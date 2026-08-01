@@ -1,0 +1,1182 @@
+{
+  "_note": "Демонстраційні дані для нового проєкту. Заклад і всі страви вигадані. Жодного зв'язку з реальним меню чи чужими листами алергенів. Ключі складу посилаються на lexicon, а не містять текст.",
+  "venue": {
+    "key": "the-copper-fig",
+    "name": "The Copper Fig",
+    "timezone": "Europe/London",
+    "currency": "GBP"
+  },
+  "sources": {
+    "official-2026-07": {
+      "type": "official",
+      "label": {
+        "uk": "Офіційний лист закладу",
+        "en": "Venue allergen sheet",
+        "es": "Ficha oficial del local",
+        "it": "Scheda ufficiale del locale",
+        "de": "Offizielles Allergenblatt",
+        "ru": "Официальный лист заведения"
+      },
+      "checked": "2026-07-14"
+    },
+    "reconstructed": {
+      "type": "reconstructed",
+      "label": {
+        "uk": "Реконструкція з опису",
+        "en": "Reconstructed from description",
+        "es": "Reconstruido de la descripción",
+        "it": "Ricostruito dalla descrizione",
+        "de": "Aus der Beschreibung rekonstruiert",
+        "ru": "Реконструкция из описания"
+      }
+    }
+  },
+  "sections": {
+    "starters": {
+      "uk": "Закуски",
+      "en": "Starters",
+      "es": "Entrantes",
+      "it": "Antipasti",
+      "de": "Vorspeisen",
+      "ru": "Закуски"
+    },
+    "mains": {
+      "uk": "Основні страви",
+      "en": "Mains",
+      "es": "Principales",
+      "it": "Secondi",
+      "de": "Hauptgerichte",
+      "ru": "Основные блюда"
+    },
+    "desserts": {
+      "uk": "Десерти",
+      "en": "Desserts",
+      "es": "Postres",
+      "it": "Dolci",
+      "de": "Desserts",
+      "ru": "Десерты"
+    },
+    "cocktails": {
+      "uk": "Коктейлі",
+      "en": "Cocktails",
+      "es": "Cócteles",
+      "it": "Cocktail",
+      "de": "Cocktails",
+      "ru": "Коктейли"
+    },
+    "soft-drinks": {
+      "uk": "Безалкогольні",
+      "en": "Soft drinks",
+      "es": "Sin alcohol",
+      "it": "Analcolici",
+      "de": "Alkoholfrei",
+      "ru": "Безалкогольные"
+    }
+  },
+  "warnings": {
+    "shared-fryer": {
+      "uk": "Спільний фритюр з позиціями, що містять глютен",
+      "en": "Shared fryer with gluten-containing items",
+      "es": "Freidora compartida con productos con gluten",
+      "it": "Friggitrice condivisa con prodotti con glutine",
+      "de": "Gemeinsame Fritteuse mit glutenhaltigen Produkten",
+      "ru": "Общий фритюр с позициями, содержащими глютен"
+    },
+    "shared-grill": {
+      "uk": "Спільний гриль з рибою та м'ясом",
+      "en": "Shared grill with fish and meat",
+      "es": "Parrilla compartida con pescado y carne",
+      "it": "Griglia condivisa con pesce e carne",
+      "de": "Gemeinsamer Grill mit Fisch und Fleisch",
+      "ru": "Общий гриль с рыбой и мясом"
+    },
+    "raw-egg": {
+      "uk": "Містить сире яйце",
+      "en": "Contains raw egg",
+      "es": "Contiene huevo crudo",
+      "it": "Contiene uovo crudo",
+      "de": "Enthält rohes Ei",
+      "ru": "Содержит сырое яйцо"
+    }
+  },
+  "lexicon": {
+    "beetroot": {
+      "uk": "буряк",
+      "en": "beetroot",
+      "es": "remolacha",
+      "it": "barbabietola",
+      "de": "Rote Bete",
+      "ru": "свёкла"
+    },
+    "capers": {
+      "uk": "каперси",
+      "en": "capers",
+      "es": "alcaparras",
+      "it": "capperi",
+      "de": "Kapern",
+      "ru": "каперсы"
+    },
+    "shallot": {
+      "uk": "шалот",
+      "en": "shallot",
+      "es": "chalota",
+      "it": "scalogno",
+      "de": "Schalotte",
+      "ru": "шалот"
+    },
+    "dijon-mustard": {
+      "uk": "діжонська гірчиця",
+      "en": "Dijon mustard",
+      "es": "mostaza de Dijon",
+      "it": "senape di Digione",
+      "de": "Dijon-Senf",
+      "ru": "дижонская горчица"
+    },
+    "olive-oil": {
+      "uk": "оливкова олія",
+      "en": "olive oil",
+      "es": "aceite de oliva",
+      "it": "olio d'oliva",
+      "de": "Olivenöl",
+      "ru": "оливковое масло"
+    },
+    "lemon-juice": {
+      "uk": "лимонний сік",
+      "en": "lemon juice",
+      "es": "zumo de limón",
+      "it": "succo di limone",
+      "de": "Zitronensaft",
+      "ru": "лимонный сок"
+    },
+    "sourdough-bread": {
+      "uk": "хліб на заквасці",
+      "en": "sourdough bread",
+      "es": "pan de masa madre",
+      "it": "pane a lievitazione naturale",
+      "de": "Sauerteigbrot",
+      "ru": "хлеб на закваске"
+    },
+    "wheat-flour": {
+      "uk": "пшеничне борошно",
+      "en": "wheat flour",
+      "es": "harina de trigo",
+      "it": "farina di frumento",
+      "de": "Weizenmehl",
+      "ru": "пшеничная мука"
+    },
+    "plain-flour": {
+      "uk": "борошно вищого ґатунку",
+      "en": "plain flour",
+      "es": "harina común",
+      "it": "farina 00",
+      "de": "Weizenmehl Type 405",
+      "ru": "мука высшего сорта"
+    },
+    "breadcrumbs": {
+      "uk": "панірувальні сухарі",
+      "en": "breadcrumbs",
+      "es": "pan rallado",
+      "it": "pangrattato",
+      "de": "Semmelbrösel",
+      "ru": "панировочные сухари"
+    },
+    "water": {
+      "uk": "вода",
+      "en": "water",
+      "es": "agua",
+      "it": "acqua",
+      "de": "Wasser",
+      "ru": "вода"
+    },
+    "yeast": {
+      "uk": "дріжджі",
+      "en": "yeast",
+      "es": "levadura",
+      "it": "lievito",
+      "de": "Hefe",
+      "ru": "дрожжи"
+    },
+    "salt": {
+      "uk": "сіль",
+      "en": "salt",
+      "es": "sal",
+      "it": "sale",
+      "de": "Salz",
+      "ru": "соль"
+    },
+    "sugar": {
+      "uk": "цукор",
+      "en": "sugar",
+      "es": "azúcar",
+      "it": "zucchero",
+      "de": "Zucker",
+      "ru": "сахар"
+    },
+    "black-pepper": {
+      "uk": "чорний перець",
+      "en": "black pepper",
+      "es": "pimienta negra",
+      "it": "pepe nero",
+      "de": "schwarzer Pfeffer",
+      "ru": "чёрный перец"
+    },
+    "octopus": {
+      "uk": "восьминіг",
+      "en": "octopus",
+      "es": "pulpo",
+      "it": "polpo",
+      "de": "Oktopus",
+      "ru": "осьминог"
+    },
+    "parsley": {
+      "uk": "петрушка",
+      "en": "parsley",
+      "es": "perejil",
+      "it": "prezzemolo",
+      "de": "Petersilie",
+      "ru": "петрушка"
+    },
+    "anchovy": {
+      "uk": "анчоус",
+      "en": "anchovy",
+      "es": "anchoa",
+      "it": "acciuga",
+      "de": "Sardelle",
+      "ru": "анчоус"
+    },
+    "garlic": {
+      "uk": "часник",
+      "en": "garlic",
+      "es": "ajo",
+      "it": "aglio",
+      "de": "Knoblauch",
+      "ru": "чеснок"
+    },
+    "potato": {
+      "uk": "картопля",
+      "en": "potato",
+      "es": "patata",
+      "it": "patata",
+      "de": "Kartoffel",
+      "ru": "картофель"
+    },
+    "arborio-rice": {
+      "uk": "рис арборіо",
+      "en": "arborio rice",
+      "es": "arroz arborio",
+      "it": "riso arborio",
+      "de": "Arborio-Reis",
+      "ru": "рис арборио"
+    },
+    "wild-mushroom": {
+      "uk": "лісові гриби",
+      "en": "wild mushrooms",
+      "es": "setas silvestres",
+      "it": "funghi di bosco",
+      "de": "Waldpilze",
+      "ru": "лесные грибы"
+    },
+    "vegetable-stock": {
+      "uk": "овочевий бульйон",
+      "en": "vegetable stock",
+      "es": "caldo de verduras",
+      "it": "brodo vegetale",
+      "de": "Gemüsebrühe",
+      "ru": "овощной бульон"
+    },
+    "beef-stock": {
+      "uk": "яловичий бульйон",
+      "en": "beef stock",
+      "es": "caldo de ternera",
+      "it": "brodo di manzo",
+      "de": "Rinderbrühe",
+      "ru": "говяжий бульон"
+    },
+    "celery": {
+      "uk": "селера",
+      "en": "celery",
+      "es": "apio",
+      "it": "sedano",
+      "de": "Sellerie",
+      "ru": "сельдерей"
+    },
+    "carrot": {
+      "uk": "морква",
+      "en": "carrot",
+      "es": "zanahoria",
+      "it": "carota",
+      "de": "Karotte",
+      "ru": "морковь"
+    },
+    "onion": {
+      "uk": "цибуля",
+      "en": "onion",
+      "es": "cebolla",
+      "it": "cipolla",
+      "de": "Zwiebel",
+      "ru": "лук"
+    },
+    "fennel": {
+      "uk": "фенхель",
+      "en": "fennel",
+      "es": "hinojo",
+      "it": "finocchio",
+      "de": "Fenchel",
+      "ru": "фенхель"
+    },
+    "rocket": {
+      "uk": "рукола",
+      "en": "rocket",
+      "es": "rúcula",
+      "it": "rucola",
+      "de": "Rucola",
+      "ru": "руккола"
+    },
+    "parmesan": {
+      "uk": "пармезан",
+      "en": "parmesan",
+      "es": "parmesano",
+      "it": "parmigiano",
+      "de": "Parmesan",
+      "ru": "пармезан"
+    },
+    "goat-cheese": {
+      "uk": "козячий сир",
+      "en": "goat cheese",
+      "es": "queso de cabra",
+      "it": "formaggio di capra",
+      "de": "Ziegenkäse",
+      "ru": "козий сыр"
+    },
+    "butter": {
+      "uk": "вершкове масло",
+      "en": "butter",
+      "es": "mantequilla",
+      "it": "burro",
+      "de": "Butter",
+      "ru": "сливочное масло"
+    },
+    "double-cream": {
+      "uk": "жирні вершки",
+      "en": "double cream",
+      "es": "nata espesa",
+      "it": "panna densa",
+      "de": "Schlagsahne",
+      "ru": "жирные сливки"
+    },
+    "whole-egg": {
+      "uk": "куряче яйце",
+      "en": "egg",
+      "es": "huevo",
+      "it": "uovo",
+      "de": "Ei",
+      "ru": "куриное яйцо"
+    },
+    "egg-white": {
+      "uk": "яєчний білок",
+      "en": "egg white",
+      "es": "clara de huevo",
+      "it": "albume",
+      "de": "Eiweiß",
+      "ru": "яичный белок"
+    },
+    "sea-bream": {
+      "uk": "дорада",
+      "en": "sea bream",
+      "es": "dorada",
+      "it": "orata",
+      "de": "Dorade",
+      "ru": "дорада"
+    },
+    "beef-short-rib": {
+      "uk": "яловичі реберця",
+      "en": "beef short rib",
+      "es": "costilla de ternera",
+      "it": "costine di manzo",
+      "de": "Rinderrippe",
+      "ru": "говяжьи рёбра"
+    },
+    "red-wine": {
+      "uk": "червоне вино",
+      "en": "red wine",
+      "es": "vino tinto",
+      "it": "vino rosso",
+      "de": "Rotwein",
+      "ru": "красное вино"
+    },
+    "white-wine": {
+      "uk": "біле вино",
+      "en": "white wine",
+      "es": "vino blanco",
+      "it": "vino bianco",
+      "de": "Weißwein",
+      "ru": "белое вино"
+    },
+    "red-wine-vinegar": {
+      "uk": "винний оцет",
+      "en": "red wine vinegar",
+      "es": "vinagre de vino",
+      "it": "aceto di vino",
+      "de": "Rotweinessig",
+      "ru": "винный уксус"
+    },
+    "honey": {
+      "uk": "мед",
+      "en": "honey",
+      "es": "miel",
+      "it": "miele",
+      "de": "Honig",
+      "ru": "мёд"
+    },
+    "fig": {
+      "uk": "інжир",
+      "en": "fig",
+      "es": "higo",
+      "it": "fico",
+      "de": "Feige",
+      "ru": "инжир"
+    },
+    "fig-syrup": {
+      "uk": "інжирний сироп",
+      "en": "fig syrup",
+      "es": "sirope de higo",
+      "it": "sciroppo di fico",
+      "de": "Feigensirup",
+      "ru": "инжирный сироп"
+    },
+    "walnut": {
+      "uk": "волоський горіх",
+      "en": "walnut",
+      "es": "nuez",
+      "it": "noce",
+      "de": "Walnuss",
+      "ru": "грецкий орех"
+    },
+    "dark-chocolate": {
+      "uk": "чорний шоколад",
+      "en": "dark chocolate",
+      "es": "chocolate negro",
+      "it": "cioccolato fondente",
+      "de": "Zartbitterschokolade",
+      "ru": "тёмный шоколад"
+    },
+    "cocoa": {
+      "uk": "какао",
+      "en": "cocoa",
+      "es": "cacao",
+      "it": "cacao",
+      "de": "Kakao",
+      "ru": "какао"
+    },
+    "soya-lecithin": {
+      "uk": "соєвий лецитин",
+      "en": "soya lecithin",
+      "es": "lecitina de soja",
+      "it": "lecitina di soia",
+      "de": "Sojalecithin",
+      "ru": "соевый лецитин"
+    },
+    "bourbon": {
+      "uk": "бурбон",
+      "en": "bourbon",
+      "es": "bourbon",
+      "it": "bourbon",
+      "de": "Bourbon",
+      "ru": "бурбон"
+    },
+    "whisky": {
+      "uk": "віскі",
+      "en": "whisky",
+      "es": "whisky",
+      "it": "whisky",
+      "de": "Whisky",
+      "ru": "виски"
+    },
+    "gin": {
+      "uk": "джин",
+      "en": "gin",
+      "es": "ginebra",
+      "it": "gin",
+      "de": "Gin",
+      "ru": "джин"
+    },
+    "prosecco": {
+      "uk": "просекко",
+      "en": "prosecco",
+      "es": "prosecco",
+      "it": "prosecco",
+      "de": "Prosecco",
+      "ru": "просекко"
+    },
+    "angostura-bitters": {
+      "uk": "біттер ангостура",
+      "en": "Angostura bitters",
+      "es": "bíter Angostura",
+      "it": "bitter Angostura",
+      "de": "Angostura-Bitter",
+      "ru": "биттер ангостура"
+    },
+    "elderflower-cordial": {
+      "uk": "сироп бузини",
+      "en": "elderflower cordial",
+      "es": "sirope de saúco",
+      "it": "sciroppo di sambuco",
+      "de": "Holunderblütensirup",
+      "ru": "сироп бузины"
+    },
+    "orange-zest": {
+      "uk": "цедра апельсина",
+      "en": "orange zest",
+      "es": "ralladura de naranja",
+      "it": "scorza d'arancia",
+      "de": "Orangenschale",
+      "ru": "цедра апельсина"
+    },
+    "lime-juice": {
+      "uk": "сік лайма",
+      "en": "lime juice",
+      "es": "zumo de lima",
+      "it": "succo di lime",
+      "de": "Limettensaft",
+      "ru": "сок лайма"
+    },
+    "basil": {
+      "uk": "базилік",
+      "en": "basil",
+      "es": "albahaca",
+      "it": "basilico",
+      "de": "Basilikum",
+      "ru": "базилик"
+    },
+    "rosemary": {
+      "uk": "розмарин",
+      "en": "rosemary",
+      "es": "romero",
+      "it": "rosmarino",
+      "de": "Rosmarin",
+      "ru": "розмарин"
+    },
+    "mint": {
+      "uk": "м'ята",
+      "en": "mint",
+      "es": "menta",
+      "it": "menta",
+      "de": "Minze",
+      "ru": "мята"
+    },
+    "soda-water": {
+      "uk": "содова",
+      "en": "soda water",
+      "es": "agua con gas",
+      "it": "acqua frizzante",
+      "de": "Sodawasser",
+      "ru": "содовая"
+    },
+    "apple-juice": {
+      "uk": "яблучний сік",
+      "en": "apple juice",
+      "es": "zumo de manzana",
+      "it": "succo di mela",
+      "de": "Apfelsaft",
+      "ru": "яблочный сок"
+    },
+    "cinnamon": {
+      "uk": "кориця",
+      "en": "cinnamon",
+      "es": "canela",
+      "it": "cannella",
+      "de": "Zimt",
+      "ru": "корица"
+    },
+    "ginger": {
+      "uk": "імбир",
+      "en": "ginger",
+      "es": "jengibre",
+      "it": "zenzero",
+      "de": "Ingwer",
+      "ru": "имбирь"
+    },
+    "coffee": {
+      "uk": "кава",
+      "en": "coffee",
+      "es": "café",
+      "it": "caffè",
+      "de": "Kaffee",
+      "ru": "кофе"
+    },
+    "oat-milk": {
+      "uk": "вівсяне молоко",
+      "en": "oat milk",
+      "es": "bebida de avena",
+      "it": "bevanda d'avena",
+      "de": "Hafermilch",
+      "ru": "овсяное молоко"
+    },
+    "salsa-verde": {
+      "uk": "зелений соус",
+      "en": "salsa verde",
+      "es": "salsa verde",
+      "it": "salsa verde",
+      "de": "Salsa verde",
+      "ru": "зелёный соус"
+    },
+    "dressing": {
+      "uk": "заправка",
+      "en": "dressing",
+      "es": "aliño",
+      "it": "condimento",
+      "de": "Dressing",
+      "ru": "заправка"
+    },
+    "oats": {
+      "uk": "овес",
+      "en": "oats",
+      "es": "avena",
+      "it": "avena",
+      "de": "Hafer",
+      "ru": "овёс"
+    }
+  },
+  "items": [
+    {
+      "key": "smoked-beetroot-tartare",
+      "name": "Smoked Beetroot Tartare",
+      "section": "starters",
+      "station": "kitchen",
+      "price_pence": 1150,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Копчений буряк із каперсами та хлібом на заквасці",
+        "en": "Smoked beetroot with capers and sourdough",
+        "es": "Remolacha ahumada con alcaparras y pan de masa madre",
+        "it": "Barbabietola affumicata con capperi e pane a lievitazione naturale",
+        "de": "Geräucherte Rote Bete mit Kapern und Sauerteigbrot",
+        "ru": "Копчёная свёкла с каперсами и хлебом на закваске"
+      },
+      "ing": [
+        "beetroot",
+        "capers",
+        "shallot",
+        "dijon-mustard",
+        "olive-oil",
+        "lemon-juice",
+        [
+          "sourdough-bread",
+          [
+            "wheat-flour",
+            "water",
+            "yeast",
+            "salt"
+          ]
+        ]
+      ],
+      "a": [
+        "mustard",
+        "cereals-gluten",
+        "sulphites"
+      ],
+      "m": [
+        "celery"
+      ],
+      "r": [
+        "mustard"
+      ],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "charred-octopus",
+      "name": "Charred Octopus",
+      "section": "starters",
+      "station": "kitchen",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Восьминіг на грилі з зеленим соусом і картоплею",
+        "en": "Grilled octopus with salsa verde and potato",
+        "es": "Pulpo a la parrilla con salsa verde y patata",
+        "it": "Polpo alla griglia con salsa verde e patate",
+        "de": "Gegrillter Oktopus mit Salsa verde und Kartoffeln",
+        "ru": "Осьминог на гриле с зелёным соусом и картофелем"
+      },
+      "ing": [
+        "octopus",
+        [
+          "salsa-verde",
+          [
+            "parsley",
+            "capers",
+            "anchovy",
+            "olive-oil",
+            "garlic"
+          ]
+        ],
+        "potato",
+        "lemon-juice"
+      ],
+      "a": [
+        "molluscs",
+        "fish"
+      ],
+      "m": [
+        "celery",
+        "sulphites"
+      ],
+      "r": [],
+      "src": "official-2026-07",
+      "w": [
+        "shared-grill"
+      ]
+    },
+    {
+      "key": "wild-mushroom-arancini",
+      "name": "Wild Mushroom Arancini",
+      "section": "starters",
+      "station": "kitchen",
+      "price_pence": 950,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Смажені рисові кульки з лісовими грибами",
+        "en": "Fried rice balls with wild mushrooms",
+        "es": "Bolas de arroz fritas con setas silvestres",
+        "it": "Arancini fritti ai funghi di bosco",
+        "de": "Frittierte Reisbällchen mit Waldpilzen",
+        "ru": "Жареные рисовые шарики с лесными грибами"
+      },
+      "ing": [
+        "arborio-rice",
+        "wild-mushroom",
+        [
+          "vegetable-stock",
+          [
+            "celery",
+            "carrot",
+            "onion"
+          ]
+        ],
+        "parmesan",
+        "butter",
+        "whole-egg",
+        [
+          "breadcrumbs",
+          [
+            "wheat-flour",
+            "salt"
+          ]
+        ]
+      ],
+      "a": [
+        "cereals-gluten",
+        "milk",
+        "eggs",
+        "celery"
+      ],
+      "m": [
+        "tree-nuts"
+      ],
+      "r": [
+        "milk"
+      ],
+      "src": "official-2026-07",
+      "w": [
+        "shared-fryer"
+      ]
+    },
+    {
+      "key": "pan-seared-sea-bream",
+      "name": "Pan-Seared Sea Bream",
+      "section": "mains",
+      "station": "kitchen",
+      "price_pence": 2100,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Дорада на сковороді з фенхелем і білим вином",
+        "en": "Sea bream with fennel and white wine",
+        "es": "Dorada con hinojo y vino blanco",
+        "it": "Orata con finocchio e vino bianco",
+        "de": "Dorade mit Fenchel und Weißwein",
+        "ru": "Дорада с фенхелем и белым вином"
+      },
+      "ing": [
+        "sea-bream",
+        "fennel",
+        "white-wine",
+        "butter",
+        "lemon-juice",
+        "olive-oil"
+      ],
+      "a": [
+        "fish",
+        "milk",
+        "sulphites"
+      ],
+      "m": [],
+      "r": [
+        "milk"
+      ],
+      "src": "official-2026-07",
+      "w": [
+        "shared-grill"
+      ]
+    },
+    {
+      "key": "braised-short-rib",
+      "name": "Braised Short Rib",
+      "section": "mains",
+      "station": "kitchen",
+      "price_pence": 2450,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Яловичі реберця, тушковані в червоному вині",
+        "en": "Beef short rib braised in red wine",
+        "es": "Costilla de ternera estofada en vino tinto",
+        "it": "Costine di manzo brasate al vino rosso",
+        "de": "In Rotwein geschmorte Rinderrippe",
+        "ru": "Говяжьи рёбра, тушённые в красном вине"
+      },
+      "ing": [
+        "beef-short-rib",
+        "red-wine",
+        [
+          "beef-stock",
+          [
+            "celery",
+            "carrot",
+            "onion"
+          ]
+        ],
+        "plain-flour",
+        "double-cream",
+        "potato"
+      ],
+      "a": [
+        "celery",
+        "sulphites",
+        "cereals-gluten",
+        "milk"
+      ],
+      "m": [
+        "mustard"
+      ],
+      "r": [
+        "milk"
+      ],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "fig-walnut-salad",
+      "name": "Fig & Walnut Salad",
+      "section": "mains",
+      "station": "kitchen",
+      "price_pence": 1050,
+      "orderable": true,
+      "state": "soon",
+      "opens_at": "2026-09-01T12:00:00",
+      "desc": {
+        "uk": "Інжир, волоські горіхи, козячий сир і рукола",
+        "en": "Fig, walnut, goat cheese and rocket",
+        "es": "Higo, nuez, queso de cabra y rúcula",
+        "it": "Fico, noci, formaggio di capra e rucola",
+        "de": "Feige, Walnuss, Ziegenkäse und Rucola",
+        "ru": "Инжир, грецкий орех, козий сыр и руккола"
+      },
+      "ing": [
+        "fig",
+        "walnut",
+        "goat-cheese",
+        "rocket",
+        [
+          "dressing",
+          [
+            "dijon-mustard",
+            "olive-oil",
+            "red-wine-vinegar",
+            "honey"
+          ]
+        ]
+      ],
+      "a": [
+        "tree-nuts",
+        "milk",
+        "mustard",
+        "sulphites"
+      ],
+      "m": [],
+      "r": [
+        "milk",
+        "tree-nuts"
+      ],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "dark-chocolate-tart",
+      "name": "Dark Chocolate Tart",
+      "section": "desserts",
+      "station": "kitchen",
+      "price_pence": 850,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Тарт із чорного шоколаду з вершками",
+        "en": "Dark chocolate tart with cream",
+        "es": "Tarta de chocolate negro con nata",
+        "it": "Crostata al cioccolato fondente con panna",
+        "de": "Zartbitterschokoladentarte mit Sahne",
+        "ru": "Тарт из тёмного шоколада со сливками"
+      },
+      "ing": [
+        [
+          "dark-chocolate",
+          [
+            "cocoa",
+            "sugar",
+            "soya-lecithin"
+          ]
+        ],
+        "butter",
+        "whole-egg",
+        "plain-flour",
+        "double-cream"
+      ],
+      "a": [
+        "milk",
+        "eggs",
+        "cereals-gluten",
+        "soya"
+      ],
+      "m": [
+        "tree-nuts",
+        "peanuts"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": []
+    },
+    {
+      "key": "copper-fig-old-fashioned",
+      "name": "Copper Fig Old Fashioned",
+      "section": "cocktails",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": false,
+      "orderable_reason": "alcohol-age-check",
+      "state": "available",
+      "desc": {
+        "uk": "Бурбон, інжирний сироп, біттер, цедра апельсина",
+        "en": "Bourbon, fig syrup, bitters, orange zest",
+        "es": "Bourbon, sirope de higo, bíter, ralladura de naranja",
+        "it": "Bourbon, sciroppo di fico, bitter, scorza d'arancia",
+        "de": "Bourbon, Feigensirup, Bitter, Orangenschale",
+        "ru": "Бурбон, инжирный сироп, биттер, цедра апельсина"
+      },
+      "ing": [
+        "bourbon",
+        "fig-syrup",
+        "angostura-bitters",
+        "orange-zest"
+      ],
+      "a": [],
+      "m": [
+        "cereals-gluten"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": []
+    },
+    {
+      "key": "smoked-rosemary-sour",
+      "name": "Smoked Rosemary Sour",
+      "section": "cocktails",
+      "station": "bar",
+      "price_pence": 1250,
+      "orderable": false,
+      "orderable_reason": "alcohol-age-check",
+      "state": "available",
+      "desc": {
+        "uk": "Віскі, лимон, яєчний білок, розмарин",
+        "en": "Whisky, lemon, egg white, rosemary",
+        "es": "Whisky, limón, clara de huevo, romero",
+        "it": "Whisky, limone, albume, rosmarino",
+        "de": "Whisky, Zitrone, Eiweiß, Rosmarin",
+        "ru": "Виски, лимон, яичный белок, розмарин"
+      },
+      "ing": [
+        "whisky",
+        "lemon-juice",
+        "egg-white",
+        "rosemary",
+        "sugar"
+      ],
+      "a": [
+        "eggs"
+      ],
+      "m": [
+        "cereals-gluten"
+      ],
+      "r": [],
+      "src": "official-2026-07",
+      "w": [
+        "raw-egg"
+      ]
+    },
+    {
+      "key": "elderflower-spritz",
+      "name": "Elderflower Spritz",
+      "section": "cocktails",
+      "station": "bar",
+      "price_pence": 1100,
+      "orderable": false,
+      "orderable_reason": "alcohol-age-check",
+      "state": "available",
+      "desc": {
+        "uk": "Просекко, сироп бузини, содова, м'ята",
+        "en": "Prosecco, elderflower, soda, mint",
+        "es": "Prosecco, saúco, soda, menta",
+        "it": "Prosecco, sambuco, soda, menta",
+        "de": "Prosecco, Holunderblüte, Soda, Minze",
+        "ru": "Просекко, бузина, содовая, мята"
+      },
+      "ing": [
+        "prosecco",
+        "elderflower-cordial",
+        "soda-water",
+        "mint"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "basil-garden-gimlet",
+      "name": "Basil Garden Gimlet",
+      "section": "cocktails",
+      "station": "bar",
+      "price_pence": 1200,
+      "orderable": false,
+      "orderable_reason": "alcohol-age-check",
+      "state": "86",
+      "desc": {
+        "uk": "Джин, базилік, лайм, цукровий сироп",
+        "en": "Gin, basil, lime, sugar syrup",
+        "es": "Ginebra, albahaca, lima, sirope",
+        "it": "Gin, basilico, lime, sciroppo di zucchero",
+        "de": "Gin, Basilikum, Limette, Zuckersirup",
+        "ru": "Джин, базилик, лайм, сахарный сироп"
+      },
+      "ing": [
+        "gin",
+        "basil",
+        "lime-juice",
+        "sugar"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "house-lemonade",
+      "name": "House Lemonade",
+      "section": "soft-drinks",
+      "station": "bar",
+      "price_pence": 450,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Домашній лимонад із м'ятою",
+        "en": "House lemonade with mint",
+        "es": "Limonada de la casa con menta",
+        "it": "Limonata della casa con menta",
+        "de": "Hausgemachte Limonade mit Minze",
+        "ru": "Домашний лимонад с мятой"
+      },
+      "ing": [
+        "lemon-juice",
+        "sugar",
+        "water",
+        "mint"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "spiced-apple-cooler",
+      "name": "Spiced Apple Cooler",
+      "section": "soft-drinks",
+      "station": "bar",
+      "price_pence": 500,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Яблучний сік, кориця, імбир, содова",
+        "en": "Apple juice, cinnamon, ginger, soda",
+        "es": "Zumo de manzana, canela, jengibre, soda",
+        "it": "Succo di mela, cannella, zenzero, soda",
+        "de": "Apfelsaft, Zimt, Ingwer, Soda",
+        "ru": "Яблочный сок, корица, имбирь, содовая"
+      },
+      "ing": [
+        "apple-juice",
+        "cinnamon",
+        "ginger",
+        "soda-water"
+      ],
+      "a": [],
+      "m": [
+        "sulphites"
+      ],
+      "r": [],
+      "src": "official-2026-07",
+      "w": []
+    },
+    {
+      "key": "oat-cold-brew",
+      "name": "Oat Cold Brew",
+      "section": "soft-drinks",
+      "station": "bar",
+      "price_pence": 475,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Холодна кава з вівсяним молоком",
+        "en": "Cold brew coffee with oat milk",
+        "es": "Café cold brew con bebida de avena",
+        "it": "Caffè cold brew con bevanda d'avena",
+        "de": "Cold Brew mit Hafermilch",
+        "ru": "Холодный кофе с овсяным молоком"
+      },
+      "ing": [
+        "coffee",
+        [
+          "oat-milk",
+          [
+            "oats",
+            "water"
+          ]
+        ]
+      ],
+      "a": [
+        "cereals-gluten"
+      ],
+      "m": [],
+      "r": [],
+      "src": "official-2026-07",
+      "w": []
+    }
+  ]
+}
