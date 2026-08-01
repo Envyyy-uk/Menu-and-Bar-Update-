@@ -25,6 +25,7 @@ from app.models import (
     Order,
     WebhookEvent,
 )
+from app.services import realtime
 from app.services.audit import record
 from app.services.orders import transition
 from app.services.stripe_gateway import StripeNotReady, verify_event
@@ -133,4 +134,9 @@ async def stripe_webhook(
         )
 
     db.commit()
+    if order is not None and handled != "ignored":
+        # Кухня дізнається про оплату тієї ж секунди, а не наступним опитуванням
+        realtime.publish(
+            {"type": "order.new" if handled == "paid" else f"order.{handled}", "number": order.number}
+        )
     return {"status": handled, "id": event_id}

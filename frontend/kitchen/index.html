@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kitchen</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0d0c0b">
+<link rel="manifest" href="/kitchen/manifest.json">
+<link rel="icon" href="/assets/icons/icon-kitchen-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/icon-kitchen-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kitchen">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body class="kitchen">
+
+<!-- Повноекранний банер втрати зв'язку. Він перекриває все навмисно:
+     тихий застарілий список гірший за помилку. -->
+<div id="offline" class="offline" hidden>
+  <p class="head" data-i18n="k.offline.head"></p>
+  <p class="body" data-i18n="k.offline.body"></p>
+</div>
+
+<header class="kbar">
+  <span id="link" class="link"></span>
+  <h1 id="station-name"></h1>
+  <button id="swap" type="button" data-i18n="k.switch"></button>
+  <button id="mute" type="button"></button>
+</header>
+
+<main id="board" class="board"></main>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/kitchen-i18n.js"></script>
+<script src="/assets/format.js"></script>
+<script src="/assets/ui.js"></script>
+<script src="/assets/api.js"></script>
+<script src="/assets/kitchen.js"></script>
+<script src="/assets/pwa.js"></script>
+<script>initKitchen();</script>
+</body>
+</html>

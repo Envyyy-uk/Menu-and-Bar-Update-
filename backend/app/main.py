@@ -15,15 +15,17 @@ from app.api import admin_users as admin_users_api
 from app.api import auth as auth_api
 from app.api import menu as menu_api
 from app.api import orders as orders_api
+from app.api import kitchen as kitchen_api
 from app.api import webhooks as webhooks_api
 from app.core.config import settings
 from app.db import engine
-from app.services import reconcile
+from app.services import realtime, reconcile
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Звірка `paid` → `accepted` крутиться поруч із застосунком: гість
     заплатив, кухня не побачила — і система має кричати, а не мовчати."""
+    realtime.bind_loop(asyncio.get_running_loop())
     task = asyncio.create_task(reconcile.run_forever())
     try:
         yield
@@ -49,6 +51,7 @@ app.include_router(admin_tables_api.router)
 app.include_router(orders_api.router)
 app.include_router(admin_stripe_api.router)
 app.include_router(webhooks_api.router)
+app.include_router(kitchen_api.router)
 
 
 @app.get("/health", tags=["ops"])

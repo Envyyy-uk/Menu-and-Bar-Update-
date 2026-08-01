@@ -65,6 +65,11 @@
 
 * { box-sizing: border-box; }
 
+/* `hidden` мусить ховати навіть те, чому клас задав display. Інакше
+   прихований повноекранний банер лишається на місці й перехоплює всі
+   натискання — на планшеті це виглядає як «екран завис». */
+[hidden] { display: none !important; }
+
 html {
   -webkit-text-size-adjust: 100%;
   /* прибирає зум по подвійному тапу, лишаючи пінч і прокрутку */
@@ -412,3 +417,85 @@ button.wide { width: 100%; margin-top: 8px; }
 /* Прострочене замовлення в панелі — не тонкий натяк, а червона рамка:
    гість заплатив, кухня не побачила, і мовчати про це не можна. */
 .arow.late { border-color: var(--danger); border-width: 2px; }
+
+/* ==========================================================================
+   Екран кухні.
+
+   Планшет, темна тема, великі кнопки, нічого зайвого. Усе, що тут є, має
+   читатися з двох метрів і натискатися брудним пальцем.
+   ========================================================================== */
+
+body.kitchen {
+  background: #0d0c0b; color: #ece7de;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overscroll-behavior: none;
+}
+
+.kbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-top, 0px));
+  background: #17150f; border-bottom: 1px solid #33302b;
+}
+.kbar h1 { margin: 0; font-size: 20px; flex: 1 1 auto; }
+.kbar button {
+  font: inherit; font-size: 15px; padding: 10px 16px; cursor: pointer;
+  background: #241f18; color: #ece7de; border: 1px solid #4a4239; border-radius: 10px;
+}
+.kbar button.off { opacity: .5; }
+
+/* Індикатор зв'язку живе в шапці постійно, а не тільки коли все зламалось */
+.link { width: 14px; height: 14px; border-radius: 50%; background: #666; flex: 0 0 auto; }
+.link.ok { background: #4ec27f; }
+.link.bad { background: #e8534a; animation: pulse .8s infinite alternate; }
+@keyframes pulse { from { opacity: 1; } to { opacity: .25; } }
+
+.board {
+  display: grid; gap: 14px; padding: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  align-content: start;
+}
+.kempty { grid-column: 1 / -1; text-align: center; color: #8b8377; padding: 60px 0; font-size: 20px; }
+
+.kcard {
+  background: #1c1a17; border: 2px solid #33302b; border-radius: 12px; padding: 14px;
+}
+/* Нове замовлення виділяється, поки на нього не натиснули */
+.kcard.fresh { border-color: #d9945c; box-shadow: 0 0 0 3px rgba(217,148,92,.25); }
+.kcard.late { border-color: #e8534a; }
+.kcard-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.knum { font-size: 26px; font-weight: 700; }
+.ktable { font-size: 17px; color: #d9945c; }
+.kage { margin-left: auto; font-size: 14px; color: #8b8377; }
+.klate {
+  margin: 8px 0 0; padding: 6px 10px; border-radius: 8px;
+  background: #3a1512; color: #ffb3ad; font-size: 14px; font-weight: 700; letter-spacing: .04em;
+}
+.kitems { list-style: none; margin: 10px 0 0; padding: 0; }
+.kitems li { font-size: 19px; padding: 5px 0; border-bottom: 1px solid #2a2722; }
+.kitems li b { color: #d9945c; margin-right: 6px; }
+.knote { margin: 10px 0 0; font-size: 15px; color: #cbbfae; font-style: italic; }
+
+/* Кнопка на всю ширину картки: цілитись у неї треба не дивлячись */
+.kbtn {
+  width: 100%; margin-top: 14px; padding: 18px; font: inherit; font-size: 20px;
+  font-weight: 700; cursor: pointer; border-radius: 10px; border: none;
+  background: #d9945c; color: #17110c;
+}
+.kbtn.ready { background: #4ec27f; color: #08150d; }
+.kbtn.served { background: #3b3730; color: #ece7de; }
+.kbtn:disabled { opacity: .5; }
+
+/* Втрата зв'язку перекриває екран цілком. Це не «повідомлення», це стоп-кран */
+.offline {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 30px; text-align: center;
+  background: #8c1c15; color: #fff;
+}
+.offline .head { margin: 0; font-size: 44px; font-weight: 800; letter-spacing: .05em; }
+.offline .body { margin: 0; font-size: 20px; max-width: 620px; }
+body.alarm .kbar { background: #8c1c15; }
+
+.kitchen .login { max-width: 320px; margin: 60px auto; }
+.kitchen .login input { font-size: 22px; text-align: center; letter-spacing: .3em; }

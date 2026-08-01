@@ -93,6 +93,7 @@ python tools/check_guest.py       # меню: пошук, фільтр, стан
 python tools/check_admin.py       # панель + критерій «гість бачить без перезавантаження»
 python tools/check_order.py       # кошик, подвійний тап, розділення kitchen/bar
 python tools/check_money.py       # черга замовлень, статуси, повернення, стан Stripe
+python tools/check_kitchen.py     # екран кухні + критерій «втрата зв'язку кричить»
 ```
 
 ## Ліцензія і дані

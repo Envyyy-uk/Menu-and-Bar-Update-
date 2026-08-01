@@ -25,7 +25,14 @@ const API = {
       if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
     });
     const r = await fetch(url, { cache: 'no-store', credentials: 'same-origin' });
-    if (!r.ok) throw new Error(`${path}: ${r.status}`);
+    if (!r.ok) {
+      // Статус потрібен викликачу: без нього екран кухні на 401 показував
+      // порожнечу замість форми входу — тобто рівно той тихий екран, якого
+      // тут не має бути.
+      const err = new Error(`${path}: ${r.status}`);
+      err.status = r.status;
+      throw err;
+    }
     return r.json();
   },
 

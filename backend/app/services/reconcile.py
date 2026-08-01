@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db import SessionLocal
 from app.models import STATUS_PAID, Order, utcnow
+from app.services import realtime
 from app.services.audit import record
 
 log = logging.getLogger("reconcile")
@@ -59,6 +60,8 @@ def sweep(db: Session) -> list[Order]:
             after={"paid_seconds_ago": seconds},
         )
     db.commit()
+    if late:
+        realtime.publish({"type": "alert.late", "numbers": [o.number for o in late]})
     return late
 
 

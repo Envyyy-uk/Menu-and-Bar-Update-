@@ -26,7 +26,7 @@ from app.models import (
     Venue,
     utcnow,
 )
-from app.services import stripe_gateway
+from app.services import realtime, stripe_gateway
 from app.services.audit import record
 from app.services.reconcile import late_orders
 from app.services.stripe_gateway import StripeNotReady
@@ -207,6 +207,7 @@ def confirm_offline(
         db.commit()
     except OrderError as exc:
         _fail(exc)
+    realtime.publish({"type": "order.new", "number": order.number})
     return order_payload(order, _table_label(db, order))
 
 
@@ -310,4 +311,5 @@ def set_status(
     except OrderError as exc:
         _fail(exc)
     db.commit()
+    realtime.publish({"type": "order.status", "number": order.number, "status": order.status})
     return order_payload(order, _table_label(db, order))
