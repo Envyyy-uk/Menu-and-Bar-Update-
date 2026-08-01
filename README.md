@@ -92,9 +92,30 @@ pip install playwright && playwright install chromium
 python tools/check_guest.py       # меню: пошук, фільтр, стани
 python tools/check_admin.py       # панель + критерій «гість бачить без перезавантаження»
 python tools/check_order.py       # кошик, подвійний тап, розділення kitchen/bar
+python tools/check_money.py       # черга замовлень, статуси, повернення, стан Stripe
 ```
 
 ## Ліцензія і дані
 
 Заклад «The Copper Fig» і всі позиції в `seed_menu.json` вигадані. Жодного
 зв'язку з реальним меню чи чужими листами алергенів.
+
+## Гроші
+
+Поки `STRIPE_SECRET_KEY` порожній, застосунок працює в **режимі прогону**:
+замовлення підтверджуються без оплати (`POST /api/orders/{id}/confirm-offline`).
+Це режим для фейкового сервісу з розділу 15 плану, не робочий.
+
+Щойно ключ з'являється, цей ендпойнт відповідає 409, і `paid` виставляється
+**виключно** вебхуком Stripe. Локально вебхуки перевіряються Stripe CLI:
+
+```bash
+stripe listen --forward-to localhost:8000/api/webhooks/stripe
+# секрет із виводу → STRIPE_WEBHOOK_SECRET у .env
+stripe trigger checkout.session.completed
+```
+
+Заклад підключає власний **Standard**-акаунт із панелі (вкладка «Замовлення»,
+видно тільки `owner`). Платіж проводиться як direct charge на його акаунті;
+спори й від'ємні баланси — його відповідальність, не платформи.
+`PLATFORM_FEE_BPS` задає комісію платформи в базисних пунктах, нуль — без комісії.

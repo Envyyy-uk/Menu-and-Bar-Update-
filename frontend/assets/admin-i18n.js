@@ -122,5 +122,36 @@ Object.assign(I18N, {
   'a.error':    { uk: 'Не вдалося', en: 'Failed', es: 'Ha fallado', it: 'Non riuscito', de: 'Fehlgeschlagen', ru: 'Не удалось' },
   'a.confirm':  { uk: 'Точно?', en: 'Are you sure?', es: '¿Seguro?', it: 'Sicuro?', de: 'Sicher?', ru: 'Точно?' },
   'a.empty':    { uk: 'Порожньо', en: 'Nothing here', es: 'Vacío', it: 'Vuoto', de: 'Leer', ru: 'Пусто' },
-  'a.venueTime':{ uk: 'час закладу', en: 'venue time', es: 'hora del local', it: 'ora del locale', de: 'Ortszeit des Lokals', ru: 'время заведения' }
+  'a.venueTime':{ uk: 'час закладу', en: 'venue time', es: 'hora del local', it: 'ora del locale', de: 'Ortszeit des Lokals', ru: 'время заведения' },
+
+  /* --------------------------------------------------- замовлення й гроші */
+  'a.tab.orders':   { uk: 'Замовлення', en: 'Orders', es: 'Pedidos', it: 'Ordini', de: 'Bestellungen', ru: 'Заказы' },
+  'a.orders.empty': { uk: 'Живих замовлень немає', en: 'No live orders', es: 'No hay pedidos activos', it: 'Nessun ordine attivo', de: 'Keine laufenden Bestellungen', ru: 'Живых заказов нет' },
+  'a.orders.accepted':{ uk: 'Прийнято', en: 'Accepted', es: 'Aceptado', it: 'Accettato', de: 'Angenommen', ru: 'Принято' },
+  'a.orders.ready': { uk: 'Готово', en: 'Ready', es: 'Listo', it: 'Pronto', de: 'Fertig', ru: 'Готово' },
+  'a.orders.served':{ uk: 'Подано', en: 'Served', es: 'Servido', it: 'Servito', de: 'Serviert', ru: 'Подано' },
+  'a.orders.late':  {
+    uk: 'Оплачено й досі не прийнято', en: 'Paid and still not accepted',
+    es: 'Pagado y aún sin aceptar', it: 'Pagato e ancora non accettato',
+    de: 'Bezahlt und noch nicht angenommen', ru: 'Оплачено и до сих пор не принято'
+  },
+  'a.refund':       { uk: 'Повернути', en: 'Refund', es: 'Reembolsar', it: 'Rimborsa', de: 'Erstatten', ru: 'Вернуть' },
+  'a.refund.amount':{ uk: 'Сума повернення', en: 'Refund amount', es: 'Importe a reembolsar', it: 'Importo del rimborso', de: 'Erstattungsbetrag', ru: 'Сумма возврата' },
+  'a.refund.limit': { uk: 'Ваша стеля', en: 'Your ceiling', es: 'Su límite', it: 'Il vostro limite', de: 'Ihre Obergrenze', ru: 'Ваш потолок' },
+  'a.refund.none':  { uk: 'без стелі', en: 'no ceiling', es: 'sin límite', it: 'nessun limite', de: 'keine Grenze', ru: 'без потолка' },
+  'a.refunded':     { uk: 'Повернуто', en: 'Refunded', es: 'Reembolsado', it: 'Rimborsato', de: 'Erstattet', ru: 'Возвращено' },
+
+  'a.stripe':          { uk: 'Stripe', en: 'Stripe', es: 'Stripe', it: 'Stripe', de: 'Stripe', ru: 'Stripe' },
+  'a.stripe.connect':  { uk: 'Підключити Stripe', en: 'Connect Stripe', es: 'Conectar Stripe', it: 'Collega Stripe', de: 'Stripe verbinden', ru: 'Подключить Stripe' },
+  'a.stripe.ok':       { uk: 'Підключено, платежі приймаються', en: 'Connected, charges enabled', es: 'Conectado, cobros activos', it: 'Collegato, pagamenti attivi', de: 'Verbunden, Zahlungen aktiv', ru: 'Подключено, платежи принимаются' },
+  'a.stripe.pending':  { uk: 'Акаунт створено, KYC не завершено', en: 'Account created, KYC unfinished', es: 'Cuenta creada, KYC sin completar', it: 'Account creato, KYC incompleto', de: 'Konto erstellt, KYC unvollständig', ru: 'Аккаунт создан, KYC не завершён' },
+  'a.stripe.offline':  {
+    uk: 'Ключів немає — замовлення підтверджуються без оплати. Це режим прогону, не робочий.',
+    en: 'No keys — orders are confirmed without payment. This is the rehearsal mode, not production.',
+    es: 'Sin claves: los pedidos se confirman sin pago. Es el modo de ensayo, no producción.',
+    it: 'Nessuna chiave: gli ordini si confermano senza pagamento. È la modalità di prova, non produzione.',
+    de: 'Keine Schlüssel — Bestellungen werden ohne Zahlung bestätigt. Das ist der Probemodus, nicht Produktion.',
+    ru: 'Ключей нет — заказы подтверждаются без оплаты. Это режим прогона, не рабочий.'
+  }
+
 });

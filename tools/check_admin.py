@@ -52,8 +52,11 @@ with sync_playwright() as p:
     admin.fill('input[type="email"]', EMAIL)
     admin.fill('input[type="password"]', PASSWORD)
     admin.click("button.primary")
-    admin.wait_for_selector(".arow", timeout=15000)
+    admin.wait_for_selector(".tab", timeout=15000)
     check("вхід поштою й паролем", "owner" in admin.inner_text("#who"))
+    # Панель відкривається на черзі замовлень — позиції на сусідній вкладці
+    admin.locator(".tab", has_text="Позиції").click()
+    admin.wait_for_selector(".arow", timeout=15000)
     check("вкладки за правами owner",
           {"Позиції", "Розділи", "Розклади", "Столи", "Люди", "Аудит"} <=
           set(admin.locator(".tab").all_inner_texts()),

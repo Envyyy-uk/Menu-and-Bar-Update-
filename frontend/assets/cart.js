@@ -22,6 +22,12 @@ function loadCart() {
     CART = JSON.parse(sessionStorage.getItem(CART_KEY) || '{}');
     ORDER = JSON.parse(sessionStorage.getItem(ORDER_KEY) || 'null');
   } catch (e) { CART = {}; ORDER = null; }
+
+  // Повернення зі Stripe: /t/{token}?order={id}. Саме по собі воно нічого не
+  // підтверджує — статус усе одно питаємо в сервера, а туди його поставить
+  // вебхук.
+  const back = new URLSearchParams(location.search).get('order');
+  if (back && ORDER && ORDER.id !== back) ORDER = null;
 }
 
 function saveCart() {
@@ -268,7 +274,21 @@ async function submitOrder(data, note, button, box) {
 
   try {
     const order = await API.post('/api/orders', payload);
-    await API.post(`/api/orders/${order.id}/checkout?client_token=${encodeURIComponent(payload.client_token)}`);
+    const checkout = await API.post(
+      `/api/orders/${order.id}/checkout?client_token=${encodeURIComponent(payload.client_token)}`);
+
+    if (checkout && checkout.mode === 'stripe') {
+      // Далі гостя веде Stripe. Замовлення стане `paid` від вебхука, а не
+      // від того, що браузер повернувся на success_url — повернутися він
+      // може й не встигнути.
+      ORDER = { id: order.id, client_token: payload.client_token, number: order.number, status: order.status };
+      CART = {};
+      resetToken();
+      saveCart();
+      location.href = checkout.url;
+      return;
+    }
+
     let final = order;
     if (order.payment_mode === 'offline') {
       // Режим без Stripe: фейковий сервіс із розділу 15, замовлення на нуль

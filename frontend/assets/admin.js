@@ -13,11 +13,13 @@
 
 let LANG = getLang();
 let ME = null;
-let TAB = 'items';
+let TAB = 'orders';   // черга — перше, заради чого відкривають панель у зміну
 let ITEM_QUERY = '';
+let ORDERS_TIMER = null;
 
 const DATA = {
-  items: [], sections: [], schedules: [], tables: [], users: [], devices: [], audit: [], menu: null
+  items: [], sections: [], schedules: [], tables: [], users: [], devices: [], audit: [],
+  orders: [], alerts: [], stripe: null, menu: null
 };
 
 const STATES = ['auto', 'on', 'off', 'soon'];
@@ -106,7 +108,7 @@ function tickClock() {
 
 /* ------------------------------------------------------------ вкладки --- */
 function tabsFor() {
-  const list = [['items', 'a.tab.items'], ['sections', 'a.tab.sections']];
+  const list = [['orders', 'a.tab.orders'], ['items', 'a.tab.items'], ['sections', 'a.tab.sections']];
   if (may('schedules.edit')) list.push(['schedules', 'a.tab.schedules']);
   if (may('tables.manage')) list.push(['tables', 'a.tab.tables']);
   if (may('users.create')) list.push(['users', 'a.tab.users']);
@@ -522,6 +524,99 @@ function renderUsers(mount) {
   mount.appendChild(box);
 }
 
+/* -------------------------------------------------------- замовлення ---- */
+function renderOrders(mount) {
+  if (may('stripe.manage') && DATA.stripe) {
+    const card = el('div', 'arow');
+    card.appendChild(el('b', null, esc(t('a.stripe', LANG))));
+    const s = DATA.stripe;
+    if (!s.enabled) {
+      card.appendChild(el('p', 'warn', esc(t('a.stripe.offline', LANG))));
+    } else {
+      card.appendChild(el('p', 'ro',
+        esc(s.charges_enabled ? t('a.stripe.ok', LANG) : t('a.stripe.pending', LANG))));
+    }
+    if (!s.enabled || !s.charges_enabled) {
+      const connect = el('button', 'primary', esc(t('a.stripe.connect', LANG)));
+      connect.type = 'button';
+      connect.addEventListener('click', () => guard(card, async () => {
+        const out = await API.post('/api/admin/stripe/connect');
+        location.href = out.url;
+      }));
+      card.appendChild(connect);
+    }
+    mount.appendChild(card);
+  }
+
+  const lateIds = new Set(DATA.alerts.map(a => a.id));
+  if (!DATA.orders.length) {
+    mount.appendChild(el('p', 'hint', esc(t('a.orders.empty', LANG))));
+    return;
+  }
+
+  DATA.orders.forEach(order => {
+    const row = el('div', 'arow' + (lateIds.has(order.id) ? ' late' : ''));
+    const head = el('div', 'arow-head');
+    head.appendChild(el('b', null, `№${esc(order.number)} · ${esc(order.table || '—')}`));
+    head.appendChild(el('span', 'pill', esc(t('order.st.' + order.status, LANG))));
+    head.appendChild(el('span', 'pill',
+      esc(money(order.total_pence, DATA.menu.venue.currency, LANG))));
+    row.appendChild(head);
+
+    // Оплачено й досі не прийнято — це той самий алерт, який кричить на кухні
+    if (lateIds.has(order.id)) row.appendChild(el('p', 'warn', esc(t('a.orders.late', LANG))));
+
+    const list = el('ul', 'ing');
+    order.items.forEach(i => list.appendChild(el('li', null,
+      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
+    row.appendChild(list);
+    if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
+
+    const actions = el('div', 'actions');
+    const next = { paid: 'accepted', accepted: 'ready', ready: 'served' }[order.status];
+    if (next) {
+      const move = el('button', 'primary', esc(t('a.orders.' + next, LANG)));
+      move.type = 'button';
+      move.addEventListener('click', () => guard(row, async () => {
+        await API.post(`/api/orders/${order.id}/status?target=${next}`);
+        await reload();
+      }));
+      actions.appendChild(move);
+    }
+
+    if (may('refunds')) {
+      const refund = el('button', 'danger', esc(t('a.refund', LANG)));
+      refund.type = 'button';
+      refund.addEventListener('click', () => askRefund(order, row));
+      actions.appendChild(refund);
+      const ceiling = ME.refund_limit_pence;
+      actions.appendChild(el('span', 'ro',
+        `${esc(t('a.refund.limit', LANG))}: ${ceiling === null
+          ? esc(t('a.refund.none', LANG))
+          : esc(money(ceiling, DATA.menu.venue.currency, LANG))}`));
+    }
+    row.appendChild(actions);
+    mount.appendChild(row);
+  });
+}
+
+function askRefund(order, row) {
+  const box = el('div', 'stack');
+  const amount = el('input');
+  amount.type = 'number'; amount.step = '0.05'; amount.min = '0.01';
+  amount.value = ((order.total_pence - (order.refunded_pence || 0)) / 100).toFixed(2);
+  const go = el('button', 'danger', esc(t('a.refund', LANG)));
+  go.type = 'button';
+  go.addEventListener('click', () => guard(row, async () => {
+    await API.post(`/api/orders/${order.id}/refund`, {
+      amount_pence: Math.round(parseFloat(amount.value || '0') * 100)
+    });
+    await reload();
+  }));
+  box.append(el('label', null, esc(t('a.refund.amount', LANG))), amount, go);
+  row.appendChild(box);
+}
+
 /* ------------------------------------------------------------- аудит ---- */
 function renderAudit(mount) {
   if (!DATA.audit.length) { mount.appendChild(el('p', 'hint', esc(t('a.empty', LANG)))); return; }
@@ -549,6 +644,7 @@ function renderBody() {
   const mount = document.getElementById('body');
   mount.innerHTML = '';
   ({
+    orders: renderOrders,
     items: renderItems,
     sections: renderSections,
     schedules: renderSchedules,
@@ -578,6 +674,11 @@ async function reload() {
     jobs.push(API.get('/api/admin/devices').then(d => { DATA.devices = d; }));
   }
   if (may('audit.view')) jobs.push(API.get('/api/admin/audit').then(d => { DATA.audit = d; }));
+  if (may('orders.view')) {
+    jobs.push(API.get('/api/orders').then(d => { DATA.orders = d; }));
+    jobs.push(API.get('/api/orders/alerts').then(d => { DATA.alerts = d; }));
+  }
+  if (may('stripe.manage')) jobs.push(API.get('/api/admin/stripe').then(d => { DATA.stripe = d; }));
   await Promise.all(jobs);
   renderTabs();
   renderBody();
@@ -588,8 +689,11 @@ async function boot() {
   document.getElementById('app').innerHTML =
     '<div id="tabs"></div><div id="body"></div>';
   renderHeader();
-  if (!tabsFor().some(([k]) => k === TAB)) TAB = 'items';
+  if (!tabsFor().some(([k]) => k === TAB)) TAB = 'orders';
   await reload();
+  // Черга живе сама: замовлення приходять, поки менеджер дивиться в екран.
+  if (ORDERS_TIMER) clearInterval(ORDERS_TIMER);
+  ORDERS_TIMER = setInterval(() => { if (ME && TAB === 'orders') reload(); }, 10000);
 }
 
 async function initAdmin() {

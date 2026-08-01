@@ -8,13 +8,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session as DbSession
 
 from app.core.config import settings
-from app.core.deps import get_venue, require
+from app.core.deps import current_user, get_venue, require
+from app.core.permissions import refund_limit_pence
 from app.db import get_db
 from app.models import (
     STATUS_ACCEPTED,
     STATUS_PAID,
     STATUS_PAYMENT_PENDING,
     STATUS_READY,
+    STATUS_REFUNDED,
     STATUS_SERVED,
     MenuItem,
     Order,
@@ -22,8 +24,12 @@ from app.models import (
     Table,
     User,
     Venue,
+    utcnow,
 )
+from app.services import stripe_gateway
 from app.services.audit import record
+from app.services.reconcile import late_orders
+from app.services.stripe_gateway import StripeNotReady
 from app.services.orders import (
     Line,
     OrderError,
@@ -89,6 +95,24 @@ def place_order(
     return payload
 
 
+@router.get("/alerts")
+def alerts(
+    actor: User = Depends(require("orders.view")),
+    db: DbSession = Depends(get_db),
+    venue: Venue = Depends(get_venue),
+) -> list[dict]:
+    """Оплачені й не прийняті довше за норму. Це те, через що екран кухні
+    має кричати, а не мовчати."""
+    return [
+        {
+            **order_payload(o, _table_label(db, o)),
+            "paid_seconds_ago": int((utcnow() - o.paid_at).total_seconds()),
+        }
+        for o in late_orders(db)
+        if o.venue_id == venue.id
+    ]
+
+
 @router.get("/{order_id}")
 def guest_order(
     order_id: uuid.UUID,
@@ -137,8 +161,16 @@ def checkout(
         _fail(exc)
 
     if settings.stripe_enabled:
-        # Stripe Checkout приходить у Спринті 6.
-        raise HTTPException(status_code=501, detail="stripe checkout is not wired yet")
+        try:
+            table = db.get(Table, order.table_id)
+            session = stripe_gateway.create_checkout_session(venue, order, table.token)
+        except StripeNotReady as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from None
+        order.checkout_session_id = session["id"]
+        db.commit()
+        # Далі гість іде на сторінку Stripe. Назад він повернеться вже після
+        # оплати, але `paid` виставить вебхук, а не це повернення.
+        return {"mode": "stripe", "url": session["url"], "session_id": session["id"]}
     return {"mode": "offline", "order": order_payload(order, _table_label(db, order))}
 
 
@@ -202,6 +234,63 @@ def queue(
         else:
             out.append(order_payload(order, label))
     return out
+
+
+class RefundIn(BaseModel):
+    amount_pence: int | None = Field(default=None, ge=1)
+    reason: str | None = None
+
+
+@router.post("/{order_id}/refund")
+def refund_order(
+    order_id: uuid.UUID,
+    body: RefundIn,
+    actor: User = Depends(require("refunds")),
+    db: DbSession = Depends(get_db),
+    venue: Venue = Depends(get_venue),
+) -> dict:
+    """Повернення — єдина дія, якою співробітник може вивести гроші, тож у
+    `manager` вона має стелю. Перевіряється тут, на сервері."""
+    order = db.get(Order, order_id)
+    if order is None or order.venue_id != venue.id:
+        raise HTTPException(status_code=404, detail="замовлення не знайдено")
+
+    remaining = order.total_pence - order.refunded_pence
+    if remaining <= 0:
+        raise HTTPException(status_code=409, detail="повертати нічого")
+    amount = body.amount_pence or remaining
+    if amount > remaining:
+        raise HTTPException(status_code=422, detail="сума більша за залишок")
+
+    ceiling = refund_limit_pence(actor.role, settings.manager_refund_limit_pence)
+    if ceiling is not None and amount > ceiling:
+        raise HTTPException(
+            status_code=403,
+            detail=f"ліміт повернення для вашої ролі — {ceiling / 100:.2f}",
+        )
+
+    if settings.stripe_enabled:
+        try:
+            stripe_gateway.refund(venue, order, amount, body.reason)
+        except StripeNotReady as exc:
+            raise HTTPException(status_code=503, detail=str(exc)) from None
+        # Підсумковий стан виставить вебхук charge.refunded — так само, як
+        # і з оплатою, ми не віримо власній відповіді Stripe наосліп.
+    else:
+        order.refunded_pence += amount
+        if order.refunded_pence >= order.total_pence:
+            transition(db, order, STATUS_REFUNDED)
+
+    record.write(
+        db,
+        venue_id=venue.id,
+        user_id=actor.id,
+        action="order.refund",
+        entity=f"order:{order.number}",
+        after={"amount_pence": amount, "reason": body.reason},
+    )
+    db.commit()
+    return order_payload(order, _table_label(db, order))
 
 
 @router.post("/{order_id}/status")
