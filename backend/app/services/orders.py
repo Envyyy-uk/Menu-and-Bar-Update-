@@ -25,9 +25,11 @@ from app.models import (
     STATUS_PAID,
     STATUS_READY,
     STATUS_SERVED,
+    TICKET_ORDER,
     MenuItem,
     Order,
     OrderItem,
+    OrderTicket,
     Table,
     Venue,
     utcnow,
@@ -173,9 +175,16 @@ def create_order(
                 unit_price_pence=item.price_pence,
                 name_snapshot=item.name,
                 station_snapshot=item.station,
+                course_snapshot=item.course,
             )
         )
     order.total_pence = total
+
+    # Одна марка на кожну пару «станція × курс»: саме її бачить екран і саме
+    # її рухають кнопки. Бар і кухня далі не заважають одне одному.
+    for station, course in sorted({(i.station_snapshot, i.course_snapshot) for i in order.items}):
+        order.tickets.append(OrderTicket(station=station, course=course))
+
     db.add(order)
 
     try:
@@ -213,7 +222,131 @@ def transition(db: Session, order: Order, target: str) -> Order:
         order.ready_at = now
     elif target == STATUS_SERVED:
         order.served_at = now
+
+    # Панель рухає замовлення цілком — свідома «важка» дія менеджера. Марки
+    # підтягуються за нею, включно з тими, що чекали своєї черги.
+    if target in TICKET_ORDER:
+        for ticket in order.tickets:
+            if TICKET_ORDER[ticket.status] < TICKET_ORDER[target]:
+                ticket.status = target
+                if target == STATUS_ACCEPTED and ticket.accepted_at is None:
+                    ticket.accepted_at = now
+                if target == STATUS_READY and ticket.ready_at is None:
+                    ticket.ready_at = now
+                if target == STATUS_SERVED and ticket.served_at is None:
+                    ticket.served_at = now
     return order
+
+
+def sync_order_status(order: Order) -> None:
+    """Статус замовлення для гостя — з марок, але не «найповільніша».
+
+    Правило асиметричне навмисно:
+      · «готується» — щойно **хоч хтось** узявся до роботи;
+      · «готово» і «подано» — лише коли **всі** дійшли, бо поки кухня смажить
+        основне, замовлення не готове, хай навіть бар уже приніс напої.
+    """
+    if order.status in ("draft", "payment_pending", "failed", "refunded"):
+        return
+    if not order.tickets:
+        return
+
+    ranks = [TICKET_ORDER[t.status] for t in order.tickets]
+    if min(ranks) >= TICKET_ORDER[STATUS_SERVED]:
+        order.status = STATUS_SERVED
+    elif min(ranks) >= TICKET_ORDER[STATUS_READY]:
+        order.status = STATUS_READY
+    elif max(ranks) >= TICKET_ORDER[STATUS_ACCEPTED]:
+        order.status = STATUS_ACCEPTED
+    else:
+        order.status = STATUS_PAID
+    now = utcnow()
+    if order.status == STATUS_ACCEPTED and order.accepted_at is None:
+        order.accepted_at = now
+    if order.status == STATUS_READY and order.ready_at is None:
+        order.ready_at = now
+    if order.status == STATUS_SERVED and order.served_at is None:
+        order.served_at = now
+
+
+def blocking_ticket(order: Order, ticket: OrderTicket) -> OrderTicket | None:
+    """Попередній курс тієї ж станції, який ще не готовий.
+
+    Курси йдуть по черзі: поки закуски не віддали, основне не приймають. Це не
+    примха інтерфейсу — так працює подача, і кухня не має робити все підряд.
+    Напої (курс 0) нікого не чекають.
+    """
+    if ticket.course <= 0:
+        return None
+    earlier = [
+        t
+        for t in order.tickets
+        if t.station == ticket.station
+        and 0 < t.course < ticket.course
+        and TICKET_ORDER[t.status] < TICKET_ORDER[STATUS_READY]
+    ]
+    if not earlier:
+        return None
+    return min(earlier, key=lambda t: t.course)
+
+
+def ticket_transition(order: Order, ticket: OrderTicket, target: str) -> OrderTicket:
+    if target == ticket.status:
+        return ticket  # повторне натискання на кухні нічого не ламає
+    if target not in ALLOWED_TRANSITIONS.get(ticket.status, ()):
+        raise OrderError(f"перехід {ticket.status} → {target} не дозволений", status=409)
+
+    blocker = blocking_ticket(order, ticket)
+    if blocker is not None:
+        raise OrderError(
+            f"спершу віддайте курс {blocker.course}",
+            status=409,
+            payload={"blocked_by_course": blocker.course},
+        )
+
+    ticket.status = target
+    now = utcnow()
+    if target == STATUS_ACCEPTED:
+        ticket.accepted_at = now
+    elif target == STATUS_READY:
+        ticket.ready_at = now
+    elif target == STATUS_SERVED:
+        ticket.served_at = now
+    sync_order_status(order)
+    return ticket
+
+
+def ticket_payload(order: Order, ticket: OrderTicket, table_label: str | None) -> dict[str, Any]:
+    blocker = blocking_ticket(order, ticket)
+    return {
+        "id": str(ticket.id),
+        "order_id": str(order.id),
+        "number": order.number,
+        "station": ticket.station,
+        "course": ticket.course,
+        "status": ticket.status,
+        "table": table_label,
+        "note": order.note,
+        "total_pence": order.total_pence,
+        "created_at": order.created_at.isoformat() if order.created_at else None,
+        "paid_at": order.paid_at.isoformat() if order.paid_at else None,
+        "accepted_at": ticket.accepted_at.isoformat() if ticket.accepted_at else None,
+        "ready_at": ticket.ready_at.isoformat() if ticket.ready_at else None,
+        # Заблокована марка видима, але не натискається: кухня має бачити, що
+        # її чекає далі, а не отримати основне сюрпризом.
+        "blocked_by_course": blocker.course if blocker else None,
+        "items": [
+            {
+                "name": i.name_snapshot,
+                "qty": i.qty,
+                "unit_price_pence": i.unit_price_pence,
+                "station": i.station_snapshot,
+                "course": i.course_snapshot,
+            }
+            for i in order.items
+            if i.station_snapshot == ticket.station and i.course_snapshot == ticket.course
+        ],
+    }
 
 
 def order_payload(order: Order, table_label: str | None = None) -> dict[str, Any]:
@@ -234,30 +367,15 @@ def order_payload(order: Order, table_label: str | None = None) -> dict[str, Any
                 "qty": i.qty,
                 "unit_price_pence": i.unit_price_pence,
                 "station": i.station_snapshot,
+                "course": i.course_snapshot,
             }
             for i in order.items
         ],
+        "tickets": [
+            {"id": str(t.id), "station": t.station, "course": t.course, "status": t.status}
+            for t in sorted(order.tickets, key=lambda t: (t.station, t.course))
+        ],
     }
-
-
-def station_payload(order: Order, station: str, table_label: str | None) -> dict[str, Any] | None:
-    """Той самий чек, але лише з позиціями однієї станції. Кухня не має
-    бачити коктейлі, бар — стейки."""
-    lines = [i for i in order.items if i.station_snapshot == station]
-    if not lines:
-        return None
-    payload = order_payload(order, table_label)
-    payload["items"] = [
-        {
-            "name": i.name_snapshot,
-            "qty": i.qty,
-            "unit_price_pence": i.unit_price_pence,
-            "station": i.station_snapshot,
-        }
-        for i in lines
-    ]
-    payload["station"] = station
-    return payload
 
 
 def get_for_guest(db: Session, venue: Venue, order_id: uuid.UUID, client_token: str) -> Order:

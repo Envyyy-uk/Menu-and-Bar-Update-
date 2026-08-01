@@ -43,6 +43,13 @@ ALLOWED_TRANSITIONS: dict[str, tuple[str, ...]] = {
 }
 
 
+# Марка (ticket) — те, що бачить одна станція про один курс. Кухня й бар
+# працюють із різною швидкістю: коли бар віддав напої, це не означає, що
+# кухня віддала основне. Тому статус живе на марці, а не на замовленні.
+TICKET_STATUSES = (STATUS_PAID, STATUS_ACCEPTED, STATUS_READY, STATUS_SERVED)
+TICKET_ORDER = {STATUS_PAID: 0, STATUS_ACCEPTED: 1, STATUS_READY: 2, STATUS_SERVED: 3}
+
+
 class Order(UUIDPk, Timestamped, Base):
     __tablename__ = "orders"
     __table_args__ = (
@@ -78,6 +85,9 @@ class Order(UUIDPk, Timestamped, Base):
     items: Mapped[list["OrderItem"]] = relationship(
         back_populates="order", cascade="all, delete-orphan"
     )
+    tickets: Mapped[list["OrderTicket"]] = relationship(
+        back_populates="order", cascade="all, delete-orphan"
+    )
 
 
 class OrderItem(UUIDPk, Base):
@@ -95,5 +105,36 @@ class OrderItem(UUIDPk, Base):
     unit_price_pence: Mapped[int] = mapped_column(Integer, default=0)
     name_snapshot: Mapped[str] = mapped_column(String(200), default="")
     station_snapshot: Mapped[str] = mapped_column(String(10), default="kitchen")
+    course_snapshot: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     order: Mapped[Order] = relationship(back_populates="items")
+
+
+class OrderTicket(UUIDPk, Base):
+    """Одна марка = одна станція × один курс.
+
+    Саме її бачить екран кухні, і саме її статус рухають кнопки «Прийнято» /
+    «Готово». Бар може віддати напої, поки кухня ще смажить основне, — і одне
+    одному не заважає.
+
+    Курси на станції йдуть по черзі: поки закуски не готові, основне не
+    приймають. Це не примха інтерфейсу, а те, як працює подача.
+    """
+
+    __tablename__ = "order_tickets"
+    __table_args__ = (
+        UniqueConstraint("order_id", "station", "course", name="uq_ticket_station_course"),
+    )
+
+    order_id: Mapped[uuid.UUID] = mapped_column(
+        PgUUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), index=True
+    )
+    station: Mapped[str] = mapped_column(String(10))
+    course: Mapped[int] = mapped_column(Integer, default=0)
+    status: Mapped[str] = mapped_column(String(20), default=STATUS_PAID)
+
+    accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    ready_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    served_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+
+    order: Mapped[Order] = relationship(back_populates="tickets")

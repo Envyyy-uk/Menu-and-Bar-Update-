@@ -21,6 +21,7 @@ from app.models import (
     MenuItem,
     Order,
     OrderItem,
+    OrderTicket,
     Table,
     User,
     Venue,
@@ -36,7 +37,8 @@ from app.services.orders import (
     create_order,
     get_for_guest,
     order_payload,
-    station_payload,
+    ticket_payload,
+    ticket_transition,
     transition,
     unavailable_lines,
 )
@@ -219,22 +221,60 @@ def queue(
     db: DbSession = Depends(get_db),
     venue: Venue = Depends(get_venue),
 ) -> list[dict]:
-    """Черга станції. Замовлення потрапляє сюди **тільки** після `paid`."""
+    """Черга станції — це **марки**, а не замовлення цілком.
+
+    Кухня й бар працюють із різною швидкістю, тож у кожного свій рядок і свій
+    статус. Без станції (панель) віддаємо замовлення як єдине ціле.
+
+    Сюди потрапляє **тільки** оплачене.
+    """
     orders = db.scalars(
         select(Order)
         .where(Order.venue_id == venue.id, Order.status.in_(LIVE_STATUSES))
         .order_by(Order.created_at)
     ).all()
+
     out = []
     for order in orders:
         label = _table_label(db, order)
-        if station:
-            payload = station_payload(order, station, label)
-            if payload:
-                out.append(payload)
-        else:
+        if not station:
             out.append(order_payload(order, label))
+            continue
+        tickets = [t for t in order.tickets if t.station == station]
+        for ticket in sorted(tickets, key=lambda t: t.course):
+            if ticket.status == STATUS_SERVED:
+                continue
+            out.append(ticket_payload(order, ticket, label))
     return out
+
+
+@router.post("/tickets/{ticket_id}/status")
+def set_ticket_status(
+    ticket_id: uuid.UUID,
+    target: str = Query(pattern="^(accepted|ready|served)$"),
+    actor: User = Depends(require("orders.status")),
+    db: DbSession = Depends(get_db),
+    venue: Venue = Depends(get_venue),
+) -> dict:
+    """Кнопка на екрані кухні рухає **свою** марку, а не все замовлення.
+
+    Тому «Готово» в барі не робить готовим те, що кухня ще смажить.
+    """
+    ticket = db.get(OrderTicket, ticket_id)
+    if ticket is None:
+        raise HTTPException(status_code=404, detail="марку не знайдено")
+    order = db.get(Order, ticket.order_id)
+    if order is None or order.venue_id != venue.id:
+        raise HTTPException(status_code=404, detail="замовлення не знайдено")
+
+    status_map = {"accepted": STATUS_ACCEPTED, "ready": STATUS_READY, "served": STATUS_SERVED}
+    try:
+        ticket_transition(order, ticket, status_map[target])
+    except OrderError as exc:
+        _fail(exc)
+    db.commit()
+    realtime.publish({"type": "order.status", "number": order.number, "status": order.status})
+    return ticket_payload(order, ticket, _table_label(db, order))
 
 
 class RefundIn(BaseModel):

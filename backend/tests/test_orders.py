@@ -228,7 +228,10 @@ def test_order_reaches_the_queue_only_after_paid(client, db, venue):
 
 
 def test_queue_splits_kitchen_and_bar(client, db, venue):
-    """Кухня не має бачити коктейлі, бар — стейки."""
+    """Кухня не має бачити коктейлі, бар — стейки.
+
+    Черга станції складається з марок, тож звіряємось за `order_id`.
+    """
     order, _ = paid_order(
         client,
         db,
@@ -237,9 +240,9 @@ def test_queue_splits_kitchen_and_bar(client, db, venue):
     as_staff(client)
 
     kitchen = next(o for o in client.get("/api/orders", params={"station": "kitchen"}).json()
-                   if o["id"] == order["id"])
+                   if o["order_id"] == order["id"])
     bar = next(o for o in client.get("/api/orders", params={"station": "bar"}).json()
-               if o["id"] == order["id"])
+               if o["order_id"] == order["id"])
 
     assert [i["name"] for i in kitchen["items"]] == ["Charred Octopus"]
     assert [i["name"] for i in bar["items"]] == ["House Lemonade"]

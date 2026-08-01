@@ -80,29 +80,39 @@ async function reload() {
   const fresh = queue.filter(o => o.status !== 'served');
   LATE = new Set(alerts.map(a => a.number));
 
+  // Ключ — сама марка: у замовленні їх кілька, і кожна приходить своєю чергою
   if (BOOTED) {
-    const arrived = fresh.filter(o => !KNOWN.has(o.number));
+    const arrived = fresh.filter(o => !KNOWN.has(o.id));
     if (arrived.length) soundNewOrder();
     arrived.forEach(o => o.fresh = true);
   }
-  KNOWN = new Set(fresh.map(o => o.number));
+  KNOWN = new Set(fresh.map(o => o.id));
   ORDERS = fresh;
   BOOTED = true;
   render();
 }
 
 /* -------------------------------------------------------------- екран --- */
+/**
+ * Картка — це **марка**: одна станція, один курс. Кухня натискає своє, бар —
+ * своє, і одне одному вони не заважають.
+ */
 function card(order) {
+  const blocked = order.blocked_by_course !== null && order.blocked_by_course !== undefined;
   const box = el('article', 'kcard' + (order.fresh ? ' fresh' : '') +
-    (LATE.has(order.number) ? ' late' : ''));
+    (LATE.has(order.number) ? ' late' : '') + (blocked ? ' held' : ''));
 
   const head = el('div', 'kcard-head');
   head.appendChild(el('span', 'knum', `№${esc(order.number)}`));
   head.appendChild(el('span', 'ktable', `${esc(t('k.table', LANG))} ${esc(order.table || '—')}`));
+  if (order.course !== undefined) {
+    head.appendChild(el('span', 'kcourse', esc(t('k.course.' + order.course, LANG))));
+  }
   head.appendChild(el('span', 'kage', waited(order)));
   box.appendChild(head);
 
   if (LATE.has(order.number)) box.appendChild(el('p', 'klate', esc(t('k.late', LANG))));
+  if (blocked) box.appendChild(el('p', 'kheld', esc(t('k.blocked', LANG))));
 
   const list = el('ul', 'kitems');
   order.items.forEach(i => {
@@ -119,13 +129,15 @@ function card(order) {
     const label = { accepted: 'k.accept', ready: 'k.ready', served: 'k.served' }[next];
     const b = el('button', 'kbtn ' + next, esc(t(label, LANG)));
     b.type = 'button';
+    // Заблокований курс видно, але не натискається — сервер однаково відмовить
+    b.disabled = blocked;
     b.addEventListener('click', async () => {
       b.disabled = true;
       try {
-        await API.post(`/api/orders/${order.id}/status?target=${next}`);
+        await API.post(`/api/orders/tickets/${order.id}/status?target=${next}`);
         await reload();
       } catch (e) {
-        b.disabled = false;
+        b.disabled = blocked;
       }
     });
     box.appendChild(b);

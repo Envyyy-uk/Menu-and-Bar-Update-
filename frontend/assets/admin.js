@@ -241,6 +241,20 @@ function renderItems(mount) {
         item.station = station.value;
       }));
       fields.append(el('label', null, esc(t('a.station', LANG))), station);
+
+      // Курс подачі: напої йдуть одразу, решта — по черзі
+      const course = el('select');
+      [0, 1, 2, 3].forEach(c => {
+        const o = el('option', null, esc(t('a.course.' + c, LANG)));
+        o.value = String(c);
+        if (c === item.course) o.selected = true;
+        course.appendChild(o);
+      });
+      course.addEventListener('change', () => guard(row, async () => {
+        await API.patch(`/api/admin/items/${item.id}`, { course: Number(course.value) });
+        item.course = Number(course.value);
+      }));
+      fields.append(el('label', null, esc(t('a.course', LANG))), course);
     } else {
       // Ціну зал бачить, але не редагує. Ховати її було б брехнею: вона
       // однаково є в меню гостя.
@@ -568,7 +582,8 @@ function renderOrders(mount) {
 
     const list = el('ul', 'ing');
     order.items.forEach(i => list.appendChild(el('li', null,
-      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
+      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}` +
+      ` · ${esc(t('a.course.' + (i.course || 0), LANG))}`)));
     row.appendChild(list);
     if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
 

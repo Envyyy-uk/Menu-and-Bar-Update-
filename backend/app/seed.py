@@ -37,6 +37,10 @@ DEMO_TABLES = ["1", "2", "3", "4", "5", "Bar 1"]
 # Словник демо-даних говорить мовою меню, база — мовою станів із розділу 11.
 SEED_STATE_MAP = {"available": "auto", "soon": "soon", "86": "off", "off": "off"}
 
+# Курс подачі за розділом: напої йдуть одразу, далі закуски, основні, десерт.
+# Зал може перевизначити це в панелі для будь-якої позиції.
+COURSE_BY_SECTION = {"starters": 1, "mains": 2, "desserts": 3}
+
 # Пресети розкладів: самі по собі нічого не закривають, але дають панелі
 # з чого обирати з першого дня. 'late-bar' навмисно перетинає північ.
 DEMO_SCHEDULES = {
@@ -117,6 +121,8 @@ def seed(db: Session) -> Venue:
         item.name = spec["name"]
         item.section_id = sections[spec["section"]].id if spec.get("section") in sections else None
         item.station = spec.get("station", "kitchen")
+        if is_new:
+            item.course = COURSE_BY_SECTION.get(spec.get("section"), 0)
         item.price_pence = spec.get("price_pence", 0)
         item.description = spec.get("desc", {})
         item.ingredients = spec.get("ing", [])
