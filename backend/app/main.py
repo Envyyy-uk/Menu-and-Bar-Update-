@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
 from app.api import admin_menu as admin_menu_api
+from app.api import admin_schedules as admin_schedules_api
+from app.api import admin_tables as admin_tables_api
 from app.api import admin_users as admin_users_api
 from app.api import auth as auth_api
 from app.api import menu as menu_api
@@ -20,6 +22,8 @@ app.include_router(menu_api.router)
 app.include_router(auth_api.router)
 app.include_router(admin_users_api.router)
 app.include_router(admin_menu_api.router)
+app.include_router(admin_schedules_api.router)
+app.include_router(admin_tables_api.router)
 
 
 @app.get("/health", tags=["ops"])

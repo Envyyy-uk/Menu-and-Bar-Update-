@@ -254,3 +254,91 @@ footer.site {
   .grid { grid-template-columns: 1fr; }
   header.site h1 { font-size: 22px; }
 }
+
+/* ==========================================================================
+   Адмін-панель.
+
+   Розрахована на телефон: керування вгорі, кнопки станів на всю ширину
+   рядка, нічого не ховається за наведенням миші.
+   ========================================================================== */
+
+.admin main { padding-top: 14px; }
+.admin .clock { margin: 8px 0 0; color: #bdb2a3; font-size: 14px; font-variant-numeric: tabular-nums; }
+.admin .who { margin-top: 8px; display: flex; gap: 10px; align-items: center; font-size: 14px; color: #d8cdbd; }
+
+.login { max-width: 380px; margin: 40px auto; }
+.login h2 { margin: 0 0 12px; }
+
+.stack { display: flex; flex-direction: column; gap: 8px; }
+.stack input, .stack select, .fields input, .fields select {
+  font: inherit; font-size: 16px; padding: 9px 11px;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--paper-2); color: var(--ink);
+}
+
+button {
+  font: inherit; font-size: 15px; padding: 9px 14px; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--paper-2); color: var(--ink);
+}
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+button.danger { border-color: var(--danger); color: var(--danger); }
+button.link { border: none; background: none; color: var(--accent); padding: 2px 6px; text-decoration: underline; }
+
+.rowbar { position: sticky; top: 0; z-index: 20; background: var(--paper); padding: 8px 0; }
+.rowbar .search { width: 100%; }
+
+.arow {
+  background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 12px; margin: 10px 0; box-shadow: var(--shadow);
+}
+.arow-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.pill {
+  font-size: 12px; padding: 2px 9px; border-radius: 999px;
+  border: 1px solid var(--rule); color: var(--ink-faint);
+}
+.pill.ok { border-color: var(--ok); color: var(--ok); }
+.pill.off { border-color: var(--danger); color: var(--danger); }
+.ro { color: var(--ink-faint); font-size: 14px; margin: 4px 0; word-break: break-all; }
+
+/* Кнопки станів — на всю ширину рядка: на телефоні це головна дія */
+.states { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.sbtn { padding: 10px 8px; font-size: 14px; }
+.sbtn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.sbtn.s-off.on { background: var(--danger); border-color: var(--danger); color: #fff; }
+.sbtn.s-soon.on { background: var(--ok); border-color: var(--ok); color: #fff; }
+
+.fields { display: grid; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; margin-top: 10px; }
+.fields label { font-size: 13px; color: var(--ink-faint); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.check { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+
+.ranges { display: flex; flex-direction: column; gap: 8px; }
+.range { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.days { display: flex; gap: 3px; }
+.dbtn { padding: 6px 8px; font-size: 13px; min-width: 38px; }
+.dbtn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+.qr { display: block; width: 180px; height: 180px; image-rendering: pixelated; background: #fff; padding: 6px; border-radius: 6px; }
+.url { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+
+.pin-once {
+  margin: 8px 0 0; padding: 8px 10px; border-radius: 6px;
+  background: var(--warn-bg); font-size: 15px;
+}
+.pin-once b { font-size: 20px; letter-spacing: .18em; font-variant-numeric: tabular-nums; }
+
+.flash {
+  margin-left: 8px; font-size: 13px; padding: 2px 8px; border-radius: 999px;
+  background: var(--accent-soft); color: var(--ink);
+}
+.flash.bad { background: var(--danger-bg); color: var(--danger); }
+.hint { font-size: 13px; color: var(--ink-faint); margin: 6px 0; }
+
+table.audit { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.audit th, table.audit td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.audit small { display: block; color: var(--ink-faint); font-size: 12px; word-break: break-word; }
+
+@media (min-width: 620px) {
+  .states { grid-template-columns: repeat(4, 1fr); }
+}

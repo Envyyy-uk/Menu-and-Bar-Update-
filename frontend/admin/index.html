@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#24201b">
+<!-- Свій маніфест із власним id і start_url: спільний маніфест призводив
+     до того, що ярлик панелі відкривав гостьове меню. -->
+<link rel="manifest" href="/admin/manifest.json">
+<link rel="icon" href="/assets/icons/icon-admin-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/icon-admin-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body class="admin">
+
+<header class="site">
+  <div class="wrap">
+    <h1 data-i18n="a.title"></h1>
+    <p class="sub" data-i18n="a.sub"></p>
+    <p id="clock" class="clock"></p>
+    <div id="who" class="who"></div>
+    <div class="switches"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="app"></div>
+</main>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/admin-i18n.js"></script>
+<script src="/assets/format.js"></script>
+<script src="/assets/ui.js"></script>
+<script src="/assets/api.js"></script>
+<script src="/assets/admin.js"></script>
+<script src="/assets/pwa.js"></script>
+<script>initAdmin();</script>
+</body>
+</html>
