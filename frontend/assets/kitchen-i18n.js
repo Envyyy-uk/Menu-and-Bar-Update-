@@ -44,6 +44,14 @@ Object.assign(I18N, {
     de: 'Wartet: zuerst den vorherigen Gang ausgeben',
     ru: 'Ждёт: сначала отдайте предыдущий курс'
   },
+  'k.awaitFire': {
+    uk: 'Чекає команди залу — офіціант запустить, коли гість доїсть попереднє',
+    en: 'Waiting for the floor — the server fires it when the guests finish the previous course',
+    es: 'Esperando a la sala: el camarero lo lanza cuando terminen el plato anterior',
+    it: 'In attesa della sala: il cameriere la lancia quando finiscono la portata precedente',
+    de: 'Wartet auf den Service — der Kellner stößt ihn an, wenn der vorige Gang gegessen ist',
+    ru: 'Ждёт команды зала — официант запустит, когда гость доест предыдущее'
+  },
   'k.enter':   { uk: 'Увійти PIN-ом', en: 'Sign in with PIN', es: 'Entrar con PIN', it: 'Accedi con PIN', de: 'Mit PIN anmelden', ru: 'Войти по PIN' },
   'k.switch':  { uk: 'Станція', en: 'Station', es: 'Estación', it: 'Postazione', de: 'Station', ru: 'Станция' }
 });

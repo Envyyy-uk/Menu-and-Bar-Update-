@@ -587,6 +587,26 @@ function renderOrders(mount) {
     row.appendChild(list);
     if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
 
+    // Запуск курсу — робота залу. Кухня чекає саме цієї кнопки.
+    (order.tickets || []).filter(tk => tk.awaiting_fire).forEach(tk => {
+      const line = el('div', 'fire-line');
+      line.appendChild(el('span', 'ro',
+        `${esc(t('a.course.' + tk.course, LANG))} · ${esc(t(tk.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`));
+      const go = el('button', 'primary', esc(t('a.fire', LANG)));
+      go.type = 'button';
+      go.disabled = !tk.can_fire;
+      go.addEventListener('click', () => guard(row, async () => {
+        await API.post(`/api/orders/tickets/${tk.id}/fire`);
+        await reload();
+      }));
+      line.appendChild(go);
+      if (!tk.can_fire) line.appendChild(el('span', 'ro', esc(t('a.fire.wait', LANG))));
+      row.appendChild(line);
+    });
+    if ((order.tickets || []).some(tk => tk.awaiting_fire)) {
+      row.appendChild(el('p', 'hint', esc(t('a.fire.hint', LANG))));
+    }
+
     const actions = el('div', 'actions');
     const next = { paid: 'accepted', accepted: 'ready', ready: 'served' }[order.status];
     if (next) {

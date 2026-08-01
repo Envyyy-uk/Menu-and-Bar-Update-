@@ -512,3 +512,11 @@ body.alarm .kbar { background: #8c1c15; }
   margin: 8px 0 0; padding: 6px 10px; border-radius: 8px;
   background: #2a2417; color: #e0cf9a; font-size: 14px;
 }
+
+/* Запуск курсу — окремий рядок у картці замовлення: це дія залу, а не
+   продовження статусу. */
+.fire-line {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule);
+}
+.fire-line .ro { margin: 0; }

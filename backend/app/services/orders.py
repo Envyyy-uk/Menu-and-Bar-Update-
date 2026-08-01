@@ -182,8 +182,20 @@ def create_order(
 
     # Одна марка на кожну пару «станція × курс»: саме її бачить екран і саме
     # її рухають кнопки. Бар і кухня далі не заважають одне одному.
-    for station, course in sorted({(i.station_snapshot, i.course_snapshot) for i in order.items}):
-        order.tickets.append(OrderTicket(station=station, course=course))
+    pairs = sorted({(i.station_snapshot, i.course_snapshot) for i in order.items})
+    now = utcnow()
+    first_course: dict[str, int] = {}
+    for station, course in pairs:
+        if course > 0 and station not in first_course:
+            first_course[station] = course
+
+    for station, course in pairs:
+        ticket = OrderTicket(station=station, course=course)
+        # Одразу запускаємо напої й **перший** курс кожної станції: закуски
+        # чекати нема чого. Усе наступне запускає зал, коли побачить стіл.
+        if course == 0 or first_course.get(station) == course:
+            ticket.fired_at = now
+        order.tickets.append(ticket)
 
     db.add(order)
 
@@ -225,8 +237,12 @@ def transition(db: Session, order: Order, target: str) -> Order:
 
     # Панель рухає замовлення цілком — свідома «важка» дія менеджера. Марки
     # підтягуються за нею, включно з тими, що чекали своєї черги.
-    if target in TICKET_ORDER:
+    # `paid` сюди теж приходить — це просто оплата, а не команда залу, і вона
+    # не має запускати наступні курси. Запускає лише свідомий рух статусу.
+    if target in TICKET_ORDER and TICKET_ORDER[target] > TICKET_ORDER[STATUS_PAID]:
         for ticket in order.tickets:
+            if ticket.fired_at is None:
+                ticket.fired_at = now
             if TICKET_ORDER[ticket.status] < TICKET_ORDER[target]:
                 ticket.status = target
                 if target == STATUS_ACCEPTED and ticket.accepted_at is None:
@@ -269,11 +285,10 @@ def sync_order_status(order: Order) -> None:
         order.served_at = now
 
 
-def blocking_ticket(order: Order, ticket: OrderTicket) -> OrderTicket | None:
+def previous_course_ticket(order: Order, ticket: OrderTicket) -> OrderTicket | None:
     """Попередній курс тієї ж станції, який ще не готовий.
 
-    Курси йдуть по черзі: поки закуски не віддали, основне не приймають. Це не
-    примха інтерфейсу — так працює подача, і кухня не має робити все підряд.
+    Курси йдуть по черзі: поки закуски не віддали, основне не запускають.
     Напої (курс 0) нікого не чекають.
     """
     if ticket.course <= 0:
@@ -290,18 +305,37 @@ def blocking_ticket(order: Order, ticket: OrderTicket) -> OrderTicket | None:
     return min(earlier, key=lambda t: t.course)
 
 
+def fire_ticket(order: Order, ticket: OrderTicket, user_id) -> OrderTicket:
+    """Зал запускає курс у роботу.
+
+    Це навмисно рішення людини, а не таймера: тільки офіціант бачить, чи
+    доїв гість закуску. Основне, запущене «за розкладом», приїде холодним.
+    """
+    if ticket.fired_at is not None:
+        return ticket  # повторне натискання нічого не ламає
+    blocker = previous_course_ticket(order, ticket)
+    if blocker is not None:
+        raise OrderError(
+            f"спершу віддайте курс {blocker.course}",
+            status=409,
+            payload={"blocked_by_course": blocker.course},
+        )
+    ticket.fired_at = utcnow()
+    ticket.fired_by = user_id
+    return ticket
+
+
 def ticket_transition(order: Order, ticket: OrderTicket, target: str) -> OrderTicket:
     if target == ticket.status:
         return ticket  # повторне натискання на кухні нічого не ламає
     if target not in ALLOWED_TRANSITIONS.get(ticket.status, ()):
         raise OrderError(f"перехід {ticket.status} → {target} не дозволений", status=409)
 
-    blocker = blocking_ticket(order, ticket)
-    if blocker is not None:
+    if ticket.fired_at is None:
         raise OrderError(
-            f"спершу віддайте курс {blocker.course}",
+            "курс ще не запустив зал",
             status=409,
-            payload={"blocked_by_course": blocker.course},
+            payload={"awaiting_fire": True},
         )
 
     ticket.status = target
@@ -317,7 +351,7 @@ def ticket_transition(order: Order, ticket: OrderTicket, target: str) -> OrderTi
 
 
 def ticket_payload(order: Order, ticket: OrderTicket, table_label: str | None) -> dict[str, Any]:
-    blocker = blocking_ticket(order, ticket)
+    blocker = previous_course_ticket(order, ticket)
     return {
         "id": str(ticket.id),
         "order_id": str(order.id),
@@ -335,6 +369,10 @@ def ticket_payload(order: Order, ticket: OrderTicket, table_label: str | None) -
         # Заблокована марка видима, але не натискається: кухня має бачити, що
         # її чекає далі, а не отримати основне сюрпризом.
         "blocked_by_course": blocker.course if blocker else None,
+        "fired_at": ticket.fired_at.isoformat() if ticket.fired_at else None,
+        # Кухня чекає не таймера, а команди залу
+        "awaiting_fire": ticket.fired_at is None,
+        "can_fire": ticket.fired_at is None and blocker is None,
         "items": [
             {
                 "name": i.name_snapshot,
@@ -372,7 +410,19 @@ def order_payload(order: Order, table_label: str | None = None) -> dict[str, Any
             for i in order.items
         ],
         "tickets": [
-            {"id": str(t.id), "station": t.station, "course": t.course, "status": t.status}
+            {
+                "id": str(t.id),
+                "station": t.station,
+                "course": t.course,
+                "status": t.status,
+                "awaiting_fire": t.fired_at is None,
+                "can_fire": t.fired_at is None and previous_course_ticket(order, t) is None,
+                "blocked_by_course": (
+                    previous_course_ticket(order, t).course
+                    if previous_course_ticket(order, t)
+                    else None
+                ),
+            }
             for t in sorted(order.tickets, key=lambda t: (t.station, t.course))
         ],
     }

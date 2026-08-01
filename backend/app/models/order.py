@@ -133,6 +133,14 @@ class OrderTicket(UUIDPk, Base):
     course: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String(20), default=STATUS_PAID)
 
+    # Запуск курсу — рішення залу, а не кухні. Гість може ще їсти закуску, і
+    # основне, зроблене «за розкладом», доїде до столу холодним. Тому кухня
+    # не починає, поки офіціант не запустив: `fired_at` порожній — марка чекає.
+    fired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
+    fired_by: Mapped[uuid.UUID | None] = mapped_column(
+        PgUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), default=None
+    )
+
     accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
     ready_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
     served_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)

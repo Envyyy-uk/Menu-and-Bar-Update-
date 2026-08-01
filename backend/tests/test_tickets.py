@@ -100,7 +100,12 @@ def test_served_ticket_leaves_its_own_queue_only(client, db, venue):
 # ---------------------------------------------------------- черга курсів ---
 
 
-def test_mains_wait_for_the_starters(client, db, venue):
+def test_mains_wait_for_the_waiter(client, db, venue):
+    """Головне правило подачі: основне запускає зал, а не кухня.
+
+    Гість може ще їсти закуску — основне, зроблене «за розкладом», приїде
+    холодним.
+    """
     order, _ = paid(client, db)
     as_staff(client)
 
@@ -108,21 +113,75 @@ def test_mains_wait_for_the_starters(client, db, venue):
     starter = find(rows, order["number"], course=1)
     main = find(rows, order["number"], course=2)
 
-    assert starter["blocked_by_course"] is None
+    # закуски запускаються самі, основне — ні
+    assert starter["awaiting_fire"] is False
+    assert main["awaiting_fire"] is True
     assert main["blocked_by_course"] == 1
+    assert main["can_fire"] is False
 
+    # кухня не може почати основне сама
     refused = client.post(f"/api/orders/tickets/{main['id']}/status", params={"target": "accepted"})
     assert refused.status_code == 409
-    assert refused.json()["detail"]["blocked_by_course"] == 1
+    assert refused.json()["detail"]["awaiting_fire"] is True
 
-    # віддали закуски — основне розблокувалося
+    # і зал теж не запустить, поки закуски не пішли з пасу
+    early = client.post(f"/api/orders/tickets/{main['id']}/fire")
+    assert early.status_code == 409
+    assert early.json()["detail"]["blocked_by_course"] == 1
+
     client.post(f"/api/orders/tickets/{starter['id']}/status", params={"target": "accepted"})
     client.post(f"/api/orders/tickets/{starter['id']}/status", params={"target": "ready"})
 
     main = find(tickets_of(client, "kitchen"), order["number"], course=2)
     assert main["blocked_by_course"] is None
+    assert main["can_fire"] is True
+    # …але кухня все одно чекає команди
+    assert main["awaiting_fire"] is True
+    still = client.post(f"/api/orders/tickets/{main['id']}/status", params={"target": "accepted"})
+    assert still.status_code == 409
+
+    # офіціант подивився на стіл і запустив
+    fired = client.post(f"/api/orders/tickets/{main['id']}/fire")
+    assert fired.status_code == 200
+    assert fired.json()["awaiting_fire"] is False
+
     ok = client.post(f"/api/orders/tickets/{main['id']}/status", params={"target": "accepted"})
     assert ok.status_code == 200
+
+
+def test_firing_twice_is_harmless(client, db, venue):
+    order, _ = paid(client, db)
+    as_staff(client)
+    starter = find(tickets_of(client, "kitchen"), order["number"], course=1)
+    for target in ("accepted", "ready"):
+        client.post(f"/api/orders/tickets/{starter['id']}/status", params={"target": target})
+    main = find(tickets_of(client, "kitchen"), order["number"], course=2)
+    first = client.post(f"/api/orders/tickets/{main['id']}/fire")
+    second = client.post(f"/api/orders/tickets/{main['id']}/fire")
+    assert first.status_code == second.status_code == 200
+
+
+def test_firing_lands_in_the_audit(client, db, venue):
+    order, _ = paid(client, db)
+    as_staff(client)
+    starter = find(tickets_of(client, "kitchen"), order["number"], course=1)
+    for target in ("accepted", "ready"):
+        client.post(f"/api/orders/tickets/{starter['id']}/status", params={"target": target})
+    main = find(tickets_of(client, "kitchen"), order["number"], course=2)
+    client.post(f"/api/orders/tickets/{main['id']}/fire")
+
+    as_owner(client)
+    entry = next(r for r in client.get("/api/admin/audit").json() if r["action"] == "ticket.fire")
+    assert entry["after"] == {"station": "kitchen", "course": 2}
+    assert entry["who"] == "Demo staff"
+
+
+def test_starters_and_drinks_start_without_anyone(client, db, venue):
+    """Те, що не має чекати нічиєї команди."""
+    order, _ = paid(client, db)
+    as_staff(client)
+    assert find(tickets_of(client, "kitchen"), order["number"], course=1)["awaiting_fire"] is False
+    assert find(tickets_of(client, "bar"), order["number"])["awaiting_fire"] is False
 
 
 def test_drinks_never_wait(client, db, venue):
@@ -141,8 +200,9 @@ def test_single_course_order_is_not_blocked(client, db, venue):
     order, _ = paid(client, db, items=[{"key": MAIN, "qty": 1}])
     as_staff(client)
     main = find(tickets_of(client, "kitchen"), order["number"], course=2)
-    # закусок у замовленні немає — чекати нема на що
+    # закусок у замовленні немає — чекати нема на що, кухня починає одразу
     assert main["blocked_by_course"] is None
+    assert main["awaiting_fire"] is False
     assert client.post(
         f"/api/orders/tickets/{main['id']}/status", params={"target": "accepted"}
     ).status_code == 200
@@ -225,6 +285,8 @@ def test_order_is_ready_only_when_every_station_is(client, db, venue):
 
     for course in (1, 2):
         ticket = find(tickets_of(client, "kitchen"), order["number"], course=course)
+        if ticket["awaiting_fire"]:
+            client.post(f"/api/orders/tickets/{ticket['id']}/fire")
         for target in ("accepted", "ready"):
             client.post(f"/api/orders/tickets/{ticket['id']}/status", params={"target": target})
 

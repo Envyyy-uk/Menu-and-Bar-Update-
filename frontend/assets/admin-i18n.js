@@ -140,6 +140,16 @@ Object.assign(I18N, {
     es: 'Pagado y aún sin aceptar', it: 'Pagato e ancora non accettato',
     de: 'Bezahlt und noch nicht angenommen', ru: 'Оплачено и до сих пор не принято'
   },
+  'a.fire':         { uk: 'Запустити', en: 'Fire', es: 'Lanzar', it: 'Lancia', de: 'Anstoßen', ru: 'Запустить' },
+  'a.fire.wait':    { uk: 'чекає попереднього курсу', en: 'waiting for the previous course', es: 'espera el plato anterior', it: 'attende la portata precedente', de: 'wartet auf den vorigen Gang', ru: 'ждёт предыдущий курс' },
+  'a.fire.hint': {
+    uk: 'Кухня не почне наступний курс, поки ви його не запустите. Дивіться на стіл, а не на годинник.',
+    en: 'The kitchen will not start the next course until you fire it. Watch the table, not the clock.',
+    es: 'La cocina no empezará el siguiente plato hasta que lo lance. Mire la mesa, no el reloj.',
+    it: 'La cucina non inizia la portata successiva finché non la lanciate. Guardate il tavolo, non l’orologio.',
+    de: 'Die Küche beginnt den nächsten Gang erst, wenn Sie ihn anstoßen. Schauen Sie auf den Tisch, nicht auf die Uhr.',
+    ru: 'Кухня не начнёт следующий курс, пока вы его не запустите. Смотрите на стол, а не на часы.'
+  },
   'a.refund':       { uk: 'Повернути', en: 'Refund', es: 'Reembolsar', it: 'Rimborsa', de: 'Erstatten', ru: 'Вернуть' },
   'a.refund.amount':{ uk: 'Сума повернення', en: 'Refund amount', es: 'Importe a reembolsar', it: 'Importo del rimborso', de: 'Erstattungsbetrag', ru: 'Сумма возврата' },
   'a.refund.limit': { uk: 'Ваша стеля', en: 'Your ceiling', es: 'Su límite', it: 'Il vostro limite', de: 'Ihre Obergrenze', ru: 'Ваш потолок' },

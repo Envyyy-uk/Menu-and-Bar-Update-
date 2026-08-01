@@ -98,7 +98,9 @@ async function reload() {
  * своє, і одне одному вони не заважають.
  */
 function card(order) {
-  const blocked = order.blocked_by_course !== null && order.blocked_by_course !== undefined;
+  const waiting = !!order.awaiting_fire;
+  const blocked = waiting ||
+    (order.blocked_by_course !== null && order.blocked_by_course !== undefined);
   const box = el('article', 'kcard' + (order.fresh ? ' fresh' : '') +
     (LATE.has(order.number) ? ' late' : '') + (blocked ? ' held' : ''));
 
@@ -112,7 +114,8 @@ function card(order) {
   box.appendChild(head);
 
   if (LATE.has(order.number)) box.appendChild(el('p', 'klate', esc(t('k.late', LANG))));
-  if (blocked) box.appendChild(el('p', 'kheld', esc(t('k.blocked', LANG))));
+  // Кухня чекає не таймера, а команди залу: тільки офіціант бачить стіл
+  if (blocked) box.appendChild(el('p', 'kheld', esc(t(waiting ? 'k.awaitFire' : 'k.blocked', LANG))));
 
   const list = el('ul', 'kitems');
   order.items.forEach(i => {
