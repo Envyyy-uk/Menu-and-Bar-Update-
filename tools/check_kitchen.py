@@ -91,7 +91,7 @@ with sync_playwright() as p:
     kitchen.click(".login button")
     kitchen.wait_for_selector(".kbar", timeout=15000)
     kitchen.wait_for_timeout(1500)
-    check("індикатор зв'язку зелений", "ok" in kitchen.get_attribute("#link", "class"),
+    check("індикатор зв'язку зелений", "netdot ok" == kitchen.get_attribute("#link", "class"),
           kitchen.get_attribute("#link", "class"))
     check("порожня черга підписана", "Замовлень немає" in kitchen.inner_text("#board"),
           kitchen.inner_text("#board")[:60])

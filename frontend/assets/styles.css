@@ -444,10 +444,12 @@ body.kitchen {
 }
 .kbar button.off { opacity: .5; }
 
-/* Індикатор зв'язку живе в шапці постійно, а не тільки коли все зламалось */
-.link { width: 14px; height: 14px; border-radius: 50%; background: #666; flex: 0 0 auto; }
-.link.ok { background: #4ec27f; }
-.link.bad { background: #e8534a; animation: pulse .8s infinite alternate; }
+/* Індикатор зв'язку живе в шапці постійно, а не тільки коли все зламалось.
+   Клас навмисно свій: `.link` уже зайнятий текстовою кнопкою в панелі, і
+   кружечок 14×14 стискав ту кнопку до нечитного розміру. */
+.netdot { width: 14px; height: 14px; border-radius: 50%; background: #666; flex: 0 0 auto; }
+.netdot.ok { background: #4ec27f; }
+.netdot.bad { background: #e8534a; animation: pulse .8s infinite alternate; }
 @keyframes pulse { from { opacity: 1; } to { opacity: .25; } }
 
 .board {

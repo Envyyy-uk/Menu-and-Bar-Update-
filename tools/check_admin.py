@@ -54,6 +54,16 @@ with sync_playwright() as p:
     admin.click("button.primary")
     admin.wait_for_selector(".tab", timeout=15000)
     check("вхід поштою й паролем", "owner" in admin.inner_text("#who"))
+    # клас `.link` кнопки «Вийти» колись перетинався з індикатором зв'язку
+    # на кухні — 14×14 і текст поверх перемикача мов
+    logout = admin.evaluate("""() => {
+      const b = document.querySelector('#who button');
+      const s = document.querySelector('.switches');
+      const r = b.getBoundingClientRect(), q = s.getBoundingClientRect();
+      return { w: r.width, h: r.height, overlap: r.bottom > q.top + 1 };
+    }""")
+    check("кнопка «Вийти» читабельна", logout["w"] > 40 and logout["h"] > 18, str(logout))
+    check("шапка не накладається на перемикач мов", not logout["overlap"], str(logout))
     # Панель відкривається на черзі замовлень — позиції на сусідній вкладці
     admin.locator(".tab", has_text="Позиції").click()
     admin.wait_for_selector(".arow", timeout=15000)

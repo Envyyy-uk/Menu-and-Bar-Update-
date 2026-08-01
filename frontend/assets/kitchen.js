@@ -182,7 +182,7 @@ function watchdog() {
   const silent = Date.now() - LAST_SEEN;
   setAlarm(silent > SILENCE_MS);
   const dot = document.getElementById('link');
-  dot.className = 'link' + (silent > SILENCE_MS ? ' bad' : ' ok');
+  dot.className = 'netdot' + (silent > SILENCE_MS ? ' bad' : ' ok');
   dot.title = `${t('k.online', LANG)} · ${Math.round(silent / 1000)}s`;
 
   if (!SOCKET || SOCKET.readyState > 1) connect();
