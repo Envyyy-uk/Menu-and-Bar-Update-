@@ -129,6 +129,7 @@ const I18N = {
   'cart.send':   { uk: 'Замовити й оплатити', en: 'Order and pay', es: 'Pedir y pagar', it: 'Ordina e paga', de: 'Bestellen und zahlen', ru: 'Заказать и оплатить' },
   'cart.sending':{ uk: 'Надсилаємо…', en: 'Sending…', es: 'Enviando…', it: 'Invio…', de: 'Wird gesendet…', ru: 'Отправляем…' },
   'cart.empty':  { uk: 'Кошик порожній', en: 'Your basket is empty', es: 'La cesta está vacía', it: 'Il carrello è vuoto', de: 'Der Warenkorb ist leer', ru: 'Корзина пуста' },
+  'cart.remove': { uk: 'Прибрати', en: 'Remove', es: 'Quitar', it: 'Rimuovi', de: 'Entfernen', ru: 'Убрать' },
   'cart.close':  { uk: 'Закрити', en: 'Close', es: 'Cerrar', it: 'Chiudi', de: 'Schließen', ru: 'Закрыть' },
   'cart.needTable': {
     uk: 'Щоб замовити, скануйте QR на своєму столі.',

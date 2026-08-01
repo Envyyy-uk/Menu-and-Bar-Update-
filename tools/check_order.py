@@ -108,6 +108,37 @@ with sync_playwright() as p:
     check("панель кошика показує суму", "£9.00" in guest.inner_text("#cartbar"),
           guest.inner_text("#cartbar"))
 
+    # --- кошик редагується зсередини --------------------------------------
+    guest.locator("#d-oat-cold-brew .add-btn").click()
+    guest.wait_for_timeout(200)
+    guest.locator("#cartbar button").click()
+    guest.wait_for_selector(".sheet")
+    check("у кошику видно обидві позиції", guest.locator(".cart-list li").count() == 2,
+          guest.locator(".cart-list li").count())
+
+    lemonade_line = guest.locator(".cart-list li", has_text="House Lemonade")
+    lemonade_line.locator(".qty-btn").first.click()   # −
+    guest.wait_for_timeout(200)
+    check("кількість зменшується прямо в кошику",
+          guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty").inner_text() == "1")
+    check("сума перерахувалася", "£9.25" in guest.inner_text(".cart-total"),
+          guest.inner_text(".cart-total"))
+
+    guest.locator(".cart-list li", has_text="Oat Cold Brew").locator(".drop-btn").click()
+    guest.wait_for_timeout(200)
+    check("страву можна прибрати з кошика",
+          guest.locator(".cart-list li").count() == 1, guest.locator(".cart-list li").count())
+    check("картка в меню синхронізувалася",
+          guest.locator("#d-oat-cold-brew .add-btn").count() == 1)
+
+    guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty-btn").nth(1).click()
+    guest.wait_for_timeout(200)
+    check("кількість повертається назад",
+          guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty").inner_text() == "2")
+
+    guest.locator(".sheet button.wide:not(.primary)").click()
+    guest.wait_for_timeout(200)
+
     # --- позиція випала, поки кошик відкритий ------------------------------
     guest.locator("#d-spiced-apple-cooler .add-btn").click()
     guest.wait_for_timeout(200)

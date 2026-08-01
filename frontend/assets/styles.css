@@ -394,3 +394,17 @@ button.wide { width: 100%; margin-top: 8px; }
   background: var(--danger-bg); color: var(--danger);
 }
 .dropped ul { margin: 6px 0 0; padding-left: 18px; }
+
+/* Рядок кошика: назва й сума зліва, керування справа. Кількість і видалення
+   живуть тут, а не тільки на картці в меню — інакше, щоб прибрати одну
+   позицію, довелося б шукати її по всьому меню з відкритим кошиком. */
+.cart-list li { flex-wrap: wrap; align-items: center; }
+.cart-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 auto; }
+.cart-name { font-size: 16px; }
+.cart-price { font-size: 14px; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+.cart-list .order-line { flex: 0 0 auto; }
+.drop-btn {
+  min-width: 44px; min-height: 44px; font-size: 20px; line-height: 1; cursor: pointer;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: transparent; color: var(--danger);
+}

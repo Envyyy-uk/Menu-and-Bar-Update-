@@ -150,45 +150,103 @@ function refreshCart(data) {
   bar.appendChild(open);
 }
 
+/** Рядок кошика: кількість і видалення прямо тут.
+
+    Керування має бути там, де гість дивиться на підсумок. Відправляти його
+    шукати ту саму картку в меню, щоб прибрати одну позицію, — це змусити
+    прокрутити півменю з відкритим кошиком. */
+function cartLine(key, qty, data, redraw) {
+  const item = data.items.find(i => i.key === key);
+  const li = el('li');
+  if (!item) {
+    // Позиція зникла з меню, поки кошик лежав відкритим — прибираємо мовчки.
+    delete CART[key];
+    saveCart();
+    return null;
+  }
+
+  const info = el('div', 'cart-info');
+  info.appendChild(el('span', 'cart-name', esc(item.name)));
+  info.appendChild(el('span', 'cart-price',
+    esc(money(item.price_pence * qty, data.venue.currency, LANG))));
+
+  const controls = el('div', 'order-line');
+  const minus = el('button', 'qty-btn', '−');
+  minus.type = 'button';
+  minus.setAttribute('aria-label', `− ${item.name}`);
+  minus.addEventListener('click', () => {
+    CART[key] = qty - 1;
+    if (CART[key] <= 0) delete CART[key];
+    saveCart();
+    redraw();
+  });
+
+  const plus = el('button', 'qty-btn', '+');
+  plus.type = 'button';
+  plus.setAttribute('aria-label', `+ ${item.name}`);
+  plus.addEventListener('click', () => { CART[key] = qty + 1; saveCart(); redraw(); });
+
+  const drop = el('button', 'drop-btn', '×');
+  drop.type = 'button';
+  drop.title = t('cart.remove', LANG);
+  drop.setAttribute('aria-label', `${t('cart.remove', LANG)}: ${item.name}`);
+  drop.addEventListener('click', () => { delete CART[key]; saveCart(); redraw(); });
+
+  controls.append(minus, el('span', 'qty', String(qty)), plus, drop);
+  li.append(info, controls);
+  return li;
+}
+
 function openCart(data) {
   document.querySelectorAll('.sheet').forEach(n => n.remove());
   const sheet = el('div', 'sheet');
   const box = el('div', 'sheet-box');
-  box.appendChild(el('h2', null, esc(t('cart.title', LANG))));
-
-  if (!cartCount()) {
-    box.appendChild(el('p', 'hint', esc(t('cart.empty', LANG))));
-  } else {
-    const list = el('ul', 'cart-list');
-    Object.entries(CART).forEach(([key, qty]) => {
-      const item = data.items.find(i => i.key === key);
-      if (!item) return;
-      const li = el('li');
-      li.innerHTML = `<span>${esc(item.name)} × ${qty}</span>` +
-        `<span>${esc(money(item.price_pence * qty, data.venue.currency, LANG))}</span>`;
-      list.appendChild(li);
-    });
-    box.appendChild(list);
-    box.appendChild(el('p', 'cart-total',
-      `${esc(t('cart.total', LANG))}: <b>${esc(money(cartTotal(data), data.venue.currency, LANG))}</b>`));
-
-    const note = el('textarea', 'note');
-    note.placeholder = t('cart.note', LANG);
-    note.rows = 2;
-    box.appendChild(note);
-
-    const send = el('button', 'primary wide', esc(t('cart.send', LANG)));
-    send.type = 'button';
-    send.addEventListener('click', () => submitOrder(data, note.value, send, box));
-    box.appendChild(send);
-  }
-
-  const close = el('button', 'wide', esc(t('cart.close', LANG)));
-  close.type = 'button';
-  close.addEventListener('click', () => sheet.remove());
-  box.appendChild(close);
-
   sheet.appendChild(box);
+
+  // Побажання переживають перемальовування списку: гість міг написати їх
+  // до того, як передумав щодо однієї позиції.
+  let noteText = '';
+
+  const draw = () => {
+    box.innerHTML = '';
+    box.appendChild(el('h2', null, esc(t('cart.title', LANG))));
+
+    if (!cartCount()) {
+      box.appendChild(el('p', 'hint', esc(t('cart.empty', LANG))));
+    } else {
+      const list = el('ul', 'cart-list');
+      Object.entries(CART).forEach(([key, qty]) => {
+        const li = cartLine(key, qty, data, draw);
+        if (li) list.appendChild(li);
+      });
+      box.appendChild(list);
+      box.appendChild(el('p', 'cart-total',
+        `${esc(t('cart.total', LANG))}: <b>${esc(money(cartTotal(data), data.venue.currency, LANG))}</b>`));
+
+      const note = el('textarea', 'note');
+      note.placeholder = t('cart.note', LANG);
+      note.rows = 2;
+      note.value = noteText;
+      note.addEventListener('input', () => { noteText = note.value; });
+      box.appendChild(note);
+
+      const send = el('button', 'primary wide', esc(t('cart.send', LANG)));
+      send.type = 'button';
+      send.addEventListener('click', () => submitOrder(data, note.value, send, box));
+      box.appendChild(send);
+    }
+
+    const close = el('button', 'wide', esc(t('cart.close', LANG)));
+    close.type = 'button';
+    close.addEventListener('click', () => sheet.remove());
+    box.appendChild(close);
+
+    // Картки в меню й панель унизу мають показувати те саме, що й кошик
+    refreshCart(data);
+  };
+
+  draw();
+
   sheet.addEventListener('click', ev => { if (ev.target === sheet) sheet.remove(); });
   document.body.appendChild(sheet);
 }
