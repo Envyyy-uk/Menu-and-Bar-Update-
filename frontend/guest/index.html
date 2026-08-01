@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Menu</title>
+<meta name="theme-color" content="#24201b">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/assets/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Menu">
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+
+<div id="preview-banner" class="banner" hidden></div>
+<div id="offline-banner" class="banner warn" hidden></div>
+
+<header class="site">
+  <div class="wrap">
+    <h1 id="venue-name">&nbsp;</h1>
+    <p class="sub" data-i18n="brand.sub"></p>
+    <p id="table-badge" class="table-badge" hidden></p>
+    <div class="switches"></div>
+  </div>
+</header>
+
+<div id="toolbar"></div>
+
+<main class="wrap">
+  <p class="notice" data-i18n="guest.notice"></p>
+  <p class="notice" data-i18n="guest.lead"></p>
+  <div id="menu"><p class="notice" data-i18n="net.loading"></p></div>
+  <p id="empty" data-i18n="search.empty" hidden></p>
+</main>
+
+<footer class="site">
+  <div class="wrap"><p data-i18n="guest.notice"></p></div>
+</footer>
+
+<script src="/assets/i18n.js"></script>
+<script src="/assets/allergens.js"></script>
+<script src="/assets/format.js"></script>
+<script src="/assets/ui.js"></script>
+<script src="/assets/api.js"></script>
+<script src="/assets/menu.js"></script>
+<script src="/assets/pwa.js"></script>
+<script>initGuest();</script>
+</body>
+</html>

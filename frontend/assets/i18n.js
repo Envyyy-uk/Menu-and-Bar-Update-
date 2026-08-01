@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Локалізація інтерфейсу — uk / en / es / it / de / ru
+
+   Тут лише інтерфейс. Назви страв, склад і розділи приходять з API вже
+   перекладеними: склад — це ключі словника, а не текст.
+   ========================================================================== */
+
+const LANGS = [
+  { code: 'uk', label: 'Українська', short: 'UA' },
+  { code: 'en', label: 'English',    short: 'EN' },
+  { code: 'es', label: 'Español',    short: 'ES' },
+  { code: 'it', label: 'Italiano',   short: 'IT' },
+  { code: 'de', label: 'Deutsch',    short: 'DE' },
+  { code: 'ru', label: 'Русский',    short: 'RU' }
+];
+
+const I18N = {
+
+  'brand.sub': {
+    uk: 'Меню · склад і алергени', en: 'Menu · ingredients & allergens',
+    es: 'Carta · ingredientes y alérgenos', it: 'Menu · ingredienti e allergeni',
+    de: 'Karte · Zutaten & Allergene', ru: 'Меню · состав и аллергены'
+  },
+
+  'lang.label':  { uk: 'Мова', en: 'Language', es: 'Idioma', it: 'Lingua', de: 'Sprache', ru: 'Язык' },
+  'theme.label': { uk: 'Тема', en: 'Theme', es: 'Tema', it: 'Tema', de: 'Design', ru: 'Тема' },
+  'theme.auto':  { uk: 'Авто', en: 'Auto', es: 'Auto', it: 'Auto', de: 'Auto', ru: 'Авто' },
+  'theme.light': { uk: 'Світла', en: 'Light', es: 'Claro', it: 'Chiaro', de: 'Hell', ru: 'Светлая' },
+  'theme.dark':  { uk: 'Темна', en: 'Dark', es: 'Oscuro', it: 'Scuro', de: 'Dunkel', ru: 'Тёмная' },
+  'ui.top':      { uk: 'Нагору', en: 'Back to top', es: 'Arriba', it: 'Torna su', de: 'Nach oben', ru: 'Наверх' },
+
+  /* ------------------------------------------------------------ шапка --- */
+  'guest.table': { uk: 'Стіл', en: 'Table', es: 'Mesa', it: 'Tavolo', de: 'Tisch', ru: 'Стол' },
+  'guest.lead': {
+    uk: 'Кожна позиція — з повним складом і позначеними алергенами. Оберіть свої алергени у фільтрі: позиції з ними буде приглушено.',
+    en: 'Every item broken down into its ingredients, with allergens marked. Tick your allergens in the filter and matching items are dimmed.',
+    es: 'Cada plato con sus ingredientes y los alérgenos señalados. Marque sus alérgenos en el filtro y los platos afectados se atenúan.',
+    it: 'Ogni voce con gli ingredienti e gli allergeni indicati. Selezionate i vostri allergeni nel filtro: le voci interessate vengono attenuate.',
+    de: 'Jede Position mit vollständiger Zutatenliste und gekennzeichneten Allergenen. Wählen Sie Ihre Allergene im Filter — betroffene Positionen werden abgeblendet.',
+    ru: 'Каждая позиция — с полным составом и отмеченными аллергенами. Отметьте свои аллергены в фильтре: позиции с ними будут приглушены.'
+  },
+  'guest.notice': {
+    uk: 'Обов’язково скажіть офіціантові про алергію перед замовленням: на кухні спільне обладнання, і слідів уникнути не завжди можливо.',
+    en: 'Please tell your server about any allergy before ordering: the kitchen shares equipment and traces cannot always be avoided.',
+    es: 'Informe al camarero de cualquier alergia antes de pedir: la cocina comparte equipos y no siempre se pueden evitar las trazas.',
+    it: 'Informate il personale di eventuali allergie prima di ordinare: la cucina condivide le attrezzature e le tracce non sono sempre evitabili.',
+    de: 'Bitte informieren Sie das Personal vor der Bestellung über Allergien: Die Küche nutzt gemeinsame Geräte, Spuren sind nicht immer vermeidbar.',
+    ru: 'Обязательно скажите официанту об аллергии перед заказом: на кухне общее оборудование, и следов не всегда удаётся избежать.'
+  },
+
+  /* --------------------------------------------------------- панель --- */
+  'tb.search': {
+    uk: 'Пошук за назвою або складником', en: 'Search by name or ingredient',
+    es: 'Buscar por nombre o ingrediente', it: 'Cerca per nome o ingrediente',
+    de: 'Nach Name oder Zutat suchen', ru: 'Поиск по названию или ингредиенту'
+  },
+  'tb.filter': { uk: 'Алергени', en: 'Allergens', es: 'Alérgenos', it: 'Allergeni', de: 'Allergene', ru: 'Аллергены' },
+  'tb.hint': {
+    uk: 'Позначте те, чого уникаєте. Приглушується і «містить», і «може містити».',
+    en: 'Tick what you avoid. Both “contains” and “may contain” are dimmed.',
+    es: 'Marque lo que evita. Se atenúan tanto «contiene» como «puede contener».',
+    it: 'Selezionate ciò che evitate. Vengono attenuati sia «contiene» sia «può contenere».',
+    de: 'Markieren Sie, was Sie meiden. Abgeblendet werden „enthält“ und „kann enthalten“.',
+    ru: 'Отметьте то, чего избегаете. Приглушается и «содержит», и «может содержать».'
+  },
+  'tb.clear':   { uk: 'Скинути', en: 'Clear', es: 'Borrar', it: 'Azzera', de: 'Zurücksetzen', ru: 'Сбросить' },
+  'tb.flagged': { uk: 'з вашими алергенами', en: 'with your allergens', es: 'con sus alérgenos', it: 'con i vostri allergeni', de: 'mit Ihren Allergenen', ru: 'с вашими аллергенами' },
+  'tabs.all':   { uk: 'Усе', en: 'All', es: 'Todo', it: 'Tutto', de: 'Alle', ru: 'Всё' },
+  'tabs.label': { uk: 'Розділи', en: 'Sections', es: 'Secciones', it: 'Sezioni', de: 'Bereiche', ru: 'Разделы' },
+  'count.items': { uk: 'позицій', en: 'items', es: 'platos', it: 'voci', de: 'Positionen', ru: 'позиций' },
+  'search.empty': {
+    uk: 'Нічого не знайдено. Спробуйте іншу мову або інший складник.',
+    en: 'Nothing found. Try another language or another ingredient.',
+    es: 'Sin resultados. Pruebe otro idioma u otro ingrediente.',
+    it: 'Nessun risultato. Provate un’altra lingua o un altro ingrediente.',
+    de: 'Nichts gefunden. Versuchen Sie eine andere Sprache oder Zutat.',
+    ru: 'Ничего не найдено. Попробуйте другой язык или другой ингредиент.'
+  },
+
+  /* ---------------------------------------------------------- картка --- */
+  'dish.ingredients': { uk: 'Склад', en: 'Ingredients', es: 'Ingredientes', it: 'Ingredienti', de: 'Zutaten', ru: 'Состав' },
+  'dish.allergens':   { uk: 'Містить', en: 'Contains', es: 'Contiene', it: 'Contiene', de: 'Enthält', ru: 'Содержит' },
+  'dish.may':         { uk: 'Може містити', en: 'May contain', es: 'Puede contener', it: 'Può contenere', de: 'Kann enthalten', ru: 'Может содержать' },
+  'dish.none':        { uk: 'Із 14 обов’язкових — жодного', en: 'None of the 14 declarable allergens', es: 'Ninguno de los 14 alérgenos declarables', it: 'Nessuno dei 14 allergeni obbligatori', de: 'Keines der 14 deklarationspflichtigen Allergene', ru: 'Из 14 обязательных — ни одного' },
+  'alg.removable':    { uk: 'можна прибрати', en: 'can be removed', es: 'se puede retirar', it: 'si può togliere', de: 'kann weggelassen werden', ru: 'можно убрать' },
+  'alg.removableFull': {
+    uk: 'Позначене R можна прибрати зі страви — скажіть офіціантові.',
+    en: 'Anything marked R can be left out — just ask your server.',
+    es: 'Lo marcado con R se puede retirar: pídalo al camarero.',
+    it: 'Ciò che è contrassegnato con R può essere tolto: chiedete al personale.',
+    de: 'Mit R Markiertes kann weggelassen werden — sagen Sie es dem Personal.',
+    ru: 'Отмеченное R можно убрать из блюда — скажите официанту.'
+  },
+  'src.official':      { uk: 'Офіційний лист закладу', en: 'Venue allergen sheet', es: 'Ficha oficial del local', it: 'Scheda ufficiale del locale', de: 'Offizielles Allergenblatt', ru: 'Официальный лист заведения' },
+  'src.reconstructed': { uk: 'Реконструкція з опису', en: 'Reconstructed from description', es: 'Reconstruido de la descripción', it: 'Ricostruito dalla descrizione', de: 'Aus der Beschreibung rekonstruiert', ru: 'Реконструкция из описания' },
+  'src.reviewed':      { uk: 'перевірено', en: 'checked', es: 'comprobado', it: 'verificato', de: 'geprüft', ru: 'проверено' },
+
+  /* --------------------------------------------------------- розклад --- */
+  'sched.days': {
+    uk: 'Нд,Пн,Вт,Ср,Чт,Пт,Сб', en: 'Su,Mo,Tu,We,Th,Fr,Sa', es: 'Do,Lu,Ma,Mi,Ju,Vi,Sá',
+    it: 'Do,Lu,Ma,Me,Gi,Ve,Sa', de: 'So,Mo,Di,Mi,Do,Fr,Sa', ru: 'Вс,Пн,Вт,Ср,Чт,Пт,Сб'
+  },
+  'sched.closed':   { uk: 'Зараз не подається', en: 'Not served right now', es: 'Ahora no se sirve', it: 'Ora non servito', de: 'Derzeit nicht im Angebot', ru: 'Сейчас не подаётся' },
+  'sched.soldOut':  { uk: 'Наразі немає', en: 'Currently unavailable', es: 'No disponible ahora', it: 'Al momento non disponibile', de: 'Derzeit nicht verfügbar', ru: 'Сейчас нет' },
+  'sched.servedAt': { uk: 'Подається', en: 'Served', es: 'Se sirve', it: 'Servito', de: 'Serviert', ru: 'Подаётся' },
+  'sched.soonHead': { uk: 'Скоро', en: 'Coming soon', es: 'Muy pronto', it: 'Presto', de: 'Demnächst', ru: 'Скоро' },
+  'sched.soon':     { uk: 'Готуємо, незабаром з’явиться', en: 'In the works, arriving soon', es: 'En preparación, llegará pronto', it: 'In arrivo a breve', de: 'In Vorbereitung, bald verfügbar', ru: 'Готовим, скоро появится' },
+  'sched.soonFrom': { uk: 'Відкриється', en: 'Opens', es: 'Se abre', it: 'Apre', de: 'Öffnet', ru: 'Откроется' },
+  'sched.badge':    { uk: 'немає', en: 'off', es: 'no', it: 'no', de: 'aus', ru: 'нет' },
+  'sched.badge.soon': { uk: 'скоро', en: 'soon', es: 'pronto', it: 'presto', de: 'bald', ru: 'скоро' },
+  'sched.preview':  { uk: 'Режим перегляду часу', en: 'Time preview mode', es: 'Modo de vista previa horaria', it: 'Modalità anteprima orario', de: 'Zeit-Vorschaumodus', ru: 'Режим просмотра времени' },
+
+  /* ----------------------------------------------------- замовлення --- */
+  'order.noAlcohol': {
+    uk: 'Алкоголь замовляється в офіціанта: вік перевіряють при подачі.',
+    en: 'Alcohol is ordered through your server: age is checked on serving.',
+    es: 'El alcohol se pide al camarero: la edad se verifica al servir.',
+    it: 'Gli alcolici si ordinano al personale: l’età viene verificata al servizio.',
+    de: 'Alkohol bestellen Sie beim Personal: Das Alter wird bei der Ausgabe geprüft.',
+    ru: 'Алкоголь заказывается у официанта: возраст проверяют при подаче.'
+  },
+
+  /* --------------------------------------------------------- зв’язок --- */
+  'net.offline': {
+    uk: 'Немає зв’язку із закладом. Показано останній відомий стан меню.',
+    en: 'No connection to the venue. Showing the last known menu state.',
+    es: 'Sin conexión con el local. Se muestra el último estado conocido de la carta.',
+    it: 'Nessuna connessione con il locale. Viene mostrato l’ultimo stato noto del menu.',
+    de: 'Keine Verbindung zum Lokal. Angezeigt wird der zuletzt bekannte Kartenstand.',
+    ru: 'Нет связи с заведением. Показано последнее известное состояние меню.'
+  },
+  'net.loading': { uk: 'Завантаження меню…', en: 'Loading the menu…', es: 'Cargando la carta…', it: 'Caricamento del menu…', de: 'Karte wird geladen…', ru: 'Загрузка меню…' },
+  'net.failed': {
+    uk: 'Меню не завантажилося. Оновіть сторінку або покличте офіціанта.',
+    en: 'The menu failed to load. Refresh the page or ask your server.',
+    es: 'La carta no se ha cargado. Actualice la página o avise al camarero.',
+    it: 'Il menu non si è caricato. Aggiornate la pagina o chiedete al personale.',
+    de: 'Die Karte konnte nicht geladen werden. Seite neu laden oder Personal ansprechen.',
+    ru: 'Меню не загрузилось. Обновите страницу или позовите официанта.'
+  }
+};
+
+/* -------------------------------------------------------------------------
+   Поточна мова
+   ------------------------------------------------------------------------- */
+const LANG_STORAGE_KEY = 'menu-lang';
+
+function getLang() {
+  const url = new URLSearchParams(location.search).get('lang');
+  if (url && LANGS.some(l => l.code === url)) return url;
+  try {
+    const saved = localStorage.getItem(LANG_STORAGE_KEY);
+    if (saved && LANGS.some(l => l.code === saved)) return saved;
+  } catch (e) { /* приватний режим */ }
+  const nav = (navigator.language || 'en').slice(0, 2).toLowerCase();
+  return LANGS.some(l => l.code === nav) ? nav : 'en';
+}
+
+function setLang(code) {
+  try { localStorage.setItem(LANG_STORAGE_KEY, code); } catch (e) { /* ігноруємо */ }
+}
+
+/** t('tb.filter') — рядок поточною мовою, з відкатом на англійську */
+function t(key, lang) {
+  const entry = I18N[key];
+  if (!entry) return key;
+  return entry[lang || getLang()] || entry.en || key;
+}
+
+/** Багатомовне поле з API: { uk: '…', en: '…' } → рядок */
+function pick(field, lang) {
+  if (!field) return '';
+  if (typeof field === 'string') return field;
+  return field[lang] || field.en || Object.values(field)[0] || '';
+}

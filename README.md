@@ -84,6 +84,14 @@ seed_menu.json        демонстраційні дані (заклад і с�
 docker compose run --rm api pytest        # або: pytest  з каталогу backend
 ```
 
+Перевірка гостьового меню в справжньому браузері — окремо, бо потребує
+Playwright і піднятого сервера:
+
+```bash
+pip install playwright && playwright install chromium
+python tools/check_guest.py
+```
+
 ## Ліцензія і дані
 
 Заклад «The Copper Fig» і всі позиції в `seed_menu.json` вигадані. Жодного

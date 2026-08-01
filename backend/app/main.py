@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 
@@ -28,6 +28,16 @@ def health() -> JSONResponse:
             status_code=503, content={"status": "degraded", "db": exc.__class__.__name__}
         )
     return JSONResponse({"status": "ok", "db": "ok"})
+
+
+@app.get("/t/{token}", include_in_schema=False)
+def table_entry(token: str) -> FileResponse:
+    """QR веде на /t/{token}. Сторінка та сама, що й гостьове меню — стіл
+    вона дізнається з адреси й перепитує в API."""
+    page = settings.frontend_dir / "guest" / "index.html"
+    if not page.exists():
+        raise HTTPException(status_code=404, detail="guest page is not built")
+    return FileResponse(page)
 
 
 # Статика без збірки, як у референсі. Монтується останньою, щоб не перехопити

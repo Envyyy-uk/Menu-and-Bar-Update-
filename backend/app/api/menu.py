@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import Venue
+from app.models import Table, Venue
 from app.services.menu import menu_payload
 
 router = APIRouter(prefix="/api", tags=["menu"])
@@ -36,3 +36,13 @@ def get_menu(
         except ValueError:
             raise HTTPException(status_code=400, detail="at: очікується ISO-8601") from None
     return menu_payload(db, venue, moment)
+
+
+@router.get("/table/{token}")
+def get_table(token: str, db: Session = Depends(get_db)) -> dict:
+    """Впізнати стіл за токеном із QR. Назва столу — єдине, що звідси
+    дізнається гість: сам токен у відповідь не повертається."""
+    table = db.scalars(select(Table).where(Table.token == token)).first()
+    if table is None or not table.active:
+        raise HTTPException(status_code=404, detail="unknown table")
+    return {"id": str(table.id), "label": table.label, "venue": table.venue.name}
