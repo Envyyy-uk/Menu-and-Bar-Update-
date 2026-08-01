@@ -342,3 +342,55 @@ table.audit small { display: block; color: var(--ink-faint); font-size: 12px; wo
 @media (min-width: 620px) {
   .states { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ==========================================================================
+   Кошик і замовлення гостя
+   ========================================================================== */
+
+.order-slot { margin-top: 12px; }
+.order-line { display: flex; align-items: center; gap: 10px; }
+.add-btn, .qty-btn {
+  font: inherit; font-size: 15px; cursor: pointer;
+  border: 1px solid var(--accent); border-radius: var(--radius);
+  background: var(--accent); color: var(--accent-ink); padding: 9px 16px;
+}
+/* Кнопки кількості великі навмисно: у них цілять пальцем, тримаючи телефон
+   однією рукою. */
+.qty-btn { min-width: 44px; min-height: 44px; font-size: 20px; line-height: 1; }
+.order-line .qty { font-size: 18px; min-width: 24px; text-align: center; font-variant-numeric: tabular-nums; }
+
+.cartbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  display: flex; gap: 12px; align-items: center; justify-content: space-between;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: var(--head); color: #f3ece2;
+  box-shadow: 0 -2px 14px rgba(0,0,0,.25);
+}
+.cartbar .cart-sum { font-size: 15px; }
+.cartbar button { border: none; }
+body:has(.cartbar:not([hidden])) { padding-bottom: 72px; }
+
+.sheet {
+  position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end;
+  background: rgba(0,0,0,.45);
+}
+.sheet-box {
+  width: 100%; max-height: 84vh; overflow-y: auto;
+  background: var(--paper); border-radius: 16px 16px 0 0;
+  padding: 18px 18px calc(18px + env(safe-area-inset-bottom, 0px));
+}
+.sheet-box h2 { margin: 0 0 10px; font-size: 20px; }
+.cart-list { list-style: none; margin: 0 0 10px; padding: 0; }
+.cart-list li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--rule); }
+.cart-total { text-align: right; font-size: 17px; }
+.note {
+  width: 100%; font: inherit; font-size: 16px; padding: 9px 11px; margin-bottom: 10px;
+  border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--paper-2); color: var(--ink); resize: vertical;
+}
+button.wide { width: 100%; margin-top: 8px; }
+.dropped {
+  margin-top: 12px; padding: 10px 12px; border-radius: var(--radius);
+  background: var(--danger-bg); color: var(--danger);
+}
+.dropped ul { margin: 6px 0 0; padding-left: 18px; }

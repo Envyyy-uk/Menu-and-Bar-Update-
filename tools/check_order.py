@@ -1,0 +1,206 @@
+"""Замовлення в справжньому браузері.
+
+Доводить критерій спринту 5 очима гостя: подвійний тап по «Замовити» не
+створює двох замовлень, а позиція, яку вимкнули, поки кошик був відкритий,
+не потрапляє в оплату.
+
+    python tools/check_order.py
+
+Змінні: BASE_URL, ADMIN_EMAIL, ADMIN_PASSWORD, CHROMIUM_PATH, SCREENSHOT.
+"""
+
+import json
+import os
+import sys
+
+from playwright.sync_api import sync_playwright
+
+BASE = os.environ.get("BASE_URL", "http://127.0.0.1:8000")
+EMAIL = os.environ.get("ADMIN_EMAIL", "owner@example.com")
+PASSWORD = os.environ.get("ADMIN_PASSWORD", "change-me-please-12")
+
+fails = []
+
+
+def check(name, cond, extra=""):
+    print(("PASS " if cond else "FAIL ") + name + (f"  {extra}" if extra else ""))
+    if not cond:
+        fails.append(name)
+
+
+def api_orders_count(page, token):
+    """Скільки замовлень пішло з цього столу — рахуємо на боці сервера."""
+    return page.evaluate(
+        """async ([base, tok]) => {
+             const r = await fetch(base + '/api/table/' + tok);
+             return r.ok;
+           }""",
+        [BASE, token],
+    )
+
+
+launch = {"executable_path": os.environ["CHROMIUM_PATH"]} if os.environ.get("CHROMIUM_PATH") else {}
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(**launch)
+
+    # --- панель: дізнатися токен столу й тримати сесію для 86 --------------
+    admin = browser.new_context(viewport={"width": 420, "height": 900}).new_page()
+    admin.goto(f"{BASE}/admin/?lang=uk", wait_until="networkidle")
+    admin.fill('input[type="email"]', EMAIL)
+    admin.fill('input[type="password"]', PASSWORD)
+    admin.click("button.primary")
+    admin.wait_for_selector(".arow", timeout=15000)
+    admin.locator(".tab", has_text="Столи").click()
+    admin.wait_for_selector(".arow .url")
+    table_url = admin.locator(".arow .url").first.inner_text()
+    token = table_url.rsplit("/", 1)[1]
+
+    # Черга від попередніх прогонів — не наша справа: доводимо її до кінця,
+    # щоб рахувати тільки те, що створить цей тест.
+    admin.evaluate(
+        """async base => {
+             const rows = await (await fetch(base + '/api/orders')).json();
+             for (const o of rows) {
+               for (const s of ['accepted', 'ready', 'served']) {
+                 await fetch(base + '/api/orders/' + o.id + '/status?target=' + s, {method: 'POST'});
+               }
+             }
+           }""",
+        BASE,
+    )
+
+    # усе меню в робочий стан
+    admin.locator(".tab", has_text="Позиції").click()
+    admin.wait_for_selector(".arow")
+    for name in ("House Lemonade", "Spiced Apple Cooler"):
+        admin.locator(".arow", has_text=name).first.locator("button", has_text="За розкладом").click()
+        admin.wait_for_timeout(500)
+
+    guest = browser.new_context(viewport={"width": 420, "height": 900}).new_page()
+    errors = []
+    guest.on("pageerror", lambda e: errors.append(str(e)))
+    # 409 тут очікуваний: тест навмисно вимикає позицію, поки кошик відкритий,
+    # і саме цією відповіддю сервер каже, що оплата не пройшла.
+    guest.on(
+        "console",
+        lambda m: errors.append(m.text)
+        if m.type == "error" and "409" not in m.text
+        else None,
+    )
+
+    # --- без столу замовити не можна ---------------------------------------
+    guest.goto(f"{BASE}/?lang=uk", wait_until="networkidle")
+    guest.wait_for_selector(".dish")
+    check("без QR столу кнопок замовлення немає", guest.locator(".add-btn").count() == 0)
+
+    # --- зі столом ---------------------------------------------------------
+    guest.goto(f"{BASE}/t/{token}?lang=uk", wait_until="networkidle")
+    guest.wait_for_selector(".dish")
+    guest.wait_for_selector(".add-btn")
+    check("на алкоголі кнопки немає",
+          guest.locator("#d-elderflower-spritz .add-btn").count() == 0)
+
+    guest.locator("#d-house-lemonade .add-btn").click()
+    guest.locator("#d-house-lemonade .qty-btn").nth(1).click()
+    guest.wait_for_timeout(200)
+    check("кількість рахується", guest.locator("#d-house-lemonade .qty").inner_text() == "2")
+    check("панель кошика показує суму", "£9.00" in guest.inner_text("#cartbar"),
+          guest.inner_text("#cartbar"))
+
+    # --- позиція випала, поки кошик відкритий ------------------------------
+    guest.locator("#d-spiced-apple-cooler .add-btn").click()
+    guest.wait_for_timeout(200)
+    admin.locator(".arow", has_text="Spiced Apple Cooler").first.locator(
+        "button", has_text="Немає").click()
+    admin.wait_for_timeout(1000)
+
+    guest.locator("#cartbar button").click()
+    guest.wait_for_selector(".sheet")
+    guest.locator(".sheet .primary.wide").click()
+    guest.wait_for_selector(".dropped", timeout=15000)
+    check("гість бачить, що саме випало",
+          "Spiced Apple Cooler" in guest.inner_text(".dropped"), guest.inner_text(".dropped")[:80])
+
+    # --- замовляємо решту, двічі поспіль -----------------------------------
+    guest.locator(".dropped button").click()
+    guest.wait_for_selector(".sheet .primary.wide")
+    send = guest.locator(".sheet .primary.wide")
+    send.click()
+    send.click(force=True)  # подвійний тап — саме те, від чого захищає client_token
+    guest.wait_for_timeout(3000)
+
+    bar = guest.inner_text("#cartbar")
+    check("замовлення прийнято й показано гостю", "Замовлення №" in bar, bar)
+    check("статус — оплачено або далі",
+          any(word in bar for word in ("Оплачено", "Готується", "Готово")), bar)
+
+    # --- скільки насправді створено ----------------------------------------
+    admin.reload(wait_until="networkidle")
+    count = admin.evaluate(
+        """async base => {
+             const r = await fetch(base + '/api/orders');
+             const rows = await r.json();
+             return rows.length;
+           }""",
+        BASE,
+    )
+    check("подвійний тап дав рівно одне замовлення в черзі", count == 1, f"у черзі: {count}")
+
+    queue = admin.evaluate(
+        """async base => {
+             const k = await (await fetch(base + '/api/orders?station=kitchen')).json();
+             const b = await (await fetch(base + '/api/orders?station=bar')).json();
+             return {kitchen: k.length, bar: b.length,
+                     barItems: b.length ? b[0].items.map(i => i.name) : []};
+           }""",
+        BASE,
+    )
+    check("напій пішов на бар, а не на кухню",
+          queue["bar"] == 1 and queue["kitchen"] == 0 and queue["barItems"] == ["House Lemonade"],
+          json.dumps(queue, ensure_ascii=False))
+
+    # --- перезавантаження сторінки не створює дубль ------------------------
+    guest.reload(wait_until="networkidle")
+    guest.wait_for_selector("#cartbar")
+    guest.wait_for_timeout(1500)
+    check("після перезавантаження гість бачить своє замовлення",
+          "Замовлення №" in guest.inner_text("#cartbar"), guest.inner_text("#cartbar"))
+
+    # --- зал рухає статуси --------------------------------------------------
+    order_id = guest.evaluate("() => JSON.parse(sessionStorage.getItem('order')).id")
+    moved = admin.evaluate(
+        """async ([base, id]) => {
+             const r1 = await fetch(base + '/api/orders/' + id + '/status?target=accepted', {method:'POST'});
+             const r2 = await fetch(base + '/api/orders/' + id + '/status?target=served', {method:'POST'});
+             return {accepted: r1.status, skipped: r2.status};
+           }""",
+        [BASE, order_id],
+    )
+    check("«Прийнято» проходить", moved["accepted"] == 200, moved)
+    check("перескочити через «Готово» не можна", moved["skipped"] == 409, moved)
+
+    got = False
+    for _ in range(15):
+        guest.wait_for_timeout(1000)
+        if "Готується" in guest.inner_text("#cartbar"):
+            got = True
+            break
+    check("гість бачить «Готується» без перезавантаження", got, guest.inner_text("#cartbar"))
+
+    if os.environ.get("SCREENSHOT"):
+        guest.screenshot(path=os.environ["SCREENSHOT"], full_page=False)
+
+    # --- прибирання ---------------------------------------------------------
+    admin.locator(".tab", has_text="Позиції").click()
+    admin.wait_for_selector(".arow")
+    admin.locator(".arow", has_text="Spiced Apple Cooler").first.locator(
+        "button", has_text="За розкладом").click()
+    admin.wait_for_timeout(600)
+
+    check("без помилок у консолі гостя", not errors, "; ".join(errors[:3]))
+    browser.close()
+
+print()
+print("FAILED:", fails if fails else "нічого")
+sys.exit(1 if fails else 0)

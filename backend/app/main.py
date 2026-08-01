@@ -9,6 +9,7 @@ from app.api import admin_tables as admin_tables_api
 from app.api import admin_users as admin_users_api
 from app.api import auth as auth_api
 from app.api import menu as menu_api
+from app.api import orders as orders_api
 from app.core.config import settings
 from app.db import engine
 
@@ -24,6 +25,7 @@ app.include_router(admin_users_api.router)
 app.include_router(admin_menu_api.router)
 app.include_router(admin_schedules_api.router)
 app.include_router(admin_tables_api.router)
+app.include_router(orders_api.router)
 
 
 @app.get("/health", tags=["ops"])

@@ -120,6 +120,49 @@ const I18N = {
     ru: 'Алкоголь заказывается у официанта: возраст проверяют при подаче.'
   },
 
+
+  /* ------------------------------------------------------------ кошик --- */
+  'cart.add':    { uk: 'Додати', en: 'Add', es: 'Añadir', it: 'Aggiungi', de: 'Hinzufügen', ru: 'Добавить' },
+  'cart.title':  { uk: 'Замовлення', en: 'Your order', es: 'Su pedido', it: 'Il vostro ordine', de: 'Ihre Bestellung', ru: 'Заказ' },
+  'cart.total':  { uk: 'Разом', en: 'Total', es: 'Total', it: 'Totale', de: 'Summe', ru: 'Итого' },
+  'cart.note':   { uk: 'Побажання до кухні', en: 'Note for the kitchen', es: 'Nota para la cocina', it: 'Nota per la cucina', de: 'Hinweis für die Küche', ru: 'Пожелания к кухне' },
+  'cart.send':   { uk: 'Замовити й оплатити', en: 'Order and pay', es: 'Pedir y pagar', it: 'Ordina e paga', de: 'Bestellen und zahlen', ru: 'Заказать и оплатить' },
+  'cart.sending':{ uk: 'Надсилаємо…', en: 'Sending…', es: 'Enviando…', it: 'Invio…', de: 'Wird gesendet…', ru: 'Отправляем…' },
+  'cart.empty':  { uk: 'Кошик порожній', en: 'Your basket is empty', es: 'La cesta está vacía', it: 'Il carrello è vuoto', de: 'Der Warenkorb ist leer', ru: 'Корзина пуста' },
+  'cart.close':  { uk: 'Закрити', en: 'Close', es: 'Cerrar', it: 'Chiudi', de: 'Schließen', ru: 'Закрыть' },
+  'cart.needTable': {
+    uk: 'Щоб замовити, скануйте QR на своєму столі.',
+    en: 'To order, scan the QR code on your table.',
+    es: 'Para pedir, escanee el QR de su mesa.',
+    it: 'Per ordinare, scansionate il QR del vostro tavolo.',
+    de: 'Zum Bestellen scannen Sie den QR-Code an Ihrem Tisch.',
+    ru: 'Чтобы заказать, отсканируйте QR на своём столе.'
+  },
+  'cart.dropped': {
+    uk: 'Це щойно закінчилося й не потрапило в замовлення:',
+    en: 'These just ran out and are not in the order:',
+    es: 'Esto se ha agotado y no entra en el pedido:',
+    it: 'Questo è appena finito e non entra nell’ordine:',
+    de: 'Das ist gerade ausgegangen und nicht in der Bestellung:',
+    ru: 'Это только что закончилось и не попало в заказ:'
+  },
+  'cart.confirmRest': {
+    uk: 'Замовити решту', en: 'Order the rest', es: 'Pedir el resto',
+    it: 'Ordina il resto', de: 'Rest bestellen', ru: 'Заказать остальное'
+  },
+
+  /* ------------------------------------------------- статус замовлення -- */
+  'order.number':   { uk: 'Замовлення №', en: 'Order #', es: 'Pedido n.º', it: 'Ordine n.', de: 'Bestellung Nr.', ru: 'Заказ №' },
+  'order.new':      { uk: 'Нове замовлення', en: 'New order', es: 'Nuevo pedido', it: 'Nuovo ordine', de: 'Neue Bestellung', ru: 'Новый заказ' },
+  'order.st.draft':           { uk: 'Оформлюється', en: 'Being placed', es: 'En curso', it: 'In corso', de: 'Wird erstellt', ru: 'Оформляется' },
+  'order.st.payment_pending': { uk: 'Очікує оплати', en: 'Awaiting payment', es: 'Esperando pago', it: 'In attesa di pagamento', de: 'Zahlung ausstehend', ru: 'Ожидает оплаты' },
+  'order.st.paid':            { uk: 'Оплачено, передано на кухню', en: 'Paid, sent to the kitchen', es: 'Pagado, enviado a cocina', it: 'Pagato, inviato in cucina', de: 'Bezahlt, an die Küche gesendet', ru: 'Оплачено, передано на кухню' },
+  'order.st.accepted':        { uk: 'Готується', en: 'Being prepared', es: 'Preparándose', it: 'In preparazione', de: 'Wird zubereitet', ru: 'Готовится' },
+  'order.st.ready':           { uk: 'Готово, несемо', en: 'Ready, on its way', es: 'Listo, va para allá', it: 'Pronto, in arrivo', de: 'Fertig, kommt gleich', ru: 'Готово, несём' },
+  'order.st.served':          { uk: 'Подано', en: 'Served', es: 'Servido', it: 'Servito', de: 'Serviert', ru: 'Подано' },
+  'order.st.failed':          { uk: 'Оплата не пройшла', en: 'Payment failed', es: 'El pago no se ha completado', it: 'Pagamento non riuscito', de: 'Zahlung fehlgeschlagen', ru: 'Оплата не прошла' },
+  'order.st.refunded':        { uk: 'Повернуто', en: 'Refunded', es: 'Reembolsado', it: 'Rimborsato', de: 'Erstattet', ru: 'Возвращено' },
+
   /* --------------------------------------------------------- зв’язок --- */
   'net.offline': {
     uk: 'Немає зв’язку із закладом. Показано останній відомий стан меню.',

@@ -91,6 +91,7 @@ Playwright і піднятого сервера:
 pip install playwright && playwright install chromium
 python tools/check_guest.py       # меню: пошук, фільтр, стани
 python tools/check_admin.py       # панель + критерій «гість бачить без перезавантаження»
+python tools/check_order.py       # кошик, подвійний тап, розділення kitchen/bar
 ```
 
 ## Ліцензія і дані
