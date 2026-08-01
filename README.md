@@ -11,6 +11,7 @@
 
 Повний план — `docs/PROJECT_PLAN.md`. Розбивка на спринти — `SPRINTS.md`.
 Звіт після кожного спринту — `docs/FEEDBACK.md`.
+Сценарій прогону на живих людях — `docs/FAKE_SERVICE.md`.
 
 ## Швидкий старт
 
@@ -94,6 +95,7 @@ python tools/check_admin.py       # панель + критерій «гість
 python tools/check_order.py       # кошик, подвійний тап, розділення kitchen/bar
 python tools/check_money.py       # черга замовлень, статуси, повернення, стан Stripe
 python tools/check_kitchen.py     # екран кухні + критерій «втрата зв'язку кричить»
+python tools/load_test.py         # одночасні замовлення, подвійний тап, подвійна оплата
 ```
 
 ## Ліцензія і дані

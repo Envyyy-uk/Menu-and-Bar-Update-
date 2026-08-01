@@ -15,7 +15,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -144,9 +144,14 @@ def create_order(
         ).all()
     }
 
-    next_number = (
-        db.scalar(select(func.max(Order.number)).where(Order.venue_id == venue.id)) or 0
-    ) + 1
+    # Атомарна видача номера: рядок закладу блокується до кінця транзакції,
+    # тож одночасні замовлення стають у чергу, а не отримують один номер.
+    next_number = db.execute(
+        update(Venue)
+        .where(Venue.id == venue.id)
+        .values(order_seq=Venue.order_seq + 1)
+        .returning(Venue.order_seq)
+    ).scalar_one()
 
     order = Order(
         venue_id=venue.id,

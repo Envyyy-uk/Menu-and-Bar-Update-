@@ -2,7 +2,7 @@ import secrets
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -26,6 +26,11 @@ class Venue(UUIDPk, Timestamped, Base):
     # Standard-акаунт закладу: KYC, дашборд і спори — на боці закладу.
     stripe_account_id: Mapped[str | None] = mapped_column(String(64), default=None)
     stripe_charges_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Лічильник номерів замовлень. Живе тут, а не рахується як max(number)+1:
+    # чотири замовлення в одну мить інакше отримують один номер, і кухня
+    # бачить чотири однакові чеки. UPDATE … RETURNING серіалізує видачу.
+    order_seq: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     tables: Mapped[list["Table"]] = relationship(back_populates="venue")
 
