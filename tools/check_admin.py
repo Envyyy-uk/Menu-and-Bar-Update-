@@ -123,6 +123,16 @@ with sync_playwright() as p:
     check("посилання столу — токен, а не номер",
           "/t/" in first_url and first_url.rsplit("/", 1)[1] not in ("1", "2", "3"), first_url)
 
+    # «Друк» друкує зі свого ж вікна: нове вікно блокує і Safari, і фрейм
+    admin.evaluate("() => { window.__printed = 0; window.print = () => { window.__printed++; }; }")
+    admin.locator(".arow", has_text="/t/").first.locator("button", has_text="Друк").click()
+    admin.wait_for_timeout(1200)
+    check("«Друк» викликає друк, а не мовчить", admin.evaluate("window.__printed") == 1,
+          admin.evaluate("window.__printed"))
+    check("на аркуш іде наліпка з QR і посиланням",
+          admin.locator("#printarea img").count() == 1 and "/t/" in admin.inner_text("#printarea .url"),
+          admin.inner_text("#printarea")[:60])
+
     admin.once("dialog", lambda d: d.accept())
     admin.locator(".arow", has_text=first_url.rsplit("/", 1)[1]).first.locator(
         "button", has_text="Змінити токен").click()

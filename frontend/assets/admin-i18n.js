@@ -78,6 +78,14 @@ Object.assign(I18N, {
     ru: 'Старая наклейка перестанет работать. Печатайте новую сразу.'
   },
   'a.tables.print': { uk: 'Друк', en: 'Print', es: 'Imprimir', it: 'Stampa', de: 'Drucken', ru: 'Печать' },
+  'a.tables.printHint': {
+    uk: 'Наклейте на стіл. Після зміни токена надрукуйте нову — стара перестане працювати.',
+    en: 'Stick it on the table. After rotating the token print a new one — the old sticker stops working.',
+    es: 'Péguelo en la mesa. Tras rotar el token imprima uno nuevo: la pegatina antigua deja de funcionar.',
+    it: 'Attaccatelo al tavolo. Dopo la rotazione del token stampatene uno nuovo: il vecchio smette di funzionare.',
+    de: 'Auf den Tisch kleben. Nach dem Token-Wechsel neu drucken — der alte Aufkleber funktioniert nicht mehr.',
+    ru: 'Наклейте на стол. После смены токена напечатайте новую — старая перестанет работать.'
+  },
   'a.tables.active':{ uk: 'Активний', en: 'Active', es: 'Activa', it: 'Attivo', de: 'Aktiv', ru: 'Активен' },
 
   /* ---------------------------------------------------------- люди ----- */

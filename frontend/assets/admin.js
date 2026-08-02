@@ -436,17 +436,37 @@ function renderTables(mount) {
   mount.appendChild(form);
 }
 
+/**
+ * Друк наліпки зі свого ж вікна.
+ *
+ * Свідомо без `window.open`: нове вікно блокує і Safari на телефоні, і будь-який
+ * вбудований фрейм — кнопка тоді просто мовчить. Замість цього кладемо наліпку
+ * в приховану область і друкуємо поточну сторінку; решту ховає `@media print`.
+ */
 function printQr(table, src) {
-  const w = window.open('', '_blank');
-  if (!w) return;
-  w.document.write(
-    `<title>${esc(table.label)}</title>` +
-    '<style>body{font:16px system-ui;text-align:center;padding:40px}img{width:70vw;max-width:420px}</style>' +
-    `<h1>${esc(table.label)}</h1><img src="${esc(src)}"><p>${esc(table.url)}</p>`
-  );
-  w.document.close();
-  w.focus();
-  setTimeout(() => w.print(), 300);
+  let area = document.getElementById('printarea');
+  if (!area) {
+    area = el('div', null);
+    area.id = 'printarea';
+    document.body.appendChild(area);
+  }
+  area.innerHTML =
+    `<h1>${esc(table.label)}</h1>` +
+    (src ? `<img src="${esc(src)}" alt="QR ${esc(table.label)}">` : '') +
+    `<p class="url">${esc(table.url)}</p>` +
+    `<p class="hint">${esc(t('a.tables.printHint', LANG))}</p>`;
+
+  const done = () => { area.innerHTML = ''; window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+
+  const img = area.querySelector('img');
+  // Картинку треба дочекатися: інакше на аркуш піде порожнє місце
+  if (img && !img.complete) {
+    img.addEventListener('load', () => window.print());
+    img.addEventListener('error', () => window.print());
+  } else {
+    window.print();
+  }
 }
 
 /* -------------------------------------------------------------- люди ---- */

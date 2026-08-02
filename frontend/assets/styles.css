@@ -520,3 +520,27 @@ body.alarm .kbar { background: #8c1c15; }
   margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule);
 }
 .fire-line .ro { margin: 0; }
+
+/* ==========================================================================
+   Друк наліпки столу.
+
+   Друкуємо зі свого ж вікна, а не з нового: `window.open` блокує і Safari на
+   телефоні, і вбудований фрейм — кнопка тоді просто мовчить.
+   ========================================================================== */
+
+#printarea { display: none; }
+
+@media print {
+  /* На аркуш іде тільки наліпка */
+  body > *:not(#printarea) { display: none !important; }
+  #printarea {
+    display: block; text-align: center; padding: 24px;
+    color: #000; background: #fff;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  #printarea h1 { font-size: 34px; margin: 0 0 18px; }
+  #printarea img { width: 70%; max-width: 380px; height: auto; image-rendering: pixelated; }
+  #printarea .url { font-family: ui-monospace, Menlo, monospace; font-size: 13px; word-break: break-all; }
+  #printarea .hint { font-size: 12px; color: #444; max-width: 380px; margin: 10px auto 0; }
+  @page { margin: 12mm; }
+}
