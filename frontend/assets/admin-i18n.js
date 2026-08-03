@@ -142,6 +142,18 @@ Object.assign(I18N, {
     es: 'Pagado y aún sin aceptar', it: 'Pagato e ancora non accettato',
     de: 'Bezahlt und noch nicht angenommen', ru: 'Оплачено и до сих пор не принято'
   },
+  'a.wallets':          { uk: 'Apple Pay і Google Pay', en: 'Apple Pay and Google Pay', es: 'Apple Pay y Google Pay', it: 'Apple Pay e Google Pay', de: 'Apple Pay und Google Pay', ru: 'Apple Pay и Google Pay' },
+  'a.wallets.https':    { uk: 'HTTPS', en: 'HTTPS', es: 'HTTPS', it: 'HTTPS', de: 'HTTPS', ru: 'HTTPS' },
+  'a.wallets.domain':   { uk: 'домен зареєстровано для Apple Pay', en: 'domain registered for Apple Pay', es: 'dominio registrado para Apple Pay', it: 'dominio registrato per Apple Pay', de: 'Domain für Apple Pay registriert', ru: 'домен зарегистрирован для Apple Pay' },
+  'a.wallets.register': { uk: 'Зареєструвати домен', en: 'Register domain', es: 'Registrar dominio', it: 'Registra dominio', de: 'Domain registrieren', ru: 'Зарегистрировать домен' },
+  'a.wallets.hint': {
+    uk: 'Гаманці ще треба ввімкнути в дашборді закладу. Якщо кнопки немає — вона не ламається, її просто не показують.',
+    en: 'Wallets also have to be switched on in the venue dashboard. A missing button is not an error — it is simply not shown.',
+    es: 'Los monederos también deben activarse en el panel del local. Si no aparece el botón, no está roto: simplemente no se muestra.',
+    it: 'I wallet vanno attivati anche nella dashboard del locale. Se il pulsante manca non è un errore: semplicemente non viene mostrato.',
+    de: 'Wallets müssen zusätzlich im Dashboard des Lokals aktiviert werden. Ein fehlender Button ist kein Fehler — er wird schlicht nicht angezeigt.',
+    ru: 'Кошельки нужно ещё включить в дашборде заведения. Если кнопки нет — она не сломалась, её просто не показывают.'
+  },
   'a.refund':       { uk: 'Повернути', en: 'Refund', es: 'Reembolsar', it: 'Rimborsa', de: 'Erstatten', ru: 'Вернуть' },
   'a.refund.amount':{ uk: 'Сума повернення', en: 'Refund amount', es: 'Importe a reembolsar', it: 'Importo del rimborso', de: 'Erstattungsbetrag', ru: 'Сумма возврата' },
   'a.refund.limit': { uk: 'Ваша стеля', en: 'Your ceiling', es: 'Su límite', it: 'Il vostro limite', de: 'Ihre Obergrenze', ru: 'Ваш потолок' },

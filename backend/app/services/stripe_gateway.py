@@ -7,9 +7,13 @@ KYC, сам володіє дашбордом, і **спори й від'ємн�
 Платіж проводиться як **direct charge** на акаунті закладу (заголовок
 `Stripe-Account`), з `application_fee_amount` на користь платформи.
 
-Дані картки ніколи не торкаються нашого сервера: тільки Stripe Checkout.
-Це утримує нас у межах SAQ A. Одна власна форма для номера картки — і це
-повний аудит PCI.
+Дані картки ніколи не торкаються нашого сервера: поля малює Stripe.js у
+своєму фреймі, ми бачимо лише `client_secret`. Це утримує нас у межах SAQ A.
+Одна власна форма для номера картки — і це повний аудит PCI.
+
+Apple Pay й Google Pay вмикаються не тут: це `automatic_payment_methods`
+плюс три речі поза кодом — HTTPS, увімкнені гаманці в дашборді закладу й
+зареєстрований домен (для Apple). Див. `docs/WALLETS.md`.
 """
 
 from __future__ import annotations
@@ -42,43 +46,88 @@ def platform_fee_pence(total_pence: int) -> int:
     return max(1, round(total_pence * settings.platform_fee_bps / 10_000))
 
 
-def create_checkout_session(venue: Venue, order: Order, table_token: str) -> dict[str, Any]:
+def create_payment_intent(venue: Venue, order: Order) -> dict[str, Any]:
+    """Намір платежу для оплати **на нашій сторінці**.
+
+    Раніше гість ішов на сторінку Stripe. Але гість сидить за столом із
+    телефоном у руці: перекидати його на чужий домен, щоб він повернувся
+    назад, — зайвий крок, на якому губляться замовлення. Тепер картка й
+    гаманці живуть у тому ж аркуші, де кошик.
+
+    `automatic_payment_methods` — це і є Apple Pay з Google Pay: Stripe сам
+    вирішує, що показати саме цьому пристрою. Вмикати їх окремо в коді не
+    треба (і не можна) — вони залежать від пристрою, браузера й того, що
+    ввімкнено в дашборді закладу.
+
+    Номер картки й далі не торкається нашого сервера: поля малює Stripe.js,
+    ми бачимо тільки `client_secret`. Межі SAQ A не змінилися.
+    """
     _ready(venue)
 
-    line_items = [
-        {
-            "price_data": {
-                "currency": venue.currency.lower(),
-                "unit_amount": item.unit_price_pence,
-                "product_data": {"name": item.name_snapshot},
-            },
-            "quantity": item.qty,
-        }
-        for item in order.items
-    ]
-
-    payment_intent_data: dict[str, Any] = {
+    params: dict[str, Any] = {
+        "amount": order.total_pence,
+        "currency": venue.currency.lower(),
+        "automatic_payment_methods": {"enabled": True},
         "metadata": {"order_id": str(order.id), "venue_id": str(venue.id)},
+        # Гість бачить це в застосунку гаманця й у виписці
+        "description": f"{venue.name} · замовлення №{order.number}",
     }
     fee = platform_fee_pence(order.total_pence)
     if fee:
-        payment_intent_data["application_fee_amount"] = fee
+        params["application_fee_amount"] = fee
 
-    base = settings.public_base_url.rstrip("/")
-    session = stripe.checkout.Session.create(
-        mode="payment",
-        line_items=line_items,
-        payment_intent_data=payment_intent_data,
-        metadata={"order_id": str(order.id)},
-        client_reference_id=str(order.id),
-        success_url=f"{base}/t/{table_token}?order={order.id}",
-        cancel_url=f"{base}/t/{table_token}?cancelled={order.id}",
+    intent = stripe.PaymentIntent.create(
+        **params,
         # Той самий кошик не має створити два платежі, якщо запит повторився
-        idempotency_key=f"checkout:{order.client_token}",
+        idempotency_key=f"intent:{order.client_token}",
         # Direct charge: платіж живе на акаунті закладу
         stripe_account=venue.stripe_account_id,
     )
-    return {"id": session.id, "url": session.url}
+    return {
+        "id": intent.id,
+        "client_secret": intent.client_secret,
+        # Ключ і акаунт потрібні Stripe.js: при direct charge елементи
+        # створюються від імені закладу, інакше гаманець не з'явиться.
+        "publishable_key": settings.stripe_publishable_key,
+        "account_id": venue.stripe_account_id,
+    }
+
+
+def register_wallet_domain(venue: Venue, domain: str) -> dict[str, Any]:
+    """Реєстрація домену для Apple Pay.
+
+    Apple вимагає довести, що сайт наш: інакше кнопки просто не буде — без
+    помилки й без пояснення. Для direct charge домен реєструється на акаунті
+    закладу, а не платформи.
+
+    Google Pay такої реєстрації не потребує — йому достатньо HTTPS.
+    """
+    _ready(venue)
+    out = stripe.PaymentMethodDomain.create(
+        domain_name=domain,
+        stripe_account=venue.stripe_account_id,
+    )
+    apple = getattr(out, "apple_pay", None) or {}
+    return {
+        "id": out.id,
+        "domain": out.domain_name,
+        "enabled": bool(getattr(out, "enabled", False)),
+        # Stripe каже прямо, чому саме гаманець не працює — передаємо як є
+        "apple_pay": dict(apple) if apple else {},
+    }
+
+
+def wallet_domains(venue: Venue) -> list[dict[str, Any]]:
+    _ready(venue)
+    rows = stripe.PaymentMethodDomain.list(stripe_account=venue.stripe_account_id)
+    return [
+        {
+            "id": d.id,
+            "domain": d.domain_name,
+            "enabled": bool(getattr(d, "enabled", False)),
+        }
+        for d in rows.data
+    ]
 
 
 def refund(venue: Venue, order: Order, amount_pence: int, reason: str | None = None) -> dict[str, Any]:

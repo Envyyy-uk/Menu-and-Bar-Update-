@@ -19,7 +19,7 @@ let ORDERS_TIMER = null;
 
 const DATA = {
   items: [], schedules: [], tables: [], users: [], devices: [], audit: [],
-  orders: [], alerts: [], stripe: null, menu: null
+  orders: [], alerts: [], stripe: null, wallets: null, menu: null
 };
 
 const STATES = ['auto', 'on', 'off', 'soon'];
@@ -540,6 +540,29 @@ function renderOrders(mount) {
       }));
       card.appendChild(connect);
     }
+
+    // Гаманці мовчать, коли не працюють: кнопки Apple Pay просто немає, без
+    // помилки. Тому стан показуємо тут прямо, а не лишаємо зал гадати.
+    const w = DATA.wallets;
+    if (w) {
+      card.appendChild(el('p', 'ro', esc(t('a.wallets', LANG))));
+      const line = (ok, key, extra) => card.appendChild(el('p', ok ? 'ro' : 'warn',
+        `${ok ? '✓' : '✕'} ${esc(t(key, LANG))}${extra ? ' · ' + esc(extra) : ''}`));
+      line(w.https, 'a.wallets.https', w.domain);
+      if (w.enabled) {
+        line(!!w.registered, 'a.wallets.domain');
+        if (w.https && !w.registered) {
+          const reg = el('button', 'primary', esc(t('a.wallets.register', LANG)));
+          reg.type = 'button';
+          reg.addEventListener('click', () => guard(card, async () => {
+            await API.post('/api/admin/stripe/wallets');
+            await reload();
+          }));
+          card.appendChild(reg);
+        }
+      }
+      card.appendChild(el('p', 'hint', esc(t('a.wallets.hint', LANG))));
+    }
     mount.appendChild(card);
   }
 
@@ -671,7 +694,10 @@ async function reload() {
     jobs.push(API.get('/api/orders').then(d => { DATA.orders = d; }));
     jobs.push(API.get('/api/orders/alerts').then(d => { DATA.alerts = d; }));
   }
-  if (may('stripe.manage')) jobs.push(API.get('/api/admin/stripe').then(d => { DATA.stripe = d; }));
+  if (may('stripe.manage')) {
+    jobs.push(API.get('/api/admin/stripe').then(d => { DATA.stripe = d; }));
+    jobs.push(API.get('/api/admin/stripe/wallets').then(d => { DATA.wallets = d; }, () => {}));
+  }
   await Promise.all(jobs);
   renderTabs();
   renderBody();

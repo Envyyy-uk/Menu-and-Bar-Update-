@@ -389,6 +389,26 @@ body:has(.cartbar:not([hidden])) { padding-bottom: 72px; }
   background: var(--paper-2); color: var(--ink); resize: vertical;
 }
 button.wide { width: 100%; margin-top: 8px; }
+
+/* Оплата: гаманці зверху, картка знизу.
+
+   Гаманець — це один тап, картка — двадцять секунд набирання, тож саме
+   гаманці стоять першими. Обидва блоки малює Stripe.js; наше тут — місце
+   під них, розділювач і рядок стану. */
+.pay-total { text-align: right; font-size: 17px; margin: 0 0 12px; }
+.pay-wallets { margin-bottom: 12px; }
+.pay-or {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 12px; color: var(--muted); font-size: 14px;
+}
+.pay-or::before, .pay-or::after {
+  content: ''; flex: 1; height: 1px; background: var(--rule);
+}
+.pay-card { margin-bottom: 12px; }
+.pay-status { margin: 0 0 10px; font-size: 15px; }
+.pay-status:empty { display: none; }
+.pay-status.warn { color: var(--danger); }
+.pay-status.ok { color: var(--accent); }
 .dropped {
   margin-top: 12px; padding: 10px 12px; border-radius: var(--radius);
   background: var(--danger-bg); color: var(--danger);

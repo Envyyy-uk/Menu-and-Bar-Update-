@@ -51,6 +51,14 @@ with sync_playwright() as p:
     check("панель чесно каже, що Stripe не налаштований",
           "режим прогону" in admin.inner_text("#body"), admin.inner_text("#body")[:120])
 
+    # Гаманці мовчать, коли не працюють: кнопки Apple Pay просто немає, без
+    # помилки. Панель мусить називати причину, а не лишати зал гадати.
+    body = admin.inner_text("#body")
+    check("панель показує стан Apple Pay і Google Pay",
+          "Apple Pay" in body and "Google Pay" in body, body[:160])
+    check("панель називає причину: тут немає HTTPS",
+          "✕ HTTPS" in body, body[:200])
+
     # --- створюємо замовлення очима гостя ---------------------------------
     admin.locator(".tab", has_text="Столи").click()
     admin.wait_for_selector(".arow .url")

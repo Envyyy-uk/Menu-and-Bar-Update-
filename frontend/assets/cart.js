@@ -278,14 +278,18 @@ async function submitOrder(data, note, button, box) {
       `/api/orders/${order.id}/checkout?client_token=${encodeURIComponent(payload.client_token)}`);
 
     if (checkout && checkout.mode === 'stripe') {
-      // Далі гостя веде Stripe. Замовлення стане `paid` від вебхука, а не
-      // від того, що браузер повернувся на success_url — повернутися він
-      // може й не встигнути.
+      // Гість лишається тут: гаманці й картка — в наступному аркуші.
+      // Замовлення стане `paid` від вебхука, а не від того, що Stripe.js
+      // відповів «успіх»: гість може згорнути вкладку рівно між списанням
+      // і відповіддю, і замовлення все одно має дійти до кухні.
       ORDER = { id: order.id, client_token: payload.client_token, number: order.number, status: order.status };
       CART = {};
       resetToken();
       saveCart();
-      location.href = checkout.url;
+      document.querySelectorAll('.sheet').forEach(n => n.remove());
+      MenuStore.refresh();
+      refreshCart(data);
+      openPaymentSheet(checkout, data, () => pollOrder(data));
       return;
     }
 

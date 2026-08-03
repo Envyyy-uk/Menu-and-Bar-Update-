@@ -164,15 +164,22 @@ def checkout(
 
     if settings.stripe_enabled:
         try:
-            table = db.get(Table, order.table_id)
-            session = stripe_gateway.create_checkout_session(venue, order, table.token)
+            intent = stripe_gateway.create_payment_intent(venue, order)
         except StripeNotReady as exc:
             raise HTTPException(status_code=503, detail=str(exc)) from None
-        order.checkout_session_id = session["id"]
+        order.payment_intent_id = intent["id"]
         db.commit()
-        # Далі гість іде на сторінку Stripe. Назад він повернеться вже після
-        # оплати, але `paid` виставить вебхук, а не це повернення.
-        return {"mode": "stripe", "url": session["url"], "session_id": session["id"]}
+        # Гість лишається на нашій сторінці: картку й гаманці малює Stripe.js
+        # тут же. `paid` усе одно виставить вебхук, а не браузер — навіть
+        # успішний Apple Pay не є для нас підтвердженням оплати.
+        return {
+            "mode": "stripe",
+            "client_secret": intent["client_secret"],
+            "publishable_key": intent["publishable_key"],
+            "account_id": intent["account_id"],
+            "amount_pence": order.total_pence,
+            "currency": venue.currency,
+        }
     return {"mode": "offline", "order": order_payload(order, _table_label(db, order))}
 
 
