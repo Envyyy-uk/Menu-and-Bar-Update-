@@ -63,3 +63,60 @@ def test_time_travel_opens_a_soon_item(client):
 
 def test_bad_at_is_rejected(client):
     assert client.get("/api/menu", params={"at": "невчасно"}).status_code == 400
+
+
+def test_menu_is_one_flat_list_ordered_by_position(client):
+    """Меню — один список. Порядок задає зал позицією, а не групою."""
+    m = client.get("/api/menu").json()
+    keys = [i["key"] for i in m["items"]]
+    assert len(keys) == len(set(keys)) == 14
+    # позиції не перетасовані за розділами: перша страва сідера лишається першою
+    assert keys[0] == "smoked-beetroot-tartare"
+
+
+def test_closed_section_closes_its_dishes(client, db, venue):
+    """Заголовка розділу гість більше не бачить — отже, закритий розділ мусить
+    гасити кожну свою страву сам. Інакше він мовчки відкриється."""
+    from sqlalchemy import select
+
+    from app.models import MenuSection
+    from tests.test_permissions import as_owner
+
+    as_owner(client)
+    section = db.scalars(select(MenuSection).where(MenuSection.key == "desserts")).one()
+    client.patch(f"/api/admin/sections/{section.id}", json={"state": "off"})
+
+    m = client.get("/api/menu").json()
+    desserts = [i for i in m["items"] if i["section"] == "desserts"]
+    assert desserts, "у сідері мають бути десерти"
+    assert all(i["available"]["open"] is False for i in desserts)
+    assert all(i["available"]["reason"] == "sold_out" for i in desserts)
+
+    # інші страви це не зачепило
+    assert next(i for i in m["items"] if i["key"] == "house-lemonade")["available"]["open"]
+
+    client.patch(f"/api/admin/sections/{section.id}", json={"state": "auto"})
+
+
+def test_dish_keeps_its_own_reason_when_section_also_closed(client, db, venue):
+    """«Закінчилось» точніше, ніж «зачинено»: причина страви важливіша."""
+    from sqlalchemy import select
+
+    from app.models import MenuItem, MenuSection
+    from tests.test_permissions import as_owner
+
+    as_owner(client)
+    section = db.scalars(select(MenuSection).where(MenuSection.key == "desserts")).one()
+    item = db.scalars(
+        select(MenuItem).where(MenuItem.section_id == section.id)
+    ).first()
+
+    client.patch(f"/api/admin/items/{item.id}", json={"state": "off"})
+    client.patch(f"/api/admin/sections/{section.id}", json={"state": "soon"})
+
+    m = client.get("/api/menu").json()
+    dish = next(i for i in m["items"] if i["key"] == item.key)
+    assert dish["available"]["reason"] == "sold_out"
+
+    client.patch(f"/api/admin/sections/{section.id}", json={"state": "auto"})
+    client.patch(f"/api/admin/items/{item.id}", json={"state": "auto"})

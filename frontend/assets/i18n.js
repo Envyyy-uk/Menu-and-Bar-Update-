@@ -65,8 +65,6 @@ const I18N = {
   },
   'tb.clear':   { uk: 'Скинути', en: 'Clear', es: 'Borrar', it: 'Azzera', de: 'Zurücksetzen', ru: 'Сбросить' },
   'tb.flagged': { uk: 'з вашими алергенами', en: 'with your allergens', es: 'con sus alérgenos', it: 'con i vostri allergeni', de: 'mit Ihren Allergenen', ru: 'с вашими аллергенами' },
-  'tabs.all':   { uk: 'Усе', en: 'All', es: 'Todo', it: 'Tutto', de: 'Alle', ru: 'Всё' },
-  'tabs.label': { uk: 'Розділи', en: 'Sections', es: 'Secciones', it: 'Sezioni', de: 'Bereiche', ru: 'Разделы' },
   'count.items': { uk: 'позицій', en: 'items', es: 'platos', it: 'voci', de: 'Positionen', ru: 'позиций' },
   'search.empty': {
     uk: 'Нічого не знайдено. Спробуйте іншу мову або інший складник.',

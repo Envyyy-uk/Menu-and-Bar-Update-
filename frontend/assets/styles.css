@@ -179,13 +179,8 @@ header.site .table-badge {
 .chip:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
 .clear-btn { margin-top: 10px; }
 
-/* ------------------------------------------------------------ розділи -- */
+/* -------------------------------------------------------------- меню --- */
 main { padding-bottom: 60px; }
-.section { margin: 28px 0; }
-.section > h2 {
-  margin: 0 0 4px; font-size: 21px; color: var(--accent);
-  border-bottom: 1px solid var(--rule); padding-bottom: 6px;
-}
 .grid {
   display: grid; gap: 14px; margin-top: 14px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

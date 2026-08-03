@@ -36,7 +36,13 @@ with sync_playwright() as p:
 
     check("венью в шапці", page.inner_text("#venue-name") == "The Copper Fig")
     check("14 карток", page.locator(".dish").count() == 14, page.locator(".dish").count())
-    check("5 розділів", page.locator(".section").count() == 5)
+    # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
+    check("немає заголовків розділів", page.locator(".section").count() == 0)
+    check("немає вкладок розділів", page.locator("#toolbar .tabs").count() == 0)
+    check("усі 14 страв в одній сітці",
+          page.locator("#menu > .grid").count() == 1
+          and page.locator("#menu > .grid > .dish").count() == 14,
+          page.locator("#menu > .grid > .dish").count())
 
     # --- крос-мовний пошук по складнику -----------------------------------
     def search(q):

@@ -12,7 +12,7 @@ let LANG = getLang();
 
 /* Стан фільтрів переживає перемальовування: меню оновлюється саме, і
    скидати гостю пошук посеред читання неприпустимо. */
-const FILTER = { query: '', allergens: new Set(), section: 'all', open: false };
+const FILTER = { query: '', allergens: new Set(), open: false };
 
 /* Чи вже намальовано хоч раз. Меню перепитується щохвилини кілька разів, і
    перемальовувати його, коли нічого не змінилося, не можна: це закриває
@@ -102,7 +102,6 @@ function dishCard(item, data) {
   card.id = 'd-' + item.key;
   card.dataset.allergens = (item.a || []).join(' ');
   card.dataset.maybe = (item.m || []).join(' ');
-  card.dataset.section = item.section || '';
   card.dataset.search = [
     item.name,
     Object.values(item.desc || {}).join(' '),
@@ -162,31 +161,19 @@ function dishCard(item, data) {
   return card;
 }
 
-/* ------------------------------------------------------------ розділи --- */
-function renderSections(mount, data) {
+/* -------------------------------------------------------------- меню ---- */
+/** Меню — один суцільний список. Без заголовків розділів і без вкладок:
+ *  гість гортає страви підряд, а не блукає між групами. Порядок задає зал
+ *  позицією страви. Розділ, закритий за розкладом, гасить свої позиції —
+ *  це вже враховано сервером у `available`. */
+function renderMenu(mount, data) {
   mount.innerHTML = '';
-  data.sections.forEach(sec => {
-    const items = data.items.filter(i => i.section === sec.key);
-    if (!items.length) return;
-    const av = sec.available || { open: true };
-    if (!av.open && av.hidden) return;
-
-    const block = el('section', 'section');
-    block.id = 's-' + sec.key;
-    block.appendChild(el('h2', null, esc(pick(sec.names, LANG) || sec.key)));
-    if (!av.open) {
-      block.classList.add('scheduled-off');
-      block.appendChild(el('p', 'sched-note', closedText(av, data.schedules)));
-    }
-
-    const grid = el('div', 'grid');
-    items.forEach(i => {
-      if (!(i.available || {}).open && (i.available || {}).hidden) return;
-      grid.appendChild(dishCard(i, data));
-    });
-    block.appendChild(grid);
-    mount.appendChild(block);
+  const grid = el('div', 'grid');
+  data.items.forEach(i => {
+    if (!(i.available || {}).open && (i.available || {}).hidden) return;
+    grid.appendChild(dishCard(i, data));
   });
+  mount.appendChild(grid);
 }
 
 /* ------------------------------------------------- панель пошуку/фільтра - */
@@ -208,33 +195,6 @@ function buildToolbar(mount, data) {
   const count = el('span', 'result-count');
   wrap.append(search, toggle, count);
   bar.appendChild(wrap);
-
-  // рядок розділів — гортається вбік, замінює довге прокручування сторінки
-  const tabsWrap = el('div', 'wrap');
-  const tabs = el('nav', 'tabs');
-  tabs.setAttribute('aria-label', t('tabs.label', LANG));
-  const mkTab = (key, label) => {
-    const b = el('button', 'tab' + (key === FILTER.section ? ' on' : ''), esc(label));
-    b.type = 'button';
-    b.dataset.section = key;
-    b.addEventListener('click', () => {
-      FILTER.section = key;
-      tabs.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.section === key));
-      b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-      apply();
-      if (key !== 'all') {
-        const target = document.getElementById('s-' + key);
-        if (target) window.scrollTo({ top: Math.max(0, target.offsetTop - bar.offsetHeight - 12), behavior: 'smooth' });
-      }
-    });
-    tabs.appendChild(b);
-  };
-  mkTab('all', t('tabs.all', LANG));
-  data.sections.forEach(s => {
-    if (data.items.some(i => i.section === s.key)) mkTab(s.key, pick(s.names, LANG) || s.key);
-  });
-  tabsWrap.appendChild(tabs);
-  bar.appendChild(tabsWrap);
 
   const filtersWrap = el('div', 'wrap');
   const filters = el('div', 'filters' + (FILTER.open ? ' open' : ''));
@@ -278,12 +238,6 @@ function buildToolbar(mount, data) {
       if (match) { shown++; if (hit) flagged++; }
     });
 
-    document.querySelectorAll('.section').forEach(sec => {
-      const nodes = sec.querySelectorAll('.dish');
-      const inTab = FILTER.section === 'all' || sec.id === 's-' + FILTER.section;
-      sec.style.display = inTab && [...nodes].some(n => n.style.display !== 'none') ? '' : 'none';
-    });
-
     count.textContent = (active.length || q)
       ? `${shown} ${t('count.items', LANG)}${flagged ? ` · ${flagged} ${t('tb.flagged', LANG)}` : ''}`
       : '';
@@ -294,11 +248,6 @@ function buildToolbar(mount, data) {
 
   search.addEventListener('input', () => {
     FILTER.query = search.value;
-    // пошук скидає на «Усе», щоб результати не ховались за активною вкладкою
-    if (search.value.trim() && FILTER.section !== 'all') {
-      FILTER.section = 'all';
-      tabs.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.section === 'all'));
-    }
     apply();
   });
   chips.addEventListener('change', apply);
@@ -353,7 +302,7 @@ function render(data, meta) {
   if (RENDERED && meta.changed === false) return;
 
   renderStatic(data);
-  renderSections(document.getElementById('menu'), data);
+  renderMenu(document.getElementById('menu'), data);
   buildToolbar(document.getElementById('toolbar'), data);
   refreshSwitches(LANG);
   RENDERED = true;
