@@ -105,41 +105,27 @@ class OrderItem(UUIDPk, Base):
     unit_price_pence: Mapped[int] = mapped_column(Integer, default=0)
     name_snapshot: Mapped[str] = mapped_column(String(200), default="")
     station_snapshot: Mapped[str] = mapped_column(String(10), default="kitchen")
-    course_snapshot: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     order: Mapped[Order] = relationship(back_populates="items")
 
 
 class OrderTicket(UUIDPk, Base):
-    """Одна марка = одна станція × один курс.
+    """Одна марка = одна станція.
 
     Саме її бачить екран кухні, і саме її статус рухають кнопки «Прийнято» /
-    «Готово». Бар може віддати напої, поки кухня ще смажить основне, — і одне
-    одному не заважає.
-
-    Курси на станції йдуть по черзі: поки закуски не готові, основне не
-    приймають. Це не примха інтерфейсу, а те, як працює подача.
+    «Готово». Бар може віддати напої, поки кухня ще смажить гаряче, — і одне
+    одному не заважає. Усередині станції замовлення одне ціле: кухня бачить
+    увесь свій список одразу й сама вирішує, з чого починати.
     """
 
     __tablename__ = "order_tickets"
-    __table_args__ = (
-        UniqueConstraint("order_id", "station", "course", name="uq_ticket_station_course"),
-    )
+    __table_args__ = (UniqueConstraint("order_id", "station", name="uq_ticket_station"),)
 
     order_id: Mapped[uuid.UUID] = mapped_column(
         PgUUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), index=True
     )
     station: Mapped[str] = mapped_column(String(10))
-    course: Mapped[int] = mapped_column(Integer, default=0)
     status: Mapped[str] = mapped_column(String(20), default=STATUS_PAID)
-
-    # Запуск курсу — рішення залу, а не кухні. Гість може ще їсти закуску, і
-    # основне, зроблене «за розкладом», доїде до столу холодним. Тому кухня
-    # не починає, поки офіціант не запустив: `fired_at` порожній — марка чекає.
-    fired_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
-    fired_by: Mapped[uuid.UUID | None] = mapped_column(
-        PgUUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), default=None
-    )
 
     accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)
     ready_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), default=None)

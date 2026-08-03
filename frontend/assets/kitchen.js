@@ -94,28 +94,20 @@ async function reload() {
 
 /* -------------------------------------------------------------- екран --- */
 /**
- * Картка — це **марка**: одна станція, один курс. Кухня натискає своє, бар —
- * своє, і одне одному вони не заважають.
+ * Картка — це **марка**: одна станція. Кухня натискає своє, бар — своє, і
+ * одне одному вони не заважають.
  */
 function card(order) {
-  const waiting = !!order.awaiting_fire;
-  const blocked = waiting ||
-    (order.blocked_by_course !== null && order.blocked_by_course !== undefined);
   const box = el('article', 'kcard' + (order.fresh ? ' fresh' : '') +
-    (LATE.has(order.number) ? ' late' : '') + (blocked ? ' held' : ''));
+    (LATE.has(order.number) ? ' late' : ''));
 
   const head = el('div', 'kcard-head');
   head.appendChild(el('span', 'knum', `№${esc(order.number)}`));
   head.appendChild(el('span', 'ktable', `${esc(t('k.table', LANG))} ${esc(order.table || '—')}`));
-  if (order.course !== undefined) {
-    head.appendChild(el('span', 'kcourse', esc(t('k.course.' + order.course, LANG))));
-  }
   head.appendChild(el('span', 'kage', waited(order)));
   box.appendChild(head);
 
   if (LATE.has(order.number)) box.appendChild(el('p', 'klate', esc(t('k.late', LANG))));
-  // Кухня чекає не таймера, а команди залу: тільки офіціант бачить стіл
-  if (blocked) box.appendChild(el('p', 'kheld', esc(t(waiting ? 'k.awaitFire' : 'k.blocked', LANG))));
 
   const list = el('ul', 'kitems');
   order.items.forEach(i => {
@@ -132,15 +124,13 @@ function card(order) {
     const label = { accepted: 'k.accept', ready: 'k.ready', served: 'k.served' }[next];
     const b = el('button', 'kbtn ' + next, esc(t(label, LANG)));
     b.type = 'button';
-    // Заблокований курс видно, але не натискається — сервер однаково відмовить
-    b.disabled = blocked;
     b.addEventListener('click', async () => {
       b.disabled = true;
       try {
         await API.post(`/api/orders/tickets/${order.id}/status?target=${next}`);
         await reload();
       } catch (e) {
-        b.disabled = blocked;
+        b.disabled = false;
       }
     });
     box.appendChild(b);

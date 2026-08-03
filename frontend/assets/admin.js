@@ -241,20 +241,6 @@ function renderItems(mount) {
         item.station = station.value;
       }));
       fields.append(el('label', null, esc(t('a.station', LANG))), station);
-
-      // Курс подачі: напої йдуть одразу, решта — по черзі
-      const course = el('select');
-      [0, 1, 2, 3].forEach(c => {
-        const o = el('option', null, esc(t('a.course.' + c, LANG)));
-        o.value = String(c);
-        if (c === item.course) o.selected = true;
-        course.appendChild(o);
-      });
-      course.addEventListener('change', () => guard(row, async () => {
-        await API.patch(`/api/admin/items/${item.id}`, { course: Number(course.value) });
-        item.course = Number(course.value);
-      }));
-      fields.append(el('label', null, esc(t('a.course', LANG))), course);
     } else {
       // Ціну зал бачить, але не редагує. Ховати її було б брехнею: вона
       // однаково є в меню гостя.
@@ -602,30 +588,9 @@ function renderOrders(mount) {
 
     const list = el('ul', 'ing');
     order.items.forEach(i => list.appendChild(el('li', null,
-      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}` +
-      ` · ${esc(t('a.course.' + (i.course || 0), LANG))}`)));
+      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
     row.appendChild(list);
     if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
-
-    // Запуск курсу — робота залу. Кухня чекає саме цієї кнопки.
-    (order.tickets || []).filter(tk => tk.awaiting_fire).forEach(tk => {
-      const line = el('div', 'fire-line');
-      line.appendChild(el('span', 'ro',
-        `${esc(t('a.course.' + tk.course, LANG))} · ${esc(t(tk.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`));
-      const go = el('button', 'primary', esc(t('a.fire', LANG)));
-      go.type = 'button';
-      go.disabled = !tk.can_fire;
-      go.addEventListener('click', () => guard(row, async () => {
-        await API.post(`/api/orders/tickets/${tk.id}/fire`);
-        await reload();
-      }));
-      line.appendChild(go);
-      if (!tk.can_fire) line.appendChild(el('span', 'ro', esc(t('a.fire.wait', LANG))));
-      row.appendChild(line);
-    });
-    if ((order.tickets || []).some(tk => tk.awaiting_fire)) {
-      row.appendChild(el('p', 'hint', esc(t('a.fire.hint', LANG))));
-    }
 
     const actions = el('div', 'actions');
     const next = { paid: 'accepted', accepted: 'ready', ready: 'served' }[order.status];

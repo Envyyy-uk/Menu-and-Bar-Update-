@@ -47,11 +47,6 @@ Object.assign(I18N, {
   'a.station':  { uk: 'Станція', en: 'Station', es: 'Estación', it: 'Postazione', de: 'Station', ru: 'Станция' },
   'a.kitchen':  { uk: 'Кухня', en: 'Kitchen', es: 'Cocina', it: 'Cucina', de: 'Küche', ru: 'Кухня' },
   'a.bar':      { uk: 'Бар', en: 'Bar', es: 'Barra', it: 'Bar', de: 'Bar', ru: 'Бар' },
-  'a.course':   { uk: 'Курс', en: 'Course', es: 'Plato', it: 'Portata', de: 'Gang', ru: 'Курс' },
-  'a.course.0': { uk: 'Одразу', en: 'Right away', es: 'De inmediato', it: 'Subito', de: 'Sofort', ru: 'Сразу' },
-  'a.course.1': { uk: 'Закуски', en: 'Starters', es: 'Entrantes', it: 'Antipasti', de: 'Vorspeisen', ru: 'Закуски' },
-  'a.course.2': { uk: 'Основні', en: 'Mains', es: 'Principales', it: 'Secondi', de: 'Hauptgerichte', ru: 'Основные' },
-  'a.course.3': { uk: 'Десерт', en: 'Dessert', es: 'Postre', it: 'Dolce', de: 'Dessert', ru: 'Десерт' },
   'a.opensAt':  { uk: 'Дата відкриття', en: 'Opening date', es: 'Fecha de apertura', it: 'Data di apertura', de: 'Öffnungsdatum', ru: 'Дата открытия' },
   'a.schedule': { uk: 'Розклад', en: 'Schedule', es: 'Horario', it: 'Orario', de: 'Zeitplan', ru: 'Расписание' },
   'a.noSchedule': { uk: '— без розкладу —', en: '— no schedule —', es: '— sin horario —', it: '— senza orario —', de: '— kein Zeitplan —', ru: '— без расписания —' },
@@ -147,16 +142,6 @@ Object.assign(I18N, {
     uk: 'Оплачено й досі не прийнято', en: 'Paid and still not accepted',
     es: 'Pagado y aún sin aceptar', it: 'Pagato e ancora non accettato',
     de: 'Bezahlt und noch nicht angenommen', ru: 'Оплачено и до сих пор не принято'
-  },
-  'a.fire':         { uk: 'Запустити', en: 'Fire', es: 'Lanzar', it: 'Lancia', de: 'Anstoßen', ru: 'Запустить' },
-  'a.fire.wait':    { uk: 'чекає попереднього курсу', en: 'waiting for the previous course', es: 'espera el plato anterior', it: 'attende la portata precedente', de: 'wartet auf den vorigen Gang', ru: 'ждёт предыдущий курс' },
-  'a.fire.hint': {
-    uk: 'Кухня не почне наступний курс, поки ви його не запустите. Дивіться на стіл, а не на годинник.',
-    en: 'The kitchen will not start the next course until you fire it. Watch the table, not the clock.',
-    es: 'La cocina no empezará el siguiente plato hasta que lo lance. Mire la mesa, no el reloj.',
-    it: 'La cucina non inizia la portata successiva finché non la lanciate. Guardate il tavolo, non l’orologio.',
-    de: 'Die Küche beginnt den nächsten Gang erst, wenn Sie ihn anstoßen. Schauen Sie auf den Tisch, nicht auf die Uhr.',
-    ru: 'Кухня не начнёт следующий курс, пока вы его не запустите. Смотрите на стол, а не на часы.'
   },
   'a.refund':       { uk: 'Повернути', en: 'Refund', es: 'Reembolsar', it: 'Rimborsa', de: 'Erstatten', ru: 'Вернуть' },
   'a.refund.amount':{ uk: 'Сума повернення', en: 'Refund amount', es: 'Importe a reembolsar', it: 'Importo del rimborso', de: 'Erstattungsbetrag', ru: 'Сумма возврата' },

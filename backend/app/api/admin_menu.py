@@ -18,7 +18,7 @@ from app.core.deps import current_user, get_venue
 from app.core.permissions import can
 from app.db import get_db
 from app.models import MenuItem, User, Venue
-from app.models.menu import COURSES, ITEM_STATES, STATIONS
+from app.models.menu import ITEM_STATES, STATIONS
 from app.services.audit import record
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
@@ -31,7 +31,6 @@ FIELD_PERMISSION = {
     "hidden_when_closed": "items.state",
     "price_pence": "items.edit",
     "station": "items.edit",
-    "course": "items.edit",
     "orderable": "items.edit",
     "name": "items.edit",
     "active": "items.edit",
@@ -45,7 +44,6 @@ class ItemPatch(BaseModel):
     hidden_when_closed: bool | None = None
     price_pence: int | None = Field(default=None, ge=0)
     station: str | None = None
-    course: int | None = Field(default=None, ge=0, le=3)
     orderable: bool | None = None
     name: str | None = None
     active: bool | None = None
@@ -68,7 +66,6 @@ def list_items(
             "key": i.key,
             "name": i.name,
             "station": i.station,
-            "course": i.course,
             "price_pence": i.price_pence,
             "state": i.state,
             "opens_at": i.opens_at,
@@ -106,8 +103,6 @@ def patch_item(
         raise HTTPException(status_code=422, detail="невідомий стан")
     if "station" in changes and changes["station"] not in STATIONS:
         raise HTTPException(status_code=422, detail="невідома станція")
-    if "course" in changes and changes["course"] not in COURSES:
-        raise HTTPException(status_code=422, detail="невідомий курс")
 
     before = {f: getattr(item, f) for f in changes}
     for field, value in changes.items():

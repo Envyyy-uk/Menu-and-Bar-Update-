@@ -20,14 +20,6 @@ STATION_KITCHEN = "kitchen"
 STATION_BAR = "bar"
 STATIONS = (STATION_KITCHEN, STATION_BAR)
 
-# Курс — черга подачі. Напої йдуть одразу, далі закуски, основні, десерти.
-# Кухня не готує все підряд: поки не віддали закуски, основні не починають.
-COURSE_IMMEDIATE = 0
-COURSE_STARTERS = 1
-COURSE_MAINS = 2
-COURSE_DESSERTS = 3
-COURSES = (COURSE_IMMEDIATE, COURSE_STARTERS, COURSE_MAINS, COURSE_DESSERTS)
-
 
 class Ingredient(UUIDPk, Base):
     """Словник: склад страви — це посилання на ключі, а не текст.
@@ -128,8 +120,6 @@ class MenuItem(UUIDPk, Timestamped, Base):
 
     price_pence: Mapped[int] = mapped_column(Integer, default=0)
     station: Mapped[str] = mapped_column(String(10), default=STATION_KITCHEN)
-    # Черга подачі: 0 — одразу, 1 — закуски, 2 — основні, 3 — десерт.
-    course: Mapped[int] = mapped_column(Integer, default=COURSE_IMMEDIATE, server_default="0")
     position: Mapped[int] = mapped_column(Integer, default=0)
 
     state: Mapped[str] = mapped_column(String(10), default=STATE_AUTO)

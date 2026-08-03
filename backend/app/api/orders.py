@@ -35,7 +35,6 @@ from app.services.orders import (
     Line,
     OrderError,
     create_order,
-    fire_ticket,
     get_for_guest,
     order_payload,
     ticket_payload,
@@ -242,48 +241,11 @@ def queue(
             out.append(order_payload(order, label))
             continue
         tickets = [t for t in order.tickets if t.station == station]
-        for ticket in sorted(tickets, key=lambda t: t.course):
+        for ticket in tickets:
             if ticket.status == STATUS_SERVED:
                 continue
             out.append(ticket_payload(order, ticket, label))
     return out
-
-
-@router.post("/tickets/{ticket_id}/fire")
-def fire(
-    ticket_id: uuid.UUID,
-    actor: User = Depends(require("orders.status")),
-    db: DbSession = Depends(get_db),
-    venue: Venue = Depends(get_venue),
-) -> dict:
-    """Зал запускає курс у роботу.
-
-    Кухня не починає основне сама: тільки офіціант бачить, чи доїв гість
-    закуску. Основне, запущене «за розкладом», приїде до столу холодним.
-    """
-    ticket = db.get(OrderTicket, ticket_id)
-    if ticket is None:
-        raise HTTPException(status_code=404, detail="марку не знайдено")
-    order = db.get(Order, ticket.order_id)
-    if order is None or order.venue_id != venue.id:
-        raise HTTPException(status_code=404, detail="замовлення не знайдено")
-
-    try:
-        fire_ticket(order, ticket, actor.id)
-    except OrderError as exc:
-        _fail(exc)
-
-    record.write(
-        db,
-        venue_id=venue.id,
-        user_id=actor.id,
-        action="ticket.fire",
-        entity=f"order:{order.number}",
-        after={"station": ticket.station, "course": ticket.course},
-    )
-    db.commit()
-    realtime.publish({"type": "order.fired", "number": order.number})
-    return ticket_payload(order, ticket, _table_label(db, order))
 
 
 @router.post("/tickets/{ticket_id}/status")

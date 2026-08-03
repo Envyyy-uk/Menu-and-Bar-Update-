@@ -32,26 +32,6 @@ Object.assign(I18N, {
   },
   'k.mute':    { uk: 'Стишити', en: 'Mute', es: 'Silenciar', it: 'Silenzia', de: 'Stumm', ru: 'Приглушить' },
   'k.unmute':  { uk: 'Звук', en: 'Sound', es: 'Sonido', it: 'Suono', de: 'Ton', ru: 'Звук' },
-  'k.course.0': { uk: 'Одразу', en: 'Right away', es: 'De inmediato', it: 'Subito', de: 'Sofort', ru: 'Сразу' },
-  'k.course.1': { uk: 'Закуски', en: 'Starters', es: 'Entrantes', it: 'Antipasti', de: 'Vorspeisen', ru: 'Закуски' },
-  'k.course.2': { uk: 'Основні', en: 'Mains', es: 'Principales', it: 'Secondi', de: 'Hauptgerichte', ru: 'Основные' },
-  'k.course.3': { uk: 'Десерт', en: 'Dessert', es: 'Postre', it: 'Dolce', de: 'Dessert', ru: 'Десерт' },
-  'k.blocked': {
-    uk: 'Чекає: спершу віддайте попередній курс',
-    en: 'On hold: send the previous course first',
-    es: 'En espera: primero sirva el plato anterior',
-    it: 'In attesa: prima servite la portata precedente',
-    de: 'Wartet: zuerst den vorherigen Gang ausgeben',
-    ru: 'Ждёт: сначала отдайте предыдущий курс'
-  },
-  'k.awaitFire': {
-    uk: 'Чекає команди залу — офіціант запустить, коли гість доїсть попереднє',
-    en: 'Waiting for the floor — the server fires it when the guests finish the previous course',
-    es: 'Esperando a la sala: el camarero lo lanza cuando terminen el plato anterior',
-    it: 'In attesa della sala: il cameriere la lancia quando finiscono la portata precedente',
-    de: 'Wartet auf den Service — der Kellner stößt ihn an, wenn der vorige Gang gegessen ist',
-    ru: 'Ждёт команды зала — официант запустит, когда гость доест предыдущее'
-  },
   'k.enter':   { uk: 'Увійти PIN-ом', en: 'Sign in with PIN', es: 'Entrar con PIN', it: 'Accedi con PIN', de: 'Mit PIN anmelden', ru: 'Войти по PIN' },
   'k.switch':  { uk: 'Станція', en: 'Station', es: 'Estación', it: 'Postazione', de: 'Station', ru: 'Станция' }
 });

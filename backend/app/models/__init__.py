@@ -1,10 +1,5 @@
 from app.models.base import Base, utcnow
 from app.models.menu import (
-    COURSES,
-    COURSE_DESSERTS,
-    COURSE_IMMEDIATE,
-    COURSE_MAINS,
-    COURSE_STARTERS,
     ITEM_STATES,
     STATE_AUTO,
     STATE_OFF,
@@ -53,11 +48,6 @@ from app.models.venue import Table, Venue, new_table_token
 __all__ = [
     "ALLOWED_TRANSITIONS",
     "ITEM_STATES",
-    "COURSES",
-    "COURSE_DESSERTS",
-    "COURSE_IMMEDIATE",
-    "COURSE_MAINS",
-    "COURSE_STARTERS",
     "ORDER_STATUSES",
     "TICKET_ORDER",
     "TICKET_STATUSES",
