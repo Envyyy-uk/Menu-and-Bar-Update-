@@ -67,10 +67,11 @@ with sync_playwright() as p:
     # Панель відкривається на черзі замовлень — позиції на сусідній вкладці
     admin.locator(".tab", has_text="Позиції").click()
     admin.wait_for_selector(".arow", timeout=15000)
+    tabs = set(admin.locator(".tab").all_inner_texts())
     check("вкладки за правами owner",
-          {"Позиції", "Розділи", "Розклади", "Столи", "Люди", "Аудит"} <=
-          set(admin.locator(".tab").all_inner_texts()),
-          admin.locator(".tab").all_inner_texts())
+          {"Позиції", "Розклади", "Столи", "Люди", "Аудит"} <= tabs, sorted(tabs))
+    # розділів більше немає: страву закриває тільки вона сама
+    check("вкладки «Розділи» немає", "Розділи" not in tabs, sorted(tabs))
 
     # Тест міг обірватися раніше — приводимо позицію до відомого стану.
     row = admin.locator(".arow", has_text=ITEM).first

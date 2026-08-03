@@ -22,7 +22,6 @@ from app.models import (
     Device,
     Ingredient,
     MenuItem,
-    MenuSection,
     MenuSource,
     MenuWarning,
     Schedule,
@@ -103,19 +102,10 @@ def seed(db: Session) -> Venue:
             row.label = spec["label"]
             row.ranges = spec["ranges"]
 
-    sections: dict[str, MenuSection] = {}
-    for position, (key, names) in enumerate(data.get("sections", {}).items()):
-        row = _upsert(db, MenuSection, venue.id, key)
-        row.names = names
-        row.position = position
-        sections[key] = row
-    db.flush()
-
     for position, spec in enumerate(data.get("items", [])):
         item = _upsert(db, MenuItem, venue.id, spec["key"])
         is_new = item.created_at is None
         item.name = spec["name"]
-        item.section_id = sections[spec["section"]].id if spec.get("section") in sections else None
         item.station = spec.get("station", "kitchen")
         item.price_pence = spec.get("price_pence", 0)
         item.description = spec.get("desc", {})

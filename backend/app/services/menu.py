@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from app.models import (
     Ingredient,
     MenuItem,
-    MenuSection,
     MenuSource,
     MenuWarning,
     Schedule,
@@ -27,10 +26,8 @@ def schedules_map(db: Session, venue_id) -> dict[str, list[dict[str, Any]]]:
 
 def item_payload(
     item: MenuItem,
-    section_key: str | None,
     schedules: dict[str, list[dict[str, Any]]],
     now,
-    section_av=None,
 ) -> dict[str, Any]:
     av = availability_of(
         state=item.state,
@@ -40,17 +37,10 @@ def item_payload(
         schedules=schedules,
         now=now,
     )
-    # Меню гість бачить одним списком, без заголовків розділів. Але розділ
-    # досі можна закрити за розкладом — і тоді закривається кожна його
-    # позиція. Раніше це робив заголовок; тепер нема кому, тож рахуємо тут.
-    # Власна причина позиції важливіша: «закінчилось» точніше, ніж «зачинено».
-    if av.open and section_av is not None and not section_av.open:
-        av = section_av
     return {
         "id": str(item.id),
         "key": item.key,
         "name": item.name,
-        "section": section_key,
         "station": item.station,
         "price_pence": item.price_pence,
         "desc": item.description,
@@ -72,24 +62,6 @@ def item_payload(
 def menu_payload(db: Session, venue: Venue, at: datetime | None = None) -> dict[str, Any]:
     now = venue_now(venue.timezone, at)
     schedules = schedules_map(db, venue.id)
-
-    sections = db.scalars(
-        select(MenuSection)
-        .where(MenuSection.venue_id == venue.id)
-        .order_by(MenuSection.position, MenuSection.key)
-    ).all()
-    section_key_by_id = {s.id: s.key for s in sections}
-    section_av_by_id = {
-        s.id: availability_of(
-            state=s.state,
-            schedule_key=s.schedule_key,
-            opens_at=s.opens_at,
-            hidden_when_closed=s.hidden_when_closed,
-            schedules=schedules,
-            now=now,
-        )
-        for s in sections
-    }
 
     items = db.scalars(
         select(MenuItem)
@@ -126,25 +98,5 @@ def menu_payload(db: Session, venue: Venue, at: datetime | None = None) -> dict[
         "sources": sources,
         "warnings": warnings,
         "schedules": schedules,
-        # Розділи лишаються — ними зал закриває цілу групу одним розкладом.
-        # Гість їх не бачить: меню для нього один список.
-        "sections": [
-            {
-                "key": s.key,
-                "names": s.names,
-                "state": s.state,
-                "available": availability_dict(section_av_by_id[s.id]),
-            }
-            for s in sections
-        ],
-        "items": [
-            item_payload(
-                i,
-                section_key_by_id.get(i.section_id),
-                schedules,
-                now,
-                section_av_by_id.get(i.section_id),
-            )
-            for i in items
-        ],
+        "items": [item_payload(i, schedules, now) for i in items],
     }

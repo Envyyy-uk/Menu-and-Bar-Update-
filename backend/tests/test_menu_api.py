@@ -7,13 +7,7 @@ def test_health(client):
 def test_menu_returns_seed_data(client):
     m = client.get("/api/menu").json()
     assert m["venue"]["key"] == "the-copper-fig"
-    assert [s["key"] for s in m["sections"]] == [
-        "starters",
-        "mains",
-        "desserts",
-        "cocktails",
-        "soft-drinks",
-    ]
+    assert "sections" not in m          # меню один список, груп немає
     assert len(m["items"]) == 14
     assert m["lexicon"]["oats"]["de"] == "Hafer"
     assert m["sources"]["official-2026-07"]["checked"] == "2026-07-14"
@@ -40,7 +34,7 @@ def test_allergen_levels_survive_the_round_trip(client):
 def test_alcohol_is_visible_but_not_orderable(client):
     """Межа v1 зашита в дані, а не в код: коктейлі видно, замовити не можна."""
     m = client.get("/api/menu").json()
-    cocktails = [i for i in m["items"] if i["section"] == "cocktails"]
+    cocktails = [i for i in m["items"] if i["orderable_reason"] == "alcohol-age-check"]
     assert len(cocktails) == 4
     assert all(i["orderable"] is False for i in cocktails)
     assert all(i["orderable_reason"] == "alcohol-age-check" for i in cocktails)
@@ -74,49 +68,88 @@ def test_menu_is_one_flat_list_ordered_by_position(client):
     assert keys[0] == "smoked-beetroot-tartare"
 
 
-def test_closed_section_closes_its_dishes(client, db, venue):
-    """Заголовка розділу гість більше не бачить — отже, закритий розділ мусить
-    гасити кожну свою страву сам. Інакше він мовчки відкриється."""
+# --------------------------------------------- три способи зняти страву ----
+# Розділів більше немає: закриває страву тільки вона сама. Способи — 86,
+# розклад і дата відкриття («по таймеру»).
+
+
+def _item(db, key):
     from sqlalchemy import select
 
-    from app.models import MenuSection
-    from tests.test_permissions import as_owner
+    from app.models import MenuItem
 
-    as_owner(client)
-    section = db.scalars(select(MenuSection).where(MenuSection.key == "desserts")).one()
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "off"})
+    return db.scalars(select(MenuItem).where(MenuItem.key == key)).one()
 
+
+def _available(client, key):
     m = client.get("/api/menu").json()
-    desserts = [i for i in m["items"] if i["section"] == "desserts"]
-    assert desserts, "у сідері мають бути десерти"
-    assert all(i["available"]["open"] is False for i in desserts)
-    assert all(i["available"]["reason"] == "sold_out" for i in desserts)
-
-    # інші страви це не зачепило
-    assert next(i for i in m["items"] if i["key"] == "house-lemonade")["available"]["open"]
-
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "auto"})
+    return next(i for i in m["items"] if i["key"] == key)["available"]
 
 
-def test_dish_keeps_its_own_reason_when_section_also_closed(client, db, venue):
-    """«Закінчилось» точніше, ніж «зачинено»: причина страви важливіша."""
-    from sqlalchemy import select
+def test_86_takes_one_dish_off(client, db, venue):
+    """Найчастіша дія зміни: страва закінчилась просто зараз."""
+    from tests.test_permissions import as_staff
 
-    from app.models import MenuItem, MenuSection
-    from tests.test_permissions import as_owner
+    as_staff(client)
+    item = _item(db, "house-lemonade")
+    assert _available(client, "house-lemonade")["open"] is True
 
-    as_owner(client)
-    section = db.scalars(select(MenuSection).where(MenuSection.key == "desserts")).one()
-    item = db.scalars(
-        select(MenuItem).where(MenuItem.section_id == section.id)
-    ).first()
+    assert client.patch(f"/api/admin/items/{item.id}", json={"state": "off"}).status_code == 200
+    av = _available(client, "house-lemonade")
+    assert av["open"] is False
+    assert av["reason"] == "sold_out"
+    # сусідню страву це не зачепило
+    assert _available(client, "oat-cold-brew")["open"] is True
 
-    client.patch(f"/api/admin/items/{item.id}", json={"state": "off"})
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "soon"})
-
-    m = client.get("/api/menu").json()
-    dish = next(i for i in m["items"] if i["key"] == item.key)
-    assert dish["available"]["reason"] == "sold_out"
-
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "auto"})
     client.patch(f"/api/admin/items/{item.id}", json={"state": "auto"})
+
+
+def test_schedule_closes_one_dish_by_hours(client, db, venue):
+    """Розклад тепер живе на страві, а не на групі. 'late-bar' — 22:00–01:00."""
+    from tests.test_permissions import as_owner
+
+    as_owner(client)
+    item = _item(db, "house-lemonade")
+    client.patch(f"/api/admin/items/{item.id}", json={"schedule_key": "late-bar"})
+
+    closed = client.get("/api/menu", params={"at": "2026-08-07T15:00"}).json()
+    av = next(i for i in closed["items"] if i["key"] == "house-lemonade")["available"]
+    assert av["open"] is False
+    assert av["reason"] == "scheduled"
+    assert av["schedule"] == "late-bar"
+
+    # у свої години — відкрито, і навіть по той бік півночі
+    for stamp in ("2026-08-07T23:30", "2026-08-08T00:30"):
+        opened = client.get("/api/menu", params={"at": stamp}).json()
+        assert next(i for i in opened["items"] if i["key"] == "house-lemonade")["available"]["open"]
+
+    # решта меню працює за своїм часом
+    assert next(
+        i for i in closed["items"] if i["key"] == "oat-cold-brew"
+    )["available"]["open"] is True
+
+    client.patch(f"/api/admin/items/{item.id}", json={"schedule_key": None})
+
+
+def test_timer_opens_a_dish_by_itself(client, db, venue):
+    """«По таймеру»: дата відкриття, після якої страва відкривається сама,
+    без жодного натискання в панелі."""
+    from tests.test_permissions import as_owner
+
+    as_owner(client)
+    item = _item(db, "house-lemonade")
+    client.patch(
+        f"/api/admin/items/{item.id}",
+        json={"state": "soon", "opens_at": "2026-12-24T18:00"},
+    )
+
+    before = client.get("/api/menu", params={"at": "2026-12-24T17:59"}).json()
+    av = next(i for i in before["items"] if i["key"] == "house-lemonade")["available"]
+    assert av["open"] is False
+    assert av["reason"] == "soon"
+    assert av["opens_at"] == "2026-12-24T18:00"
+
+    after = client.get("/api/menu", params={"at": "2026-12-24T18:00"}).json()
+    assert next(i for i in after["items"] if i["key"] == "house-lemonade")["available"]["open"]
+
+    client.patch(f"/api/admin/items/{item.id}", json={"state": "auto", "opens_at": None})

@@ -2,7 +2,7 @@
 
 from sqlalchemy import select
 
-from app.models import MenuSection, Schedule, Table
+from app.models import Schedule, Table
 from tests.test_permissions import as_owner, as_staff
 
 
@@ -103,25 +103,15 @@ def test_midnight_crossing_schedule_survives_the_round_trip(client, db, venue):
     assert r.json()["ranges"] == [{"days": [5, 6], "from": "22:00", "to": "01:00"}]
 
 
-def test_section_state_reaches_the_guest_menu(client, db, venue):
-    """Розділ має ті самі чотири стани, що й позиція."""
+def test_sections_endpoint_is_gone(client, db, venue):
+    """Розділи були другим місцем, де страву можна закрити. Тепер закриває
+    тільки сама страва — і шлях не має воскреснути «про всяк випадок»."""
+    from app.main import app
+
+    assert not any("/sections" in getattr(r, "path", "") for r in app.routes)
+
     as_owner(client)
-    section = db.scalars(select(MenuSection).where(MenuSection.key == "desserts")).one()
-
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "off"})
-    menu = client.get("/api/menu").json()
-    desserts = next(s for s in menu["sections"] if s["key"] == "desserts")
-    assert desserts["available"] == {
-        "open": False,
-        "reason": "sold_out",
-        "opens_at": None,
-        "schedule": None,
-        "hidden": False,
-    }
-
-    client.patch(f"/api/admin/sections/{section.id}", json={"state": "auto"})
-    menu = client.get("/api/menu").json()
-    assert next(s for s in menu["sections"] if s["key"] == "desserts")["available"]["open"] is True
+    assert client.get("/api/admin/sections").status_code == 404
 
 
 def test_86_from_the_panel_shows_up_in_the_guest_menu(client, db, venue):

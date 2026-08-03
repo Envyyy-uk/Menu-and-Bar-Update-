@@ -80,37 +80,12 @@ class Schedule(UUIDPk, Base):
     ranges: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, default=list)
 
 
-class MenuSection(UUIDPk, Base):
-    __tablename__ = "menu_sections"
-    __table_args__ = (UniqueConstraint("venue_id", "key", name="uq_section_key"),)
-
-    venue_id: Mapped[uuid.UUID] = mapped_column(
-        PgUUID(as_uuid=True), ForeignKey("venues.id", ondelete="CASCADE"), index=True
-    )
-    key: Mapped[str] = mapped_column(String(80))
-    names: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
-    position: Mapped[int] = mapped_column(Integer, default=0)
-
-    # Розділ має ті самі чотири стани, що й позиція.
-    state: Mapped[str] = mapped_column(String(10), default=STATE_AUTO)
-    schedule_key: Mapped[str | None] = mapped_column(String(80), default=None)
-    opens_at: Mapped[str | None] = mapped_column(String(16), default=None)
-    hidden_when_closed: Mapped[bool] = mapped_column(Boolean, default=False)
-
-    items: Mapped[list["MenuItem"]] = relationship(
-        back_populates="section", order_by="MenuItem.position"
-    )
-
-
 class MenuItem(UUIDPk, Timestamped, Base):
     __tablename__ = "menu_items"
     __table_args__ = (UniqueConstraint("venue_id", "key", name="uq_menu_item_key"),)
 
     venue_id: Mapped[uuid.UUID] = mapped_column(
         PgUUID(as_uuid=True), ForeignKey("venues.id", ondelete="CASCADE"), index=True
-    )
-    section_id: Mapped[uuid.UUID | None] = mapped_column(
-        PgUUID(as_uuid=True), ForeignKey("menu_sections.id", ondelete="SET NULL"), default=None
     )
 
     key: Mapped[str] = mapped_column(String(80))
@@ -143,4 +118,3 @@ class MenuItem(UUIDPk, Timestamped, Base):
 
     active: Mapped[bool] = mapped_column(Boolean, default=True)
 
-    section: Mapped[MenuSection | None] = relationship(back_populates="items")

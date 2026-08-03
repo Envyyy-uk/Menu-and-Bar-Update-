@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session as DbSession
 from app.core.deps import current_user, get_venue, require
 from app.core.permissions import can
 from app.db import get_db
-from app.models import MenuItem, MenuSection, Schedule, User, Venue
+from app.models import MenuItem, Schedule, User, Venue
 from app.models.menu import ITEM_STATES
 from app.services.audit import record
 
@@ -171,58 +171,3 @@ def delete_schedule(
     db.delete(schedule)
     db.commit()
     return {"status": "deleted"}
-
-
-@router.get("/sections")
-def list_sections(
-    actor: User = Depends(current_user),
-    db: DbSession = Depends(get_db),
-    venue: Venue = Depends(get_venue),
-) -> list[dict]:
-    if not can(actor.role, "items.state"):
-        raise HTTPException(status_code=403, detail="немає права: items.state")
-    rows = db.scalars(
-        select(MenuSection).where(MenuSection.venue_id == venue.id).order_by(MenuSection.position)
-    ).all()
-    return [
-        {
-            "id": str(s.id),
-            "key": s.key,
-            "names": s.names,
-            "state": s.state,
-            "schedule_key": s.schedule_key,
-            "opens_at": s.opens_at,
-            "hidden_when_closed": s.hidden_when_closed,
-        }
-        for s in rows
-    ]
-
-
-@router.patch("/sections/{section_id}")
-def patch_section(
-    section_id: uuid.UUID,
-    body: SectionPatch,
-    actor: User = Depends(require("items.state")),
-    db: DbSession = Depends(get_db),
-    venue: Venue = Depends(get_venue),
-) -> dict:
-    section = db.get(MenuSection, section_id)
-    if section is None or section.venue_id != venue.id:
-        raise HTTPException(status_code=404, detail="розділ не знайдено")
-    changes = body.model_dump(exclude_unset=True)
-    if "state" in changes and changes["state"] not in ITEM_STATES:
-        raise HTTPException(status_code=422, detail="невідомий стан")
-    before = {f: getattr(section, f) for f in changes}
-    for field, value in changes.items():
-        setattr(section, field, value)
-    record.write(
-        db,
-        venue_id=venue.id,
-        user_id=actor.id,
-        action="section.update",
-        entity=f"section:{section.key}",
-        before=before,
-        after=changes,
-    )
-    db.commit()
-    return {"id": str(section.id), "key": section.key, **changes}

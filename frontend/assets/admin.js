@@ -18,7 +18,7 @@ let ITEM_QUERY = '';
 let ORDERS_TIMER = null;
 
 const DATA = {
-  items: [], sections: [], schedules: [], tables: [], users: [], devices: [], audit: [],
+  items: [], schedules: [], tables: [], users: [], devices: [], audit: [],
   orders: [], alerts: [], stripe: null, menu: null
 };
 
@@ -108,7 +108,7 @@ function tickClock() {
 
 /* ------------------------------------------------------------ вкладки --- */
 function tabsFor() {
-  const list = [['orders', 'a.tab.orders'], ['items', 'a.tab.items'], ['sections', 'a.tab.sections']];
+  const list = [['orders', 'a.tab.orders'], ['items', 'a.tab.items']];
   if (may('schedules.edit')) list.push(['schedules', 'a.tab.schedules']);
   if (may('tables.manage')) list.push(['tables', 'a.tab.tables']);
   if (may('users.create')) list.push(['users', 'a.tab.users']);
@@ -248,31 +248,6 @@ function renderItems(mount) {
         el('span', 'ro', esc(money(item.price_pence, DATA.menu ? DATA.menu.venue.currency : 'GBP', LANG))));
     }
 
-    row.appendChild(fields);
-    mount.appendChild(row);
-  });
-}
-
-/* ------------------------------------------------------------ розділи --- */
-function renderSections(mount) {
-  DATA.sections.forEach(sec => {
-    const row = el('div', 'arow');
-    row.appendChild(el('div', 'arow-head', `<b>${esc(pick(sec.names, LANG) || sec.key)}</b>`));
-    row.appendChild(stateButtons(sec.state, async (state, box) => {
-      const ok = await guard(row, () => API.patch(`/api/admin/sections/${sec.id}`, { state }));
-      if (!ok) return;
-      sec.state = state;
-      box.querySelectorAll('.sbtn').forEach(b => b.classList.toggle('on', b.textContent === t('a.state.' + state, LANG)));
-      refreshLive();
-    }));
-    const fields = el('div', 'fields');
-    const sched = scheduleSelect(sec.schedule_key);
-    sched.addEventListener('change', () => guard(row, async () => {
-      await API.patch(`/api/admin/sections/${sec.id}`, { schedule_key: sched.value || null });
-      sec.schedule_key = sched.value || null;
-      refreshLive();
-    }));
-    fields.append(el('label', null, esc(t('a.schedule', LANG))), sched);
     row.appendChild(fields);
     mount.appendChild(row);
   });
@@ -666,7 +641,6 @@ function renderBody() {
   ({
     orders: renderOrders,
     items: renderItems,
-    sections: renderSections,
     schedules: renderSchedules,
     tables: renderTables,
     users: renderUsers,
@@ -685,7 +659,6 @@ async function reload() {
   const jobs = [
     API.get('/api/menu').then(d => { DATA.menu = d; }),
     API.get('/api/admin/items').then(d => { DATA.items = d; }),
-    API.get('/api/admin/sections').then(d => { DATA.sections = d; }),
     API.get('/api/admin/schedules').then(d => { DATA.schedules = d; })
   ];
   if (may('tables.manage')) jobs.push(API.get('/api/admin/tables').then(d => { DATA.tables = d; }));

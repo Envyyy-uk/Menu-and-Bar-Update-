@@ -28,7 +28,6 @@ Object.assign(I18N, {
 
   /* -------------------------------------------------------- вкладки ---- */
   'a.tab.items':     { uk: 'Позиції', en: 'Items', es: 'Platos', it: 'Voci', de: 'Positionen', ru: 'Позиции' },
-  'a.tab.sections':  { uk: 'Розділи', en: 'Sections', es: 'Secciones', it: 'Sezioni', de: 'Bereiche', ru: 'Разделы' },
   'a.tab.schedules': { uk: 'Розклади', en: 'Schedules', es: 'Horarios', it: 'Orari', de: 'Zeitpläne', ru: 'Расписания' },
   'a.tab.tables':    { uk: 'Столи', en: 'Tables', es: 'Mesas', it: 'Tavoli', de: 'Tische', ru: 'Столы' },
   'a.tab.users':     { uk: 'Люди', en: 'People', es: 'Personal', it: 'Personale', de: 'Personal', ru: 'Люди' },

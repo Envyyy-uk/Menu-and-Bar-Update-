@@ -31,48 +31,6 @@
       }
     }
   },
-  "sections": {
-    "starters": {
-      "uk": "Закуски",
-      "en": "Starters",
-      "es": "Entrantes",
-      "it": "Antipasti",
-      "de": "Vorspeisen",
-      "ru": "Закуски"
-    },
-    "mains": {
-      "uk": "Основні страви",
-      "en": "Mains",
-      "es": "Principales",
-      "it": "Secondi",
-      "de": "Hauptgerichte",
-      "ru": "Основные блюда"
-    },
-    "desserts": {
-      "uk": "Десерти",
-      "en": "Desserts",
-      "es": "Postres",
-      "it": "Dolci",
-      "de": "Desserts",
-      "ru": "Десерты"
-    },
-    "cocktails": {
-      "uk": "Коктейлі",
-      "en": "Cocktails",
-      "es": "Cócteles",
-      "it": "Cocktail",
-      "de": "Cocktails",
-      "ru": "Коктейли"
-    },
-    "soft-drinks": {
-      "uk": "Безалкогольні",
-      "en": "Soft drinks",
-      "es": "Sin alcohol",
-      "it": "Analcolici",
-      "de": "Alkoholfrei",
-      "ru": "Безалкогольные"
-    }
-  },
   "warnings": {
     "shared-fryer": {
       "uk": "Спільний фритюр з позиціями, що містять глютен",
@@ -641,7 +599,6 @@
     {
       "key": "smoked-beetroot-tartare",
       "name": "Smoked Beetroot Tartare",
-      "section": "starters",
       "station": "kitchen",
       "price_pence": 1150,
       "orderable": true,
@@ -688,7 +645,6 @@
     {
       "key": "charred-octopus",
       "name": "Charred Octopus",
-      "section": "starters",
       "station": "kitchen",
       "price_pence": 1300,
       "orderable": true,
@@ -733,7 +689,6 @@
     {
       "key": "wild-mushroom-arancini",
       "name": "Wild Mushroom Arancini",
-      "section": "starters",
       "station": "kitchen",
       "price_pence": 950,
       "orderable": true,
@@ -788,7 +743,6 @@
     {
       "key": "pan-seared-sea-bream",
       "name": "Pan-Seared Sea Bream",
-      "section": "mains",
       "station": "kitchen",
       "price_pence": 2100,
       "orderable": true,
@@ -826,7 +780,6 @@
     {
       "key": "braised-short-rib",
       "name": "Braised Short Rib",
-      "section": "mains",
       "station": "kitchen",
       "price_pence": 2450,
       "orderable": true,
@@ -872,7 +825,6 @@
     {
       "key": "fig-walnut-salad",
       "name": "Fig & Walnut Salad",
-      "section": "mains",
       "station": "kitchen",
       "price_pence": 1050,
       "orderable": true,
@@ -918,7 +870,6 @@
     {
       "key": "dark-chocolate-tart",
       "name": "Dark Chocolate Tart",
-      "section": "desserts",
       "station": "kitchen",
       "price_pence": 850,
       "orderable": true,
@@ -962,7 +913,6 @@
     {
       "key": "copper-fig-old-fashioned",
       "name": "Copper Fig Old Fashioned",
-      "section": "cocktails",
       "station": "bar",
       "price_pence": 1300,
       "orderable": false,
@@ -993,7 +943,6 @@
     {
       "key": "smoked-rosemary-sour",
       "name": "Smoked Rosemary Sour",
-      "section": "cocktails",
       "station": "bar",
       "price_pence": 1250,
       "orderable": false,
@@ -1029,7 +978,6 @@
     {
       "key": "elderflower-spritz",
       "name": "Elderflower Spritz",
-      "section": "cocktails",
       "station": "bar",
       "price_pence": 1100,
       "orderable": false,
@@ -1060,7 +1008,6 @@
     {
       "key": "basil-garden-gimlet",
       "name": "Basil Garden Gimlet",
-      "section": "cocktails",
       "station": "bar",
       "price_pence": 1200,
       "orderable": false,
@@ -1089,7 +1036,6 @@
     {
       "key": "house-lemonade",
       "name": "House Lemonade",
-      "section": "soft-drinks",
       "station": "bar",
       "price_pence": 450,
       "orderable": true,
@@ -1117,7 +1063,6 @@
     {
       "key": "spiced-apple-cooler",
       "name": "Spiced Apple Cooler",
-      "section": "soft-drinks",
       "station": "bar",
       "price_pence": 500,
       "orderable": true,
@@ -1147,7 +1092,6 @@
     {
       "key": "oat-cold-brew",
       "name": "Oat Cold Brew",
-      "section": "soft-drinks",
       "station": "bar",
       "price_pence": 475,
       "orderable": true,
