@@ -10,8 +10,10 @@ def test_menu_returns_seed_data(client):
     assert m["venue"]["name"] == "PODVAL"
     assert m["venue"]["currency"] == "GBP"
     assert "sections" not in m          # меню один список, груп немає
-    assert len(m["items"]) == 39
-    assert m["lexicon"]["coffee"]["de"] == "Kaffee"
+    assert len(m["items"]) == 40
+    assert m["lexicon"]["coffee"]["ru"] == "кофе"
+    # Меню виходить трьома мовами — зайвих у файлі бути не має
+    assert set(m["lexicon"]["coffee"]) == {"uk", "en", "ru"}
 
 
 def test_ingredients_are_keys_not_text(client):
@@ -21,7 +23,7 @@ def test_ingredients_are_keys_not_text(client):
     mojito = next(i for i in m["items"] if i["key"] == "mojito")
     assert mojito["ing"] == ["rum", "sugar", "lime", "mint"]
     assert all(k in m["lexicon"] for k in mojito["ing"])
-    assert m["lexicon"]["mint"]["es"] == "menta"
+    assert m["lexicon"]["mint"]["en"] == "mint"
 
 
 def test_nested_ingredients_still_render(client, db, venue):
@@ -123,10 +125,10 @@ def test_menu_is_one_flat_list_ordered_by_position(client):
     """Меню — один список. Порядок задає зал позицією, а не групою."""
     m = client.get("/api/menu").json()
     keys = [i["key"] for i in m["items"]]
-    assert len(keys) == len(set(keys)) == 39
+    assert len(keys) == len(set(keys)) == 40
     # порядок меню: міцне, коктейлі, пиво, вино, гаряче
     assert keys[0] == "absolut"
-    assert keys[-1] == "mocha"
+    assert keys[-1] == "hookah"
 
 
 # --------------------------------------------- три способи зняти страву ----
@@ -234,3 +236,42 @@ def test_every_allergen_key_is_a_real_one(client):
         used |= set(i["a"]) | set(i["m"]) | set(i["r"])
     assert used <= allowed, f"невідомі ключі: {sorted(used - allowed)}"
     assert used, "у меню має бути хоч один алерген"
+
+
+def test_menu_speaks_three_languages_only(client):
+    """Меню виходить українською, англійською та російською. Зайва мова у
+    файлі — це напівперекладене меню: частина карток чужою мовою, і гість
+    вирішує, що застосунок зламався."""
+    m = client.get("/api/menu").json()
+    wanted = {"uk", "en", "ru"}
+
+    for entry in m["lexicon"].values():
+        assert set(entry) == wanted, entry
+    for text in m["warnings"].values():
+        assert set(text) == wanted, text
+    for src in m["sources"].values():
+        assert set(src["label"]) == wanted, src
+
+    described = [i for i in m["items"] if i["desc"]]
+    assert described, "описи мають бути"
+    for i in described:
+        assert set(i["desc"]) == wanted, i["key"]
+
+
+def test_hookah_is_on_the_menu(client):
+    m = client.get("/api/menu").json()
+    hookah = next(i for i in m["items"] if i["key"] == "hookah")
+
+    assert hookah["name"] == "Hookah"
+    assert hookah["price_pence"] == 5000
+    assert hookah["orderable"] is True
+    # Тютюн, як і алкоголь: замовляється, документ перевіряє бармен при подачі
+    assert hookah["w"] == ["tobacco-age-check"]
+    assert m["warnings"]["tobacco-age-check"]["uk"].startswith("Тютюн")
+
+
+def test_everything_is_on_the_bar_for_now(client):
+    """Страв поки немає — усе меню йде на бар. Станція кухні лишається в
+    моделі: коли з'явиться їжа, її позиції просто отримають `kitchen`."""
+    m = client.get("/api/menu").json()
+    assert {i["station"] for i in m["items"]} == {"bar"}

@@ -65,7 +65,7 @@ with sync_playwright() as p:
         lambda m: errors.append(m.text) if m.type == "error" and "401" not in m.text else None,
     )
 
-    kitchen.goto(f"{BASE}/kitchen/?station=bar&lang=uk", wait_until="networkidle")
+    kitchen.goto(f"{BASE}/kitchen/?lang=uk", wait_until="networkidle")
     check("без сесії планшет просить PIN", kitchen.locator(".login input").count() == 1)
 
     # реєструємо цей планшет як пристрій і заходимо PIN-ом
@@ -123,9 +123,13 @@ with sync_playwright() as p:
     # У меню PODVAL кухонних позицій немає взагалі — їжа ще «Coming Soon».
     # Тому кухонний екран має лишатись порожнім, а не показувати чужі напої.
     other = tablet.new_page()
+    # Кухня нікуди не поділась — вона відкривається за адресою, просто в
+    # інтерфейсі перемикача немає, поки в меню немає страв.
     other.goto(f"{BASE}/kitchen/?station=kitchen&lang=uk", wait_until="networkidle")
     other.wait_for_selector(".kbar")
     other.wait_for_timeout(1500)
+    check("перемикача станцій в інтерфейсі немає",
+          kitchen.locator("#swap").count() == 0)
     check("кухня не бачить барної позиції",
           "Black Coffee" not in other.inner_text("#board"), other.inner_text("#board")[:60])
     other.close()

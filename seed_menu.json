@@ -12,9 +12,6 @@
       "label": {
         "uk": "Відновлено з назви продукту",
         "en": "Reconstructed from the product name",
-        "es": "Reconstruido a partir del nombre del producto",
-        "it": "Ricostruito dal nome del prodotto",
-        "de": "Aus dem Produktnamen rekonstruiert",
         "ru": "Восстановлено из названия продукта"
       }
     }
@@ -23,17 +20,16 @@
     "age-check": {
       "uk": "Алкоголь. Подається лише повнолітнім — бармен перевірить документ.",
       "en": "Alcohol. Served to over-18s only — the bar will check ID.",
-      "es": "Alcohol. Solo para mayores de 18 años: el bar pedirá identificación.",
-      "it": "Alcol. Servito solo ai maggiorenni — il bar chiederà un documento.",
-      "de": "Alkohol. Nur an Volljährige — die Bar prüft den Ausweis.",
       "ru": "Алкоголь. Подаётся только совершеннолетним — бармен проверит документ."
+    },
+    "tobacco-age-check": {
+      "uk": "Тютюн. Подається лише повнолітнім — бармен перевірить документ.",
+      "en": "Tobacco. Served to over-18s only — the bar will check ID.",
+      "ru": "Табак. Подаётся только совершеннолетним — бармен проверит документ."
     },
     "allergen-by-option": {
       "uk": "Алерген залежить від обраного молока: мигдалеве — горіхи, соєве — соя.",
       "en": "The allergen depends on the milk you choose: almond means nuts, soya means soya.",
-      "es": "El alérgeno depende de la leche elegida: almendra significa frutos secos; soja, soja.",
-      "it": "L'allergene dipende dal latte scelto: mandorla significa frutta a guscio, soia significa soia.",
-      "de": "Das Allergen hängt von der gewählten Milch ab: Mandel bedeutet Nüsse, Soja bedeutet Soja.",
       "ru": "Аллерген зависит от выбранного молока: миндальное — орехи, соевое — соя."
     }
   },
@@ -41,401 +37,261 @@
     "vodka": {
       "uk": "горілка",
       "en": "vodka",
-      "es": "vodka",
-      "it": "vodka",
-      "de": "Wodka",
       "ru": "водка"
     },
     "whiskey": {
       "uk": "віскі",
       "en": "whiskey",
-      "es": "whisky",
-      "it": "whisky",
-      "de": "Whiskey",
       "ru": "виски"
     },
     "gin": {
       "uk": "джин",
       "en": "gin",
-      "es": "ginebra",
-      "it": "gin",
-      "de": "Gin",
       "ru": "джин"
     },
     "rum": {
       "uk": "ром",
       "en": "rum",
-      "es": "ron",
-      "it": "rum",
-      "de": "Rum",
       "ru": "ром"
     },
     "tequila": {
       "uk": "текіла",
       "en": "tequila",
-      "es": "tequila",
-      "it": "tequila",
-      "de": "Tequila",
       "ru": "текила"
     },
     "brandy": {
       "uk": "коньяк",
       "en": "cognac",
-      "es": "coñac",
-      "it": "cognac",
-      "de": "Cognac",
       "ru": "коньяк"
     },
     "grain-spirit": {
       "uk": "зерновий спирт",
       "en": "grain spirit",
-      "es": "alcohol de grano",
-      "it": "alcol di cereali",
-      "de": "Getreidealkohol",
       "ru": "зерновой спирт"
     },
     "water": {
       "uk": "вода",
       "en": "water",
-      "es": "agua",
-      "it": "acqua",
-      "de": "Wasser",
       "ru": "вода"
     },
     "sugar": {
       "uk": "цукор",
       "en": "sugar",
-      "es": "azúcar",
-      "it": "zucchero",
-      "de": "Zucker",
       "ru": "сахар"
     },
     "lime": {
       "uk": "лайм",
       "en": "lime",
-      "es": "lima",
-      "it": "lime",
-      "de": "Limette",
       "ru": "лайм"
     },
     "mint": {
       "uk": "мʼята",
       "en": "mint",
-      "es": "menta",
-      "it": "menta",
-      "de": "Minze",
       "ru": "мята"
     },
     "orange": {
       "uk": "апельсин",
       "en": "orange",
-      "es": "naranja",
-      "it": "arancia",
-      "de": "Orange",
       "ru": "апельсин"
     },
     "lemon": {
       "uk": "лимон",
       "en": "lemon",
-      "es": "limón",
-      "it": "limone",
-      "de": "Zitrone",
       "ru": "лимон"
     },
     "cranberry": {
       "uk": "журавлина",
       "en": "cranberry",
-      "es": "arándano rojo",
-      "it": "mirtillo rosso",
-      "de": "Cranberry",
       "ru": "клюква"
     },
     "passion-fruit": {
       "uk": "маракуя",
       "en": "passion fruit",
-      "es": "maracuyá",
-      "it": "frutto della passione",
-      "de": "Maracuja",
       "ru": "маракуйя"
     },
     "strawberry": {
       "uk": "полуниця",
       "en": "strawberry",
-      "es": "fresa",
-      "it": "fragola",
-      "de": "Erdbeere",
       "ru": "клубника"
     },
     "raspberry": {
       "uk": "малина",
       "en": "raspberry",
-      "es": "frambuesa",
-      "it": "lampone",
-      "de": "Himbeere",
       "ru": "малина"
     },
     "mango": {
       "uk": "манго",
       "en": "mango",
-      "es": "mango",
-      "it": "mango",
-      "de": "Mango",
       "ru": "манго"
     },
     "cherry": {
       "uk": "вишня",
       "en": "cherry",
-      "es": "cereza",
-      "it": "ciliegia",
-      "de": "Kirsche",
       "ru": "вишня"
     },
     "black-currant": {
       "uk": "чорна смородина",
       "en": "black currant",
-      "es": "grosella negra",
-      "it": "ribes nero",
-      "de": "Schwarze Johannisbeere",
       "ru": "чёрная смородина"
     },
     "vanilla": {
       "uk": "ваніль",
       "en": "vanilla",
-      "es": "vainilla",
-      "it": "vaniglia",
-      "de": "Vanille",
       "ru": "ваниль"
     },
     "apple": {
       "uk": "яблуко",
       "en": "apple",
-      "es": "manzana",
-      "it": "mela",
-      "de": "Apfel",
       "ru": "яблоко"
     },
     "grapes": {
       "uk": "виноград",
       "en": "grapes",
-      "es": "uva",
-      "it": "uva",
-      "de": "Weintrauben",
       "ru": "виноград"
     },
     "sulphite-preservative": {
       "uk": "консервант (сульфіти)",
       "en": "sulphite preservative",
-      "es": "conservante (sulfitos)",
-      "it": "conservante (solfiti)",
-      "de": "Sulfit-Konservierung",
       "ru": "консервант (сульфиты)"
     },
     "barley-malt": {
       "uk": "ячмінний солод",
       "en": "barley malt",
-      "es": "malta de cebada",
-      "it": "malto d'orzo",
-      "de": "Gerstenmalz",
       "ru": "ячменный солод"
     },
     "maize": {
       "uk": "кукурудза",
       "en": "maize",
-      "es": "maíz",
-      "it": "mais",
-      "de": "Mais",
       "ru": "кукуруза"
     },
     "hops": {
       "uk": "хміль",
       "en": "hops",
-      "es": "lúpulo",
-      "it": "luppolo",
-      "de": "Hopfen",
       "ru": "хмель"
     },
     "campari-bitter": {
       "uk": "гіркий лікер Campari",
       "en": "Campari bitter",
-      "es": "amargo Campari",
-      "it": "bitter Campari",
-      "de": "Campari-Bitter",
       "ru": "горький ликёр Campari"
     },
     "vermouth-rosso": {
       "uk": "червоний вермут",
       "en": "vermouth rosso",
-      "es": "vermut rosso",
-      "it": "vermouth rosso",
-      "de": "Wermut Rosso",
       "ru": "вермут россо"
     },
     "aperol": {
       "uk": "апероль",
       "en": "Aperol",
-      "es": "Aperol",
-      "it": "Aperol",
-      "de": "Aperol",
       "ru": "апероль"
     },
     "triple-sec": {
       "uk": "апельсиновий лікер",
       "en": "orange liqueur",
-      "es": "licor de naranja",
-      "it": "liquore all'arancia",
-      "de": "Orangenlikör",
       "ru": "апельсиновый ликёр"
     },
     "cream": {
       "uk": "вершки",
       "en": "cream",
-      "es": "nata",
-      "it": "panna",
-      "de": "Sahne",
       "ru": "сливки"
     },
     "apricot-kernel": {
       "uk": "абрикосова кісточка",
       "en": "apricot kernel",
-      "es": "hueso de albaricoque",
-      "it": "nocciolo di albicocca",
-      "de": "Aprikosenkern",
       "ru": "абрикосовая косточка"
     },
     "herbs-spices": {
       "uk": "трави й спеції",
       "en": "herbs and spices",
-      "es": "hierbas y especias",
-      "it": "erbe e spezie",
-      "de": "Kräuter und Gewürze",
       "ru": "травы и специи"
     },
     "coconut": {
       "uk": "кокос",
       "en": "coconut",
-      "es": "coco",
-      "it": "cocco",
-      "de": "Kokos",
       "ru": "кокос"
     },
     "coffee": {
       "uk": "кава",
       "en": "coffee",
-      "es": "café",
-      "it": "caffè",
-      "de": "Kaffee",
       "ru": "кофе"
     },
     "cocoa": {
       "uk": "какао",
       "en": "cocoa",
-      "es": "cacao",
-      "it": "cacao",
-      "de": "Kakao",
       "ru": "какао"
     },
     "milk": {
       "uk": "молоко",
       "en": "milk",
-      "es": "leche",
-      "it": "latte",
-      "de": "Milch",
       "ru": "молоко"
     },
     "almond-milk": {
       "uk": "мигдалеве молоко",
       "en": "almond milk",
-      "es": "leche de almendra",
-      "it": "latte di mandorla",
-      "de": "Mandelmilch",
       "ru": "миндальное молоко"
     },
     "almonds": {
       "uk": "мигдаль",
       "en": "almonds",
-      "es": "almendras",
-      "it": "mandorle",
-      "de": "Mandeln",
       "ru": "миндаль"
     },
     "soya-milk": {
       "uk": "соєве молоко",
       "en": "soya milk",
-      "es": "leche de soja",
-      "it": "latte di soia",
-      "de": "Sojamilch",
       "ru": "соевое молоко"
     },
     "soya-beans": {
       "uk": "соєві боби",
       "en": "soya beans",
-      "es": "soja",
-      "it": "semi di soia",
-      "de": "Sojabohnen",
       "ru": "соя"
     },
     "green-tea": {
       "uk": "зелений чай",
       "en": "green tea",
-      "es": "té verde",
-      "it": "tè verde",
-      "de": "grüner Tee",
       "ru": "зелёный чай"
     },
     "black-tea": {
       "uk": "чорний чай",
       "en": "black tea",
-      "es": "té negro",
-      "it": "tè nero",
-      "de": "schwarzer Tee",
       "ru": "чёрный чай"
     },
     "camomile": {
       "uk": "ромашка",
       "en": "camomile",
-      "es": "manzanilla",
-      "it": "camomilla",
-      "de": "Kamille",
       "ru": "ромашка"
     },
     "berries": {
       "uk": "ягоди",
       "en": "berries",
-      "es": "bayas",
-      "it": "frutti di bosco",
-      "de": "Beeren",
       "ru": "ягоды"
     },
     "dried-fruits": {
       "uk": "сухофрукти",
       "en": "dried fruits",
-      "es": "frutas secas",
-      "it": "frutta secca",
-      "de": "Trockenfrüchte",
       "ru": "сухофрукты"
     },
     "honey": {
       "uk": "мед",
       "en": "honey",
-      "es": "miel",
-      "it": "miele",
-      "de": "Honig",
       "ru": "мёд"
+    },
+    "tobacco": {
+      "uk": "тютюн",
+      "en": "tobacco",
+      "ru": "табак"
+    },
+    "charcoal": {
+      "uk": "вугілля",
+      "en": "charcoal",
+      "ru": "уголь"
     },
     "caffeine": {
       "uk": "кофеїн",
       "en": "caffeine",
-      "es": "cafeína",
-      "it": "caffeina",
-      "de": "Koffein",
       "ru": "кофеин"
     },
     "taurine": {
       "uk": "таурин",
       "en": "taurine",
-      "es": "taurina",
-      "it": "taurina",
-      "de": "Taurin",
       "ru": "таурин"
     }
   },
@@ -450,9 +306,6 @@
       "desc": {
         "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -495,9 +348,6 @@
       "desc": {
         "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -540,9 +390,6 @@
       "desc": {
         "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -580,9 +427,6 @@
       "desc": {
         "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -620,9 +464,6 @@
       "desc": {
         "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -673,9 +514,6 @@
       "desc": {
         "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -725,9 +563,6 @@
       "desc": {
         "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -777,9 +612,6 @@
       "desc": {
         "uk": "Джин · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Gin · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Ginebra · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Gin · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Gin · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Джин · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -828,9 +660,6 @@
       "desc": {
         "uk": "Ром · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Rum · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Ron · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Rum · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Rum · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Ром · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -878,9 +707,6 @@
       "desc": {
         "uk": "Ром · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Rum · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Ron · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Rum · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Rum · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Ром · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -928,9 +754,6 @@
       "desc": {
         "uk": "Текіла · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Tequila · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Tequila · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Tequila · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Tequila · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Текила · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -972,9 +795,6 @@
       "desc": {
         "uk": "Текіла · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Tequila · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Tequila · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Tequila · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Tequila · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Текила · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1016,9 +836,6 @@
       "desc": {
         "uk": "Коньяк · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Cognac · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Coñac · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Cognac · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Cognac · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Коньяк · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1063,9 +880,6 @@
       "desc": {
         "uk": "Мигдалевий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Amaretto liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Licor de amaretto · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Liquore amaretto · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Amaretto-Likör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Миндальный ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1111,9 +925,6 @@
       "desc": {
         "uk": "Вершковий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Cream liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Licor de crema · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Liquore alla crema · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Sahnelikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Сливочный ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1160,9 +971,6 @@
       "desc": {
         "uk": "Трав'яний лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Herbal liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Licor de hierbas · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Liquore alle erbe · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Kräuterlikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Травяной ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1206,9 +1014,6 @@
       "desc": {
         "uk": "Кокосовий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
         "en": "Coconut liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "es": "Licor de coco · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
-        "it": "Liquore al cocco · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
-        "de": "Kokoslikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
         "ru": "Кокосовый ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
@@ -1252,9 +1057,6 @@
       "desc": {
         "uk": "Настоянка на ягодах і фруктах",
         "en": "Fruit and berry infusion",
-        "es": "Infusión de frutas y bayas",
-        "it": "Infuso di frutta e bacche",
-        "de": "Frucht- und Beerenaufguss",
         "ru": "Настойка на ягодах и фруктах"
       },
       "ing": [
@@ -1324,9 +1126,6 @@
       "desc": {
         "uk": "Апероль, просекко, свіжий апельсин",
         "en": "Aperol, prosecco, fresh orange",
-        "es": "Aperol, prosecco, naranja fresca",
-        "it": "Aperol, prosecco, arancia fresca",
-        "de": "Aperol, Prosecco, frische Orange",
         "ru": "Апероль, просекко, свежий апельсин"
       },
       "ing": [
@@ -1354,9 +1153,6 @@
       "desc": {
         "uk": "Маракуя, ванільна горілка, просекко",
         "en": "Passion fruit, vanilla vodka, prosecco",
-        "es": "Maracuyá, vodka de vainilla, prosecco",
-        "it": "Frutto della passione, vodka alla vaniglia, prosecco",
-        "de": "Maracuja, Vanillewodka, Prosecco",
         "ru": "Маракуйя, ванильная водка, просекко"
       },
       "ing": [
@@ -1385,9 +1181,6 @@
       "desc": {
         "uk": "Джин, червоний вермут, Campari, апельсин",
         "en": "Gin, vermouth rosso, Campari, orange",
-        "es": "Ginebra, vermut rosso, Campari, naranja",
-        "it": "Gin, vermouth rosso, Campari, arancia",
-        "de": "Gin, Wermut Rosso, Campari, Orange",
         "ru": "Джин, вермут россо, Campari, апельсин"
       },
       "ing": [
@@ -1416,9 +1209,6 @@
       "desc": {
         "uk": "Ром, цукор, лайм, мʼята",
         "en": "Rum, sugar, lime, mint",
-        "es": "Ron, azúcar, lima, menta",
-        "it": "Rum, zucchero, lime, menta",
-        "de": "Rum, Zucker, Limette, Minze",
         "ru": "Ром, сахар, лайм, мята"
       },
       "ing": [
@@ -1473,9 +1263,6 @@
       "desc": {
         "uk": "Горілка, Cointreau, журавлина, лайм",
         "en": "Vodka, Cointreau, cranberry juice, lime",
-        "es": "Vodka, Cointreau, arándano rojo, lima",
-        "it": "Vodka, Cointreau, mirtillo rosso, lime",
-        "de": "Wodka, Cointreau, Cranberry, Limette",
         "ru": "Водка, Cointreau, клюква, лайм"
       },
       "ing": [
@@ -1502,9 +1289,6 @@
       "desc": {
         "uk": "Текіла, трипл сек, лайм",
         "en": "Tequila, triple sec, lime",
-        "es": "Tequila, triple sec, lima",
-        "it": "Tequila, triple sec, lime",
-        "de": "Tequila, Triple Sec, Limette",
         "ru": "Текила, трипл сек, лайм"
       },
       "ing": [
@@ -1572,9 +1356,6 @@
       "desc": {
         "uk": "Світле лагер-пиво",
         "en": "Lager beer",
-        "es": "Cerveza lager",
-        "it": "Birra lager",
-        "de": "Lagerbier",
         "ru": "Светлое лагер-пиво"
       },
       "ing": [
@@ -1603,9 +1384,6 @@
       "desc": {
         "uk": "Газовані напої та соки",
         "en": "Fizzy drinks and juices",
-        "es": "Refrescos y zumos",
-        "it": "Bibite e succhi",
-        "de": "Erfrischungsgetränke und Säfte",
         "ru": "Газированные напитки и соки"
       },
       "ing": [
@@ -1664,9 +1442,6 @@
       "desc": {
         "uk": "Біле вино",
         "en": "White wine",
-        "es": "Vino blanco",
-        "it": "Vino bianco",
-        "de": "Weißwein",
         "ru": "Белое вино"
       },
       "ing": [
@@ -1711,9 +1486,6 @@
       "desc": {
         "uk": "Червоне вино",
         "en": "Red wine",
-        "es": "Vino tinto",
-        "it": "Vino rosso",
-        "de": "Rotwein",
         "ru": "Красное вино"
       },
       "ing": [
@@ -1758,9 +1530,6 @@
       "desc": {
         "uk": "Італійське ігристе",
         "en": "Italian sparkling",
-        "es": "Espumoso italiano",
-        "it": "Spumante italiano",
-        "de": "Italienischer Schaumwein",
         "ru": "Итальянское игристое"
       },
       "ing": [
@@ -1805,9 +1574,6 @@
       "desc": {
         "uk": "Шампанське",
         "en": "Champagne",
-        "es": "Champán",
-        "it": "Champagne",
-        "de": "Champagner",
         "ru": "Шампанское"
       },
       "ing": [
@@ -1866,9 +1632,6 @@
       "desc": {
         "uk": "Шампанське, лише пляшка",
         "en": "Champagne, bottle only",
-        "es": "Champán, solo botella",
-        "it": "Champagne, solo bottiglia",
-        "de": "Champagner, nur Flasche",
         "ru": "Шампанское, только бутылка"
       },
       "ing": [
@@ -1895,9 +1658,6 @@
       "desc": {
         "uk": "Шампанське, лише пляшка",
         "en": "Champagne, bottle only",
-        "es": "Champán, solo botella",
-        "it": "Champagne, solo bottiglia",
-        "de": "Champagner, nur Flasche",
         "ru": "Шампанское, только бутылка"
       },
       "ing": [
@@ -1924,9 +1684,6 @@
       "desc": {
         "uk": "Чайник чаю",
         "en": "Pot of tea",
-        "es": "Tetera",
-        "it": "Teiera",
-        "de": "Kännchen Tee",
         "ru": "Чайник чая"
       },
       "ing": [
@@ -1969,9 +1726,6 @@
       "desc": {
         "uk": "Чайник із ягодами, фруктами та медом",
         "en": "Pot of tea with berries, fruits and honey",
-        "es": "Tetera con bayas, frutas y miel",
-        "it": "Teiera con frutti di bosco, frutta e miele",
-        "de": "Kännchen mit Beeren, Früchten und Honig",
         "ru": "Чайник с ягодами, фруктами и мёдом"
       },
       "ing": [
@@ -1997,9 +1751,6 @@
       "desc": {
         "uk": "Гарячий шоколад",
         "en": "Hot chocolate",
-        "es": "Chocolate caliente",
-        "it": "Cioccolata calda",
-        "de": "Heiße Schokolade",
         "ru": "Горячий шоколад"
       },
       "ing": [
@@ -2050,9 +1801,6 @@
       "desc": {
         "uk": "Чорна кава",
         "en": "Black coffee",
-        "es": "Café solo",
-        "it": "Caffè nero",
-        "de": "Schwarzer Kaffee",
         "ru": "Чёрный кофе"
       },
       "ing": [
@@ -2075,9 +1823,6 @@
       "desc": {
         "uk": "Cappuccino на молоці, мигдалевому або соєвому",
         "en": "Cappuccino with dairy, almond or soya milk",
-        "es": "Cappuccino con leche, almendra o soja",
-        "it": "Cappuccino con latte, mandorla o soia",
-        "de": "Cappuccino mit Milch, Mandel- oder Sojamilch",
         "ru": "Cappuccino на молоке, миндальном или соевом"
       },
       "ing": [
@@ -2128,9 +1873,6 @@
       "desc": {
         "uk": "Latte на молоці, мигдалевому або соєвому",
         "en": "Latte with dairy, almond or soya milk",
-        "es": "Latte con leche, almendra o soja",
-        "it": "Latte con latte, mandorla o soia",
-        "de": "Latte mit Milch, Mandel- oder Sojamilch",
         "ru": "Latte на молоке, миндальном или соевом"
       },
       "ing": [
@@ -2181,9 +1923,6 @@
       "desc": {
         "uk": "Mocha на молоці, мигдалевому або соєвому",
         "en": "Mocha with dairy, almond or soya milk",
-        "es": "Mocha con leche, almendra o soja",
-        "it": "Mocha con latte, mandorla o soia",
-        "de": "Mocha mit Milch, Mandel- oder Sojamilch",
         "ru": "Mocha на молоке, миндальном или соевом"
       },
       "ing": [
@@ -2223,6 +1962,30 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "key": "hookah",
+      "name": "Hookah",
+      "station": "bar",
+      "price_pence": 5000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Кальян",
+        "en": "Hookah",
+        "ru": "Кальян"
+      },
+      "ing": [
+        "tobacco",
+        "charcoal"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "tobacco-age-check"
       ]
     }
   ]

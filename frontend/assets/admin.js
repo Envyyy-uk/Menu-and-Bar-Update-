@@ -229,18 +229,6 @@ function renderItems(mount) {
       }));
       fields.append(el('label', null, esc(t('a.price', LANG))), price);
 
-      const station = el('select');
-      [['kitchen', 'a.kitchen'], ['bar', 'a.bar']].forEach(([v, k]) => {
-        const o = el('option', null, esc(t(k, LANG)));
-        o.value = v;
-        if (v === item.station) o.selected = true;
-        station.appendChild(o);
-      });
-      station.addEventListener('change', () => guard(row, async () => {
-        await API.patch(`/api/admin/items/${item.id}`, { station: station.value });
-        item.station = station.value;
-      }));
-      fields.append(el('label', null, esc(t('a.station', LANG))), station);
     } else {
       // Ціну зал бачить, але не редагує. Ховати її було б брехнею: вона
       // однаково є в меню гостя.
@@ -587,7 +575,7 @@ function renderOrders(mount) {
     const list = el('ul', 'ing');
     order.items.forEach(i => list.appendChild(el('li', null,
       `${esc(i.name)}${(i.options || []).length ? ' · ' + esc(i.options.join(' · ')) : ''}` +
-      ` × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
+      ` × ${i.qty}`)));
     row.appendChild(list);
     if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
 

@@ -35,13 +35,13 @@ with sync_playwright() as p:
     page.wait_for_selector(".dish")
 
     check("венью в шапці", page.inner_text("#venue-name") == "PODVAL")
-    check("39 карток", page.locator(".dish").count() == 39, page.locator(".dish").count())
+    check("40 карток", page.locator(".dish").count() == 40, page.locator(".dish").count())
     # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
     check("немає заголовків розділів", page.locator(".section").count() == 0)
     check("немає вкладок розділів", page.locator("#toolbar .tabs").count() == 0)
-    check("усі 39 позицій в одній сітці",
+    check("усі 40 позицій в одній сітці",
           page.locator("#menu > .grid").count() == 1
-          and page.locator("#menu > .grid > .dish").count() == 39,
+          and page.locator("#menu > .grid > .dish").count() == 40,
           page.locator("#menu > .grid > .dish").count())
 
     # --- крос-мовний пошук по складнику -----------------------------------
@@ -54,13 +54,12 @@ with sync_playwright() as p:
             if page.locator(".dish").nth(i).is_visible()
         ]
 
-    for word, lang in [("хміль", "uk"), ("hops", "en"), ("Hopfen", "de"),
-                       ("lúpulo", "es"), ("luppolo", "it"), ("хмель", "ru")]:
+    for word, lang in [("хміль", "uk"), ("hops", "en"), ("хмель", "ru")]:
         found = search(word)
         check(f"пошук «{word}» ({lang}) → corona", found == ["d-corona"], found)
 
-    found = search("Gerstenmalz")
-    check("пошук «Gerstenmalz» → усе на ячмінному солоді",
+    found = search("ячмінний солод")
+    check("пошук «ячмінний солод» → усе на ньому",
           set(found) == {"d-jack-daniels", "d-black-label", "d-jameson", "d-corona"}, found)
 
     search("")
@@ -118,11 +117,13 @@ with sync_playwright() as p:
           page.locator("#d-baileys").inner_text()[:80])
 
     # --- зміна мови --------------------------------------------------------
-    page.click('.langbtn[data-lang="de"]')
+    check("мов рівно три", page.locator(".langbtn").count() == 3,
+          [page.locator(".langbtn").nth(i).inner_text() for i in range(page.locator(".langbtn").count())])
+    page.click('.langbtn[data-lang="ru"]')
     page.wait_for_timeout(200)
-    check("німецька: заголовок складу", "ZUTATEN" in page.locator("#d-espresso").inner_text().upper(),
+    check("російська: заголовок складу", "СОСТАВ" in page.locator("#d-espresso").inner_text().upper(),
           page.locator("#d-espresso").inner_text()[:80])
-    check("німецька: склад перекладено", "Kaffee" in page.locator("#d-espresso").inner_text())
+    check("російська: склад перекладено", "кофе" in page.locator("#d-espresso").inner_text().lower())
     page.click('.langbtn[data-lang="uk"]')
     page.wait_for_timeout(200)
 

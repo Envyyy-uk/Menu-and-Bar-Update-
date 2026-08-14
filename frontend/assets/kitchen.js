@@ -15,7 +15,10 @@
    ========================================================================== */
 
 let LANG = getLang();
-let STATION = new URLSearchParams(location.search).get('station') === 'bar' ? 'bar' : 'kitchen';
+/* Станція за замовчуванням — бар: у меню поки самі напої та кальяни, кухня
+   чекає на страви. Кухонний екран нікуди не подівся — він відкривається за
+   `?station=kitchen`, і перемикач повернеться сюди разом із їжею. */
+let STATION = new URLSearchParams(location.search).get('station') === 'kitchen' ? 'kitchen' : 'bar';
 let ORDERS = [];
 let LATE = new Set();
 let SOCKET = null;
@@ -240,17 +243,6 @@ async function initKitchen() {
     mute.textContent = t(MUTED ? 'k.unmute' : 'k.mute', LANG);
     mute.classList.toggle('off', MUTED);
     if (!MUTED) beep([[880, 0, 0.08]]);   // заразом розблоковує звук у браузері
-  });
-
-  const swap = document.getElementById('swap');
-  swap.addEventListener('click', () => {
-    STATION = STATION === 'bar' ? 'kitchen' : 'bar';
-    const url = new URL(location.href);
-    url.searchParams.set('station', STATION);
-    history.replaceState(null, '', url);
-    KNOWN = new Set();
-    BOOTED = false;
-    reload().catch(() => {});
   });
 
   try {

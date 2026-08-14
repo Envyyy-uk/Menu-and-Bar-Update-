@@ -79,7 +79,11 @@ with sync_playwright() as p:
     admin.wait_for_selector(f".arow:has-text('№{number}')", timeout=15000)
     row = admin.locator(".arow", has_text=f"№{number}").first
     check("замовлення видно в панелі", row.count() > 0, f"№{number}")
-    check("видно станцію позиції", "Бар" in row.inner_text(), row.inner_text()[:80])
+    # Станція з рядка зникла: у меню поки одна станція, і «Бар» біля кожної
+    # позиції — це шум, а не інформація. Назва позиції лишається.
+    check("видно назву позиції", "Black Coffee" in row.inner_text(), row.inner_text()[:80])
+    check("станцію не пишемо, поки вона одна", "Бар" not in row.inner_text(),
+          row.inner_text()[:80])
     check("видно стелю повернення", "Ваша стеля" in row.inner_text())
 
     # --- статуси -----------------------------------------------------------
