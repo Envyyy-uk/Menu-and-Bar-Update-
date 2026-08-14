@@ -37,7 +37,12 @@ with sync_playwright() as p:
     check("венью в шапці", page.inner_text("#venue-name") == "PODVAL")
     check("37 позицій", page.locator(".dish").count() == 37, page.locator(".dish").count())
     # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
-    check("вкладок-фільтрів над меню немає", page.locator("#toolbar .tabs").count() == 0)
+    # Рядок категорій угорі: це навігація, а не фільтр
+    tabs = [page.locator("#toolbar .tab").nth(i).inner_text()
+            for i in range(page.locator("#toolbar .tab").count())]
+    check("категорії винесені вгору",
+          tabs == ["Міцне", "Коктейлі", "Пиво й безалкогольне", "Вино й ігристе",
+                   "Гарячі напої", "Кальяни"], tabs)
     # Меню знову згруповане — але категорія це підпис, а не сутність зі станом
     cats = [page.locator("#menu > .cat").nth(i).get_attribute("id")
             for i in range(page.locator("#menu > .cat").count())]
@@ -76,6 +81,9 @@ with sync_playwright() as p:
     check("панелі фільтра алергенів немає", page.locator(".filters").count() == 0)
     check("міток алергенів на картках немає", page.locator(".tag").count() == 0)
     check("значка джерела немає", page.locator(".srcbadge").count() == 0)
+    check("застереження про алергію теж прибрано",
+          "алерг" not in page.inner_text("main").lower(),
+          page.inner_text("main")[:80])
     check("склад лишився", page.locator("#d-mojito ul.ing li").count() == 4,
           page.locator("#d-mojito").inner_text()[:80])
 
@@ -102,6 +110,13 @@ with sync_playwright() as p:
           page.locator("#d-espresso .price").inner_text())
 
     # --- зміна мови --------------------------------------------------------
+    boxes = page.evaluate("""() => {
+      const l = document.querySelector('.langswitch').getBoundingClientRect();
+      const t = document.querySelector('.themeswitch').getBoundingClientRect();
+      return {langBottom: l.bottom, themeTop: t.top};
+    }""")
+    check("мова й тема різними рядками", boxes["themeTop"] >= boxes["langBottom"] - 1,
+          boxes)
     check("мов рівно три", page.locator(".langbtn").count() == 3,
           [page.locator(".langbtn").nth(i).inner_text() for i in range(page.locator(".langbtn").count())])
     page.click('.langbtn[data-lang="ru"]')
@@ -121,6 +136,8 @@ with sync_playwright() as p:
     check("пошук не збився після авто-оновлення", page.input_value(".search") == "moj")
     check("порожні категорії ховаються разом із заголовком",
           page.locator("#c-hot").is_hidden(), page.locator("#c-hot").is_visible())
+    check("кнопка порожньої категорії теж ховається",
+          page.locator('#toolbar .tab[data-cat="hot"]').is_hidden())
     page.fill(".search", "")
 
     # --- тема --------------------------------------------------------------
@@ -128,6 +145,19 @@ with sync_playwright() as p:
     page.wait_for_timeout(100)
     check("темна тема застосовується",
           page.evaluate("document.documentElement.dataset.theme") == "dark")
+
+    # Видалили ключ із словника, а `data-i18n` лишився — і гість бачить на
+    # екрані «guest.notice» замість тексту. Саме так і сталося з демо.
+    import re as _re
+    leftovers = _re.findall(r"\b[a-z]{2,10}\.[a-zA-Z]{2,20}(?:\.[a-zA-Z0-9]+)?\b",
+                            page.inner_text("body"))
+    leftovers = [x for x in leftovers if not x.startswith(("www.", "http"))
+                 and "." in x and " " not in x
+                 and x.split(".")[0] in {"guest", "tb", "cart", "order", "sched",
+                                         "dish", "count", "search", "net", "brand",
+                                         "lang", "theme", "ui", "opt", "pay", "cat",
+                                         "price", "alg", "src"}]
+    check("неперекладених ключів на екрані немає", not leftovers, leftovers[:3])
 
     check("без помилок у консолі", not errors, "; ".join(errors[:3]))
     if os.environ.get("SCREENSHOT"):

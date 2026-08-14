@@ -189,6 +189,37 @@ function buildToolbar(mount, data) {
   const count = el('span', 'result-count');
   wrap.append(search, count);
   bar.appendChild(wrap);
+
+  // Рядок категорій: гортається вбік і скролить до заголовка. Тридцять сім
+  // позицій — це кілька екранів, і шукати «Кальяни» пальцем довше, ніж
+  // натиснути. Це навігація, а не фільтр: меню лишається цілим.
+  const cats = (data.categories || []).filter(
+    cat => data.items.some(i => i.category === cat.key)
+  );
+  if (cats.length > 1) {
+    const navWrap = el('div', 'wrap');
+    const nav = el('nav', 'tabs');
+    nav.setAttribute('aria-label', t('cat.label', LANG));
+    cats.forEach(cat => {
+      const b = el('button', 'tab', esc(pick(cat.names, LANG) || cat.key));
+      b.type = 'button';
+      b.dataset.cat = cat.key;
+      b.addEventListener('click', () => {
+        nav.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+        b.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+        const target = document.getElementById('c-' + cat.key);
+        if (target) {
+          // Панель липка — інакше заголовок сховається під нею
+          const top = target.offsetTop - bar.offsetHeight - 8;
+          window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        }
+      });
+      nav.appendChild(b);
+    });
+    navWrap.appendChild(nav);
+    bar.appendChild(navWrap);
+  }
+
   mount.appendChild(bar);
 
   const apply = () => {
@@ -202,10 +233,13 @@ function buildToolbar(mount, data) {
     });
 
     // Категорія без жодного видимого пункту ховається разом із заголовком:
-    // порожня рубрика в результатах пошуку читається як помилка.
+    // порожня рубрика в результатах пошуку читається як помилка. Разом із нею
+    // ховається й кнопка вгорі — інакше вона скролила б у нікуди.
     document.querySelectorAll('.cat').forEach(box => {
       const any = [...box.querySelectorAll('.dish')].some(n => n.style.display !== 'none');
       box.style.display = any ? '' : 'none';
+      const btn = document.querySelector(`.tab[data-cat="${box.id.slice(2)}"]`);
+      if (btn) btn.hidden = !any;
     });
 
     count.textContent = q ? `${shown} ${t('count.items', LANG)}` : '';

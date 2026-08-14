@@ -31,13 +31,9 @@ const I18N = {
     en: 'Every item lists what is in it. Search works in all three languages — type an ingredient in any of them.',
     ru: 'Каждая позиция — с составом. Поиск работает на трёх языках: наберите ингредиент на любом.'
   },
-  'guest.notice': {
-    uk: 'Про алергію обов’язково скажіть бармену перед замовленням: у меню їх не позначено.',
-    en: 'Please tell the bar about any allergy before ordering — allergens are not listed in this menu.',
-    ru: 'Об аллергии обязательно скажите бармену перед заказом: в меню они не отмечены.'
-  },
 
   /* --------------------------------------------------------- панель --- */
+  'cat.label':   { uk: 'Категорії', en: 'Categories',    ru: 'Категории' },
   'tb.search': {
     uk: 'Пошук за назвою або складником', en: 'Search by name or ingredient',    ru: 'Поиск по названию или ингредиенту'
   },
