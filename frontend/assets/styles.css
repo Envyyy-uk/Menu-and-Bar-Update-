@@ -1,8 +1,8 @@
 /* ==========================================================================
    Оформлення — світла й темна теми.
 
-   Палітра нейтральна й належить цьому проєкту: мідь як акцент (заклад у
-   демо-даних називається The Copper Fig), приглушений папір під текст.
+   Палітра нейтральна й належить цьому проєкту: мідь як акцент, приглушений
+   папір під текст.
    ========================================================================== */
 
 :root, :root[data-theme="light"] {
@@ -77,7 +77,7 @@ html {
 }
 
 /* У режимі застосунку інтерфейс не має поводитись як вебсторінка */
-.pwa button, .pwa .tab, .pwa .chip, .pwa .langbtn, .pwa .themebtn, .pwa summary {
+.pwa button, .pwa .tab, .pwa .langbtn, .pwa .themebtn, .pwa summary {
   -webkit-user-select: none; user-select: none;
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
@@ -145,12 +145,6 @@ header.site .table-badge {
   padding: 9px 12px; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--paper-2); color: var(--ink);
 }
-.filter-toggle, .clear-btn {
-  font: inherit; font-size: 15px; padding: 9px 14px; cursor: pointer;
-  background: var(--paper-2); color: var(--ink);
-  border: 1px solid var(--rule); border-radius: var(--radius);
-}
-.filter-toggle[aria-expanded="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .result-count { font-size: 13px; color: var(--ink-faint); white-space: nowrap; }
 
 .tabs {
@@ -165,22 +159,13 @@ header.site .table-badge {
 }
 .tab.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 
-.filters { display: none; padding-top: 10px; }
-.filters.open { display: block; }
-.filters .hint { margin: 0 0 8px; font-size: 14px; color: var(--ink-faint); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
-  font-size: 14px; padding: 5px 11px; border-radius: 999px;
-  border: 1px solid var(--rule); background: var(--paper-2); color: var(--ink-soft);
-}
-.chip input { position: absolute; opacity: 0; pointer-events: none; }
-.chip.on { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
-.chip:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-.clear-btn { margin-top: 10px; }
-
 /* -------------------------------------------------------------- меню --- */
 main { padding-bottom: 60px; }
+.cat { margin: 26px 0; }
+.cat > h2 {
+  margin: 0 0 4px; font-size: 21px; color: var(--accent);
+  border-bottom: 1px solid var(--rule); padding-bottom: 6px;
+}
 .grid {
   display: grid; gap: 14px; margin-top: 14px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -191,8 +176,7 @@ main { padding-bottom: 60px; }
   background: var(--paper-2); border: 1px solid var(--rule);
   border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow);
 }
-.dish.flagged { opacity: .5; border-color: var(--danger); }
-.dish.scheduled-off, .section.scheduled-off > .grid { opacity: .55; }
+.dish.scheduled-off { opacity: .55; }
 .dish-head { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; }
 .dish-head h3 { margin: 0; font-size: 18px; }
 .price { font-size: 16px; color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -205,26 +189,11 @@ main { padding-bottom: 60px; }
 ul.ing { margin: 0; padding-left: 18px; font-size: 15px; color: var(--ink-soft); }
 ul.ing li { margin: 1px 0; }
 
-.tags { display: flex; flex-wrap: wrap; gap: 5px; }
-.tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 13px; padding: 3px 9px; border-radius: 999px;
-  background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger);
-}
-.tag.maybe { background: transparent; color: var(--ink-faint); border: 1px dashed var(--ink-faint); }
-.tag.none { background: transparent; color: var(--ok); border: 1px solid var(--ok); }
-.tag .rem {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--ok); color: #fff; font-size: 11px; font-weight: 700;
-}
-.rem-note, .warn, .note-inline, .srcbadge {
+.warn, .note-inline {
   margin: 8px 0 0; font-size: 13px; color: var(--ink-faint);
 }
 .warn { background: var(--warn-bg); border-radius: 6px; padding: 6px 9px; color: var(--ink-soft); }
 .note-inline { color: var(--ink-soft); font-style: italic; }
-.srcbadge .dot { color: var(--ok); margin-right: 5px; }
-.srcbadge.est .dot { color: var(--ink-faint); }
 .sched-note {
   margin: 0 0 8px; font-size: 14px; padding: 7px 10px; border-radius: 6px;
   background: var(--accent-soft); color: var(--ink);

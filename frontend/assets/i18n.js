@@ -14,7 +14,7 @@ const LANGS = [
 const I18N = {
 
   'brand.sub': {
-    uk: 'Меню · склад і алергени', en: 'Menu · ingredients & allergens',    ru: 'Меню · состав и аллергены'
+    uk: 'Меню · бар і кальяни', en: 'Menu · bar and hookah',    ru: 'Меню · бар и кальяны'
   },
 
   'lang.label':  { uk: 'Мова', en: 'Language',    ru: 'Язык' },
@@ -27,28 +27,20 @@ const I18N = {
   /* ------------------------------------------------------------ шапка --- */
   'guest.table': { uk: 'Стіл', en: 'Table',    ru: 'Стол' },
   'guest.lead': {
-    uk: 'Кожна позиція — з повним складом і позначеними алергенами. Оберіть свої алергени у фільтрі: позиції з ними буде приглушено.',
-    en: 'Every item broken down into its ingredients, with allergens marked. Tick your allergens in the filter and matching items are dimmed.',   
-    ru: 'Каждая позиция — с полным составом и отмеченными аллергенами. Отметьте свои аллергены в фильтре: позиции с ними будут приглушены.'
+    uk: 'Кожна позиція — зі складом. Пошук працює трьома мовами: наберіть складник будь-якою.',
+    en: 'Every item lists what is in it. Search works in all three languages — type an ingredient in any of them.',
+    ru: 'Каждая позиция — с составом. Поиск работает на трёх языках: наберите ингредиент на любом.'
   },
   'guest.notice': {
-    uk: 'Обов’язково скажіть офіціантові про алергію перед замовленням: на кухні спільне обладнання, і слідів уникнути не завжди можливо.',
-    en: 'Please tell your server about any allergy before ordering: the kitchen shares equipment and traces cannot always be avoided.',   
-    ru: 'Обязательно скажите официанту об аллергии перед заказом: на кухне общее оборудование, и следов не всегда удаётся избежать.'
+    uk: 'Про алергію обов’язково скажіть бармену перед замовленням: у меню їх не позначено.',
+    en: 'Please tell the bar about any allergy before ordering — allergens are not listed in this menu.',
+    ru: 'Об аллергии обязательно скажите бармену перед заказом: в меню они не отмечены.'
   },
 
   /* --------------------------------------------------------- панель --- */
   'tb.search': {
     uk: 'Пошук за назвою або складником', en: 'Search by name or ingredient',    ru: 'Поиск по названию или ингредиенту'
   },
-  'tb.filter': { uk: 'Алергени', en: 'Allergens',    ru: 'Аллергены' },
-  'tb.hint': {
-    uk: 'Позначте те, чого уникаєте. Приглушується і «містить», і «може містити».',
-    en: 'Tick what you avoid. Both “contains” and “may contain” are dimmed.',   
-    ru: 'Отметьте то, чего избегаете. Приглушается и «содержит», и «может содержать».'
-  },
-  'tb.clear':   { uk: 'Скинути', en: 'Clear',    ru: 'Сбросить' },
-  'tb.flagged': { uk: 'з вашими алергенами', en: 'with your allergens',    ru: 'с вашими аллергенами' },
   'count.items': { uk: 'позицій', en: 'items',    ru: 'позиций' },
   'search.empty': {
     uk: 'Нічого не знайдено. Спробуйте іншу мову або інший складник.',
@@ -58,18 +50,6 @@ const I18N = {
 
   /* ---------------------------------------------------------- картка --- */
   'dish.ingredients': { uk: 'Склад', en: 'Ingredients',    ru: 'Состав' },
-  'dish.allergens':   { uk: 'Містить', en: 'Contains',    ru: 'Содержит' },
-  'dish.may':         { uk: 'Може містити', en: 'May contain',    ru: 'Может содержать' },
-  'dish.none':        { uk: 'Із 14 обов’язкових — жодного', en: 'None of the 14 declarable allergens',    ru: 'Из 14 обязательных — ни одного' },
-  'alg.removable':    { uk: 'можна прибрати', en: 'can be removed',    ru: 'можно убрать' },
-  'alg.removableFull': {
-    uk: 'Позначене R можна прибрати зі страви — скажіть офіціантові.',
-    en: 'Anything marked R can be left out — just ask your server.',   
-    ru: 'Отмеченное R можно убрать из блюда — скажите официанту.'
-  },
-  'src.official':      { uk: 'Офіційний лист закладу', en: 'Venue allergen sheet',    ru: 'Официальный лист заведения' },
-  'src.reconstructed': { uk: 'Реконструкція з опису', en: 'Reconstructed from description',    ru: 'Реконструкция из описания' },
-  'src.reviewed':      { uk: 'перевірено', en: 'checked',    ru: 'проверено' },
 
   /* --------------------------------------------------------- розклад --- */
   'sched.days': {

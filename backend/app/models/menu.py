@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -33,22 +33,6 @@ class Ingredient(UUIDPk, Base):
     )
     key: Mapped[str] = mapped_column(String(80))
     names: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
-
-
-class MenuSource(UUIDPk, Base):
-    """Джерело даних про алергени: офіційний лист із датою перевірки
-    або реконструкція з опису."""
-
-    __tablename__ = "menu_sources"
-    __table_args__ = (UniqueConstraint("venue_id", "key", name="uq_source_key"),)
-
-    venue_id: Mapped[uuid.UUID] = mapped_column(
-        PgUUID(as_uuid=True), ForeignKey("venues.id", ondelete="CASCADE"), index=True
-    )
-    key: Mapped[str] = mapped_column(String(80))
-    type: Mapped[str] = mapped_column(String(20), default="official")
-    label: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict)
-    checked_on: Mapped[datetime | None] = mapped_column(Date, default=None)
 
 
 class MenuWarning(UUIDPk, Base):
@@ -123,13 +107,12 @@ class MenuItem(UUIDPk, Timestamped, Base):
     # як надруковано в меню. Перекладається лише підпис групи (`label`).
     options: Mapped[list[Any]] = mapped_column(JSONB, default=list, server_default="[]")
 
-    # Склад: ключі словника, вкладені компоненти — ["salsa-verde", ["parsley", …]]
+    # Категорія — тільки для показу: за нею гість гортає меню. Ніяких станів
+    # і розкладів на групу: закривають позицію, а не категорію.
+    category: Mapped[str | None] = mapped_column(String(80), default=None)
+
+    # Склад: ключі словника, вкладені компоненти — ["oat-milk", ["oats", …]]
     ingredients: Mapped[list[Any]] = mapped_column(JSONB, default=list)
-    # Три рівні алергенів + джерело з датою.
-    allergens_a: Mapped[list[str]] = mapped_column(JSONB, default=list)  # містить
-    allergens_m: Mapped[list[str]] = mapped_column(JSONB, default=list)  # може містити
-    allergens_r: Mapped[list[str]] = mapped_column(JSONB, default=list)  # можна прибрати
-    source_key: Mapped[str | None] = mapped_column(String(80), default=None)
     warnings: Mapped[list[str]] = mapped_column(JSONB, default=list)
 
     active: Mapped[bool] = mapped_column(Boolean, default=True)

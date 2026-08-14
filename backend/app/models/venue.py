@@ -1,8 +1,10 @@
 import secrets
 import uuid
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,6 +32,12 @@ class Venue(UUIDPk, Timestamped, Base):
     # Лічильник номерів замовлень. Живе тут, а не рахується як max(number)+1:
     # чотири замовлення в одну мить інакше отримують один номер, і кухня
     # бачить чотири однакові чеки. UPDATE … RETURNING серіалізує видачу.
+    # Назви категорій меню: {"spirits": {"uk": "Міцне", …}}. Це підписи для
+    # гостя, а не сутність із власним станом — закривають позицію, не групу.
+    categories: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, default=dict, server_default="{}"
+    )
+
     order_seq: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
 
     tables: Mapped[list["Table"]] = relationship(back_populates="venue")

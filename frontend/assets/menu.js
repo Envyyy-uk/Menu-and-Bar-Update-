@@ -12,7 +12,7 @@ let LANG = getLang();
 
 /* Стан фільтрів переживає перемальовування: меню оновлюється саме, і
    скидати гостю пошук посеред читання неприпустимо. */
-const FILTER = { query: '', allergens: new Set(), open: false };
+const FILTER = { query: '' };
 
 /* Чи вже намальовано хоч раз. Меню перепитується щохвилини кілька разів, і
    перемальовувати його, коли нічого не змінилося, не можна: це закриває
@@ -49,34 +49,6 @@ function ingSearchText(list, lexicon) {
     keys.forEach(k => LANGS.forEach(l => out.push(ingName(k, lexicon, l.code))));
   });
   return out.join(' ');
-}
-
-/* -------------------------------------------------------------- мітки --- */
-function tagList(item, keys, maybe) {
-  const box = el('div', 'tags');
-  (keys || []).forEach(k => {
-    if (!ALLERGENS[k]) return;
-    const removable = !maybe && (item.r || []).includes(k);
-    const tag = el('span', 'tag' + (maybe ? ' maybe' : ''));
-    tag.title = aNote(k, LANG) + (removable ? ' · ' + t('alg.removable', LANG) : '');
-    tag.innerHTML =
-      `<span aria-hidden="true">${ALLERGENS[k].icon}</span>${esc(aName(k, LANG))}` +
-      (removable ? `<span class="rem" title="${esc(t('alg.removable', LANG))}">R</span>` : '');
-    box.appendChild(tag);
-  });
-  return box;
-}
-
-function sourceBadge(item, sources) {
-  const s = item.src ? sources[item.src] : null;
-  if (s && s.type === 'official') {
-    const checked = s.checked ? ` · ${t('src.reviewed', LANG)} ${s.checked}` : '';
-    const b = el('p', 'srcbadge',
-      `<span class="dot" aria-hidden="true">●</span>${esc(pick(s.label, LANG) || t('src.official', LANG))}${esc(checked)}`);
-    return b;
-  }
-  return el('p', 'srcbadge est',
-    `<span class="dot" aria-hidden="true">○</span>${esc(s ? pick(s.label, LANG) : t('src.reconstructed', LANG))}`);
 }
 
 /* --------------------------------------------------- чому недоступно ---- */
@@ -122,8 +94,6 @@ function priceLabel(item, currency) {
 function dishCard(item, data) {
   const card = el('article', 'dish');
   card.id = 'd-' + item.key;
-  card.dataset.allergens = (item.a || []).join(' ');
-  card.dataset.maybe = (item.m || []).join(' ');
   card.dataset.search = [
     item.name,
     Object.values(item.desc || {}).join(' '),
@@ -149,23 +119,6 @@ function dishCard(item, data) {
     card.appendChild(ul);
   }
 
-  card.appendChild(el('p', 'alg-label', esc(t('dish.allergens', LANG))));
-  if (item.a && item.a.length) {
-    card.appendChild(tagList(item, item.a, false));
-  } else {
-    const box = el('div', 'tags');
-    box.appendChild(el('span', 'tag none', esc(t('dish.none', LANG))));
-    card.appendChild(box);
-  }
-
-  if (item.m && item.m.length) {
-    card.appendChild(el('p', 'alg-label', esc(t('dish.may', LANG))));
-    card.appendChild(tagList(item, item.m, true));
-  }
-
-  if ((item.r || []).length) card.appendChild(el('p', 'rem-note', esc(t('alg.removableFull', LANG))));
-
-  card.appendChild(sourceBadge(item, data.sources));
   (item.w || []).forEach(k => {
     const text = pick(data.warnings[k], LANG);
     if (text) card.appendChild(el('p', 'warn', esc(text)));
@@ -184,18 +137,41 @@ function dishCard(item, data) {
 }
 
 /* -------------------------------------------------------------- меню ---- */
-/** Меню — один суцільний список. Без заголовків розділів і без вкладок:
- *  гість гортає страви підряд, а не блукає між групами. Порядок задає зал
- *  позицією страви. Розділ, закритий за розкладом, гасить свої позиції —
- *  це вже враховано сервером у `available`. */
+/** Меню згруповане за категоріями: сорок позицій одним списком гортати
+ *  довше, ніж читати. Категорія тут — лише підпис: власного стану чи
+ *  розкладу в неї немає, закривають позицію, а не групу.
+ *
+ *  Порядок категорій задає заклад (порядок ключів), порядок усередині —
+ *  позиція страви. Категорія, якої немає в підписах, іде під власним
+ *  ключем, а не зникає: краще незграбний заголовок, ніж загублений напій. */
 function renderMenu(mount, data) {
   mount.innerHTML = '';
-  const grid = el('div', 'grid');
-  data.items.forEach(i => {
-    if (!(i.available || {}).open && (i.available || {}).hidden) return;
-    grid.appendChild(dishCard(i, data));
+  const cats = data.categories || [];
+  const names = {};
+  cats.forEach(cat => { names[cat.key] = cat.names; });
+  const visible = data.items.filter(
+    i => !(!(i.available || {}).open && (i.available || {}).hidden)
+  );
+
+  const order = cats.map(cat => cat.key);
+  visible.forEach(i => {
+    const key = i.category || '';
+    if (!order.includes(key)) order.push(key);
   });
-  mount.appendChild(grid);
+
+  order.forEach(key => {
+    const items = visible.filter(i => (i.category || '') === key);
+    if (!items.length) return;
+
+    const box = el('section', 'cat');
+    box.id = 'c-' + (key || 'other');
+    if (key) box.appendChild(el('h2', null, esc(pick(names[key], LANG) || key)));
+
+    const grid = el('div', 'grid');
+    items.forEach(i => grid.appendChild(dishCard(i, data)));
+    box.appendChild(grid);
+    mount.appendChild(box);
+  });
 }
 
 /* ------------------------------------------------- панель пошуку/фільтра - */
@@ -210,73 +186,35 @@ function buildToolbar(mount, data) {
   search.placeholder = t('tb.search', LANG);
   search.setAttribute('aria-label', t('tb.search', LANG));
 
-  const toggle = el('button', 'filter-toggle', esc(t('tb.filter', LANG)));
-  toggle.type = 'button';
-  toggle.setAttribute('aria-expanded', String(FILTER.open));
-
   const count = el('span', 'result-count');
-  wrap.append(search, toggle, count);
+  wrap.append(search, count);
   bar.appendChild(wrap);
-
-  const filtersWrap = el('div', 'wrap');
-  const filters = el('div', 'filters' + (FILTER.open ? ' open' : ''));
-  filters.appendChild(el('p', 'hint', esc(t('tb.hint', LANG))));
-  const chips = el('div', 'chips');
-  ALLERGEN_KEYS.forEach(k => {
-    const label = el('label', 'chip' + (FILTER.allergens.has(k) ? ' on' : ''));
-    label.title = aNote(k, LANG);
-    label.innerHTML =
-      `<input type="checkbox" value="${k}"${FILTER.allergens.has(k) ? ' checked' : ''}>` +
-      `<span aria-hidden="true">${ALLERGENS[k].icon}</span>${esc(aName(k, LANG))}`;
-    chips.appendChild(label);
-  });
-  filters.appendChild(chips);
-  const clear = el('button', 'clear-btn', esc(t('tb.clear', LANG)));
-  clear.type = 'button';
-  filters.appendChild(clear);
-  filtersWrap.appendChild(filters);
-  bar.appendChild(filtersWrap);
   mount.appendChild(bar);
 
-  toggle.addEventListener('click', () => {
-    FILTER.open = filters.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', String(FILTER.open));
-  });
-
   const apply = () => {
-    FILTER.allergens = new Set([...chips.querySelectorAll('input:checked')].map(i => i.value));
-    chips.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.querySelector('input').checked));
     const q = FILTER.query.trim().toLowerCase();
-    const active = [...FILTER.allergens];
-    let shown = 0, flagged = 0;
+    let shown = 0;
 
     document.querySelectorAll('.dish').forEach(node => {
-      const has = (node.dataset.allergens || '').split(' ').filter(Boolean);
-      const may = (node.dataset.maybe || '').split(' ').filter(Boolean);
-      const hit = active.some(a => has.includes(a) || may.includes(a));
       const match = !q || (node.dataset.search || '').includes(q);
       node.style.display = match ? '' : 'none';
-      node.classList.toggle('flagged', hit);
-      if (match) { shown++; if (hit) flagged++; }
+      if (match) shown++;
     });
 
-    count.textContent = (active.length || q)
-      ? `${shown} ${t('count.items', LANG)}${flagged ? ` · ${flagged} ${t('tb.flagged', LANG)}` : ''}`
-      : '';
+    // Категорія без жодного видимого пункту ховається разом із заголовком:
+    // порожня рубрика в результатах пошуку читається як помилка.
+    document.querySelectorAll('.cat').forEach(box => {
+      const any = [...box.querySelectorAll('.dish')].some(n => n.style.display !== 'none');
+      box.style.display = any ? '' : 'none';
+    });
 
+    count.textContent = q ? `${shown} ${t('count.items', LANG)}` : '';
     const empty = document.getElementById('empty');
     if (empty) empty.hidden = shown > 0;
   };
 
   search.addEventListener('input', () => {
     FILTER.query = search.value;
-    apply();
-  });
-  chips.addEventListener('change', apply);
-  clear.addEventListener('click', () => {
-    chips.querySelectorAll('input').forEach(i => (i.checked = false));
-    search.value = '';
-    FILTER.query = '';
     apply();
   });
 

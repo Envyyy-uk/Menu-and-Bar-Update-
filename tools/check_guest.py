@@ -35,14 +35,21 @@ with sync_playwright() as p:
     page.wait_for_selector(".dish")
 
     check("венью в шапці", page.inner_text("#venue-name") == "PODVAL")
-    check("40 карток", page.locator(".dish").count() == 40, page.locator(".dish").count())
+    check("37 позицій", page.locator(".dish").count() == 37, page.locator(".dish").count())
     # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
-    check("немає заголовків розділів", page.locator(".section").count() == 0)
-    check("немає вкладок розділів", page.locator("#toolbar .tabs").count() == 0)
-    check("усі 40 позицій в одній сітці",
-          page.locator("#menu > .grid").count() == 1
-          and page.locator("#menu > .grid > .dish").count() == 40,
-          page.locator("#menu > .grid > .dish").count())
+    check("вкладок-фільтрів над меню немає", page.locator("#toolbar .tabs").count() == 0)
+    # Меню знову згруповане — але категорія це підпис, а не сутність зі станом
+    cats = [page.locator("#menu > .cat").nth(i).get_attribute("id")
+            for i in range(page.locator("#menu > .cat").count())]
+    check("шість категорій у порядку меню",
+          cats == ["c-spirits", "c-cocktails", "c-beer-soft", "c-wine", "c-hot", "c-hookah"],
+          cats)
+    check("кожна позиція під заголовком",
+          page.locator("#menu > .cat > .grid > .dish").count() == 37,
+          page.locator("#menu > .cat > .grid > .dish").count())
+    check("кальяни окремою категорією",
+          page.locator("#c-hookah h2").inner_text() == "Кальяни",
+          page.locator("#c-hookah h2").inner_text())
 
     # --- крос-мовний пошук по складнику -----------------------------------
     def search(q):
@@ -64,24 +71,13 @@ with sync_playwright() as p:
 
     search("")
 
-    # --- фільтр за алергенами ---------------------------------------------
-    page.click(".filter-toggle")
-    page.locator(".chip", has_text="Молоко").first.click()
-    page.wait_for_timeout(150)
-    flagged = page.locator(".dish.flagged").count()
-    check("фільтр «Молоко» приглушує 5 позицій", flagged == 5, flagged)
-    check("лічильник згадує алергени", "з вашими алергенами" in page.inner_text(".result-count"),
-          page.inner_text(".result-count"))
-    page.click(".clear-btn")
-    page.wait_for_timeout(150)
-    # «може містити» приглушується нарівні з «містить»
-    page.locator(".chip", has_text="Горіхи").first.click()
-    page.wait_for_timeout(150)
-    check("горіхи: «може містити» приглушується нарівні з «містить»",
-          page.locator(".dish.flagged").count() == 5, page.locator(".dish.flagged").count())
-    page.click(".clear-btn")
-    page.wait_for_timeout(150)
-    check("скидання знімає приглушення", page.locator(".dish.flagged").count() == 0)
+    # --- алергенів у меню немає -------------------------------------------
+    # Заклад їх не надавав, а виведені з назв продуктів гірші за жодних.
+    check("панелі фільтра алергенів немає", page.locator(".filters").count() == 0)
+    check("міток алергенів на картках немає", page.locator(".tag").count() == 0)
+    check("значка джерела немає", page.locator(".srcbadge").count() == 0)
+    check("склад лишився", page.locator("#d-mojito ul.ing li").count() == 4,
+          page.locator("#d-mojito").inner_text()[:80])
 
     # --- алкоголь і ціна ---------------------------------------------------
     # У PODVAL алкоголь замовляється: якби ні, застосунок був би меню для
@@ -105,17 +101,6 @@ with sync_playwright() as p:
           page.locator("#d-espresso .price").inner_text() == "£4.00",
           page.locator("#d-espresso .price").inner_text())
 
-    # --- рівні алергенів і чесність джерела --------------------------------
-    disaronno = page.locator("#d-disaronno")
-    check("«може містити» пунктиром", disaronno.locator(".tag.maybe").count() == 1,
-          disaronno.inner_text()[:80])
-    check("джерело названо чесно: відновлено, а не лист закладу",
-          "Відновлено з назви продукту" in disaronno.inner_text(),
-          disaronno.inner_text()[-90:])
-    check("вершковий лікер помічено молоком",
-          page.locator("#d-baileys .tag").first.inner_text().strip() != "",
-          page.locator("#d-baileys").inner_text()[:80])
-
     # --- зміна мови --------------------------------------------------------
     check("мов рівно три", page.locator(".langbtn").count() == 3,
           [page.locator(".langbtn").nth(i).inner_text() for i in range(page.locator(".langbtn").count())])
@@ -129,16 +114,14 @@ with sync_playwright() as p:
 
     # --- стіл із QR --------------------------------------------------------
     # --- фільтр переживає авто-оновлення ----------------------------------
-    if not page.locator(".filters").first.evaluate("n => n.classList.contains('open')"):
-        page.click(".filter-toggle")
     page.fill(".search", "moj")
     page.wait_for_timeout(150)
     page.evaluate("MenuStore.refresh()")
     page.wait_for_timeout(400)
-    check("фільтр лишається відкритим після авто-оновлення",
-          page.locator(".filters").first.evaluate("n => n.classList.contains('open')"))
     check("пошук не збився після авто-оновлення", page.input_value(".search") == "moj")
-    page.click(".clear-btn")
+    check("порожні категорії ховаються разом із заголовком",
+          page.locator("#c-hot").is_hidden(), page.locator("#c-hot").is_visible())
+    page.fill(".search", "")
 
     # --- тема --------------------------------------------------------------
     page.click('.themebtn[data-theme="dark"]')

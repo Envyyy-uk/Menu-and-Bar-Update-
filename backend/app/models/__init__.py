@@ -10,7 +10,6 @@ from app.models.menu import (
     STATIONS,
     Ingredient,
     MenuItem,
-    MenuSource,
     MenuWarning,
     Schedule,
 )
@@ -76,7 +75,6 @@ __all__ = [
     "Device",
     "Ingredient",
     "MenuItem",
-    "MenuSource",
     "MenuWarning",
     "Order",
     "OrderItem",

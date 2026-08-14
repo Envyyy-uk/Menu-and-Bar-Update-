@@ -22,7 +22,6 @@ from app.models import (
     Device,
     Ingredient,
     MenuItem,
-    MenuSource,
     MenuWarning,
     Schedule,
     Table,
@@ -81,6 +80,7 @@ def _venue(db: Session, data: dict[str, Any]) -> Venue:
     venue.name = spec["name"]
     venue.timezone = spec["timezone"]
     venue.currency = spec["currency"]
+    venue.categories = data.get("categories", {})
     db.flush()
     return venue
 
@@ -100,12 +100,6 @@ def seed(db: Session) -> Venue:
     for key, names in data.get("lexicon", {}).items():
         _upsert(db, Ingredient, venue.id, key).names = names
 
-    for key, spec in data.get("sources", {}).items():
-        row = _upsert(db, MenuSource, venue.id, key)
-        row.type = spec.get("type", "official")
-        row.label = spec.get("label", {})
-        row.checked_on = date.fromisoformat(spec["checked"]) if spec.get("checked") else None
-
     for key, text in data.get("warnings", {}).items():
         _upsert(db, MenuWarning, venue.id, key).text = text
 
@@ -121,13 +115,10 @@ def seed(db: Session) -> Venue:
         item.name = spec["name"]
         item.station = spec.get("station", "kitchen")
         item.options = spec.get("options", [])
+        item.category = spec.get("category")
         item.price_pence = spec.get("price_pence", 0)
         item.description = spec.get("desc", {})
         item.ingredients = spec.get("ing", [])
-        item.allergens_a = spec.get("a", [])
-        item.allergens_m = spec.get("m", [])
-        item.allergens_r = spec.get("r", [])
-        item.source_key = spec.get("src")
         item.warnings = spec.get("w", [])
         item.orderable = spec.get("orderable", True)
         item.orderable_reason = spec.get("orderable_reason")

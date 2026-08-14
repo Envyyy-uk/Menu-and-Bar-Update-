@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 from app.models import (
     Ingredient,
     MenuItem,
-    MenuSource,
     MenuWarning,
     Schedule,
     Venue,
@@ -45,13 +44,10 @@ def item_payload(
         "price_pence": item.price_pence,
         # Варіанти: «50 мл чи пляшка», «яке мохіто». Ціну за ними
         # рахує сервер — фронт лише запитує вибір.
+        "category": item.category,
         "options": item.options or [],
         "desc": item.description,
         "ing": item.ingredients,
-        "a": item.allergens_a,
-        "m": item.allergens_m,
-        "r": item.allergens_r,
-        "src": item.source_key,
         "w": item.warnings,
         "state": item.state,
         "orderable": item.orderable,
@@ -76,14 +72,6 @@ def menu_payload(db: Session, venue: Venue, at: datetime | None = None) -> dict[
         i.key: i.names
         for i in db.scalars(select(Ingredient).where(Ingredient.venue_id == venue.id)).all()
     }
-    sources = {
-        s.key: {
-            "type": s.type,
-            "label": s.label,
-            "checked": s.checked_on.isoformat() if s.checked_on else None,
-        }
-        for s in db.scalars(select(MenuSource).where(MenuSource.venue_id == venue.id)).all()
-    }
     warnings = {
         w.key: w.text
         for w in db.scalars(select(MenuWarning).where(MenuWarning.venue_id == venue.id)).all()
@@ -98,7 +86,8 @@ def menu_payload(db: Session, venue: Venue, at: datetime | None = None) -> dict[
         },
         "now": {"day": now.day, "minutes": now.minutes, "stamp": now.stamp},
         "lexicon": lexicon,
-        "sources": sources,
+        # Підписи категорій: гість гортає меню за ними.
+        "categories": venue.categories or {},
         "warnings": warnings,
         "schedules": schedules,
         "items": [item_payload(i, schedules, now) for i in items],

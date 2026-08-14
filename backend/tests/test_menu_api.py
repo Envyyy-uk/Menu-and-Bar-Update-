@@ -10,7 +10,7 @@ def test_menu_returns_seed_data(client):
     assert m["venue"]["name"] == "PODVAL"
     assert m["venue"]["currency"] == "GBP"
     assert "sections" not in m          # меню один список, груп немає
-    assert len(m["items"]) == 40
+    assert len(m["items"]) == 37
     assert m["lexicon"]["coffee"]["ru"] == "кофе"
     # Меню виходить трьома мовами — зайвих у файлі бути не має
     assert set(m["lexicon"]["coffee"]) == {"uk", "en", "ru"}
@@ -36,33 +36,16 @@ def test_nested_ingredients_still_render(client, db, venue):
 
     item = db.scalars(select(MenuItem).where(MenuItem.key == "hot-chocolate")).one()
     before = item.ingredients
-    item.ingredients = ["cocoa", ["almond-milk", ["almonds", "water"]]]
+    item.ingredients = ["cocoa", ["milk", ["water", "sugar"]]]
     db.commit()
 
     m = client.get("/api/menu").json()
     drink = next(i for i in m["items"] if i["key"] == "hot-chocolate")
-    assert drink["ing"] == ["cocoa", ["almond-milk", ["almonds", "water"]]]
-    assert m["lexicon"]["almonds"]["uk"] == "мигдаль"
+    assert drink["ing"] == ["cocoa", ["milk", ["water", "sugar"]]]
+    assert m["lexicon"]["water"]["uk"] == "вода"
 
     item.ingredients = before
     db.commit()
-
-
-def test_allergen_levels_survive_the_round_trip(client):
-    m = client.get("/api/menu").json()
-    by_key = {i["key"]: i for i in m["items"]}
-
-    assert by_key["baileys"]["a"] == ["milk"]          # вершковий лікер
-    assert by_key["disaronno"]["m"] == ["tree-nuts"]   # абрикосова кісточка
-    assert by_key["corona"]["a"] == ["cereals-gluten"]  # ячмінний солод
-    assert by_key["white-wine"]["a"] == ["sulphites"]
-
-    # Джерело всюди одне й чесне: алергени відновлені з назв продуктів, а не
-    # взяті з листа закладу. Гість бачить це на кожній картці.
-    assert {i["src"] for i in m["items"]} == {"reconstructed"}
-    assert m["sources"]["reconstructed"]["type"] == "reconstructed"
-
-
 def test_alcohol_is_orderable_and_warns_about_age(client):
     """PODVAL — бар. Якби алкоголь не замовлявся, застосунок був би меню для
     читання: у цьому меню алкоголь — майже все. Контроль лишається людині —
@@ -91,7 +74,9 @@ def test_options_reach_the_guest(client):
     # 50 мл проти пляшки — різні ціни на тій самій позиції
     size = next(g for g in by_key["absolut"]["options"] if g["key"] == "size")
     assert [(c["name"], c["price_pence"]) for c in size["choices"]] == [
-        ("50 ml", 1300), ("Bottle", 23000),
+        ("50 ml", 1300), ("100 ml", 2600), ("150 ml", 3900),
+        ("200 ml", 5200), ("250 ml", 6500), ("300 ml", 7800),
+        ("Bottle", 23000),
     ]
 
     # Позиції без вибору лишаються простими
@@ -125,7 +110,7 @@ def test_menu_is_one_flat_list_ordered_by_position(client):
     """Меню — один список. Порядок задає зал позицією, а не групою."""
     m = client.get("/api/menu").json()
     keys = [i["key"] for i in m["items"]]
-    assert len(keys) == len(set(keys)) == 40
+    assert len(keys) == len(set(keys)) == 37
     # порядок меню: міцне, коктейлі, пиво, вино, гаряче
     assert keys[0] == "absolut"
     assert keys[-1] == "hookah"
@@ -216,28 +201,6 @@ def test_timer_opens_a_dish_by_itself(client, db, venue):
     assert next(i for i in after["items"] if i["key"] == "espresso")["available"]["open"]
 
     client.patch(f"/api/admin/items/{item.id}", json={"state": "auto", "opens_at": None})
-
-
-def test_every_allergen_key_is_a_real_one(client):
-    """Невідомий ключ алергену інтерфейс просто **не показує** — мовчки.
-
-    Саме так у це меню потрапило `nuts` замість `tree-nuts`: мигдалевий
-    лікер лишився без мітки про горіхи, і жоден тест цього не бачив. Список
-    із чотирнадцяти закріплений законом, тож звіряємось із ним.
-    """
-    allowed = {
-        "cereals-gluten", "crustaceans", "eggs", "fish", "peanuts", "soya",
-        "milk", "tree-nuts", "celery", "mustard", "sesame", "sulphites",
-        "lupin", "molluscs",
-    }
-    m = client.get("/api/menu").json()
-    used = set()
-    for i in m["items"]:
-        used |= set(i["a"]) | set(i["m"]) | set(i["r"])
-    assert used <= allowed, f"невідомі ключі: {sorted(used - allowed)}"
-    assert used, "у меню має бути хоч один алерген"
-
-
 def test_menu_speaks_three_languages_only(client):
     """Меню виходить українською, англійською та російською. Зайва мова у
     файлі — це напівперекладене меню: частина карток чужою мовою, і гість
@@ -249,8 +212,8 @@ def test_menu_speaks_three_languages_only(client):
         assert set(entry) == wanted, entry
     for text in m["warnings"].values():
         assert set(text) == wanted, text
-    for src in m["sources"].values():
-        assert set(src["label"]) == wanted, src
+    for cat in m["categories"]:
+        assert set(cat["names"]) == wanted, cat
 
     described = [i for i in m["items"] if i["desc"]]
     assert described, "описи мають бути"
@@ -275,3 +238,71 @@ def test_everything_is_on_the_bar_for_now(client):
     моделі: коли з'явиться їжа, її позиції просто отримають `kitchen`."""
     m = client.get("/api/menu").json()
     assert {i["station"] for i in m["items"]} == {"bar"}
+
+
+def test_menu_is_grouped_into_categories(client):
+    """Меню знову згруповане — але категорія це підпис, а не сутність зі
+    станом. Закривають позицію, не групу."""
+    m = client.get("/api/menu").json()
+
+    # Порядок важливий, тож це список, а не словник: JSONB не зберігає
+    # порядок ключів, і категорії приїхали б перетасованими.
+    assert [c["key"] for c in m["categories"]] == [
+        "spirits", "cocktails", "beer-soft", "wine", "hot", "hookah",
+    ]
+    assert next(c for c in m["categories"] if c["key"] == "hookah")["names"]["uk"] == "Кальяни"
+
+    used = {i["category"] for i in m["items"]}
+    assert used == {c["key"] for c in m["categories"]}, "позиція без категорії загубиться"
+
+    by_cat = {}
+    for i in m["items"]:
+        by_cat.setdefault(i["category"], []).append(i["key"])
+    assert by_cat["hookah"] == ["hookah"]
+    assert "mojito" in by_cat["cocktails"]
+    assert "absolut" in by_cat["spirits"]
+
+
+def test_pour_sizes_are_multiples_of_the_shot(client):
+    """У меню вказана ціна лише за 50 мл, тож решта сітки кратна їй."""
+    m = client.get("/api/menu").json()
+    by_key = {i["key"]: i for i in m["items"]}
+
+    for key, shot in (("absolut", 1300), ("patron-silver", 1600), ("nalivka", 900)):
+        size = next(g for g in by_key[key]["options"] if g["key"] == "size")
+        pours = [c for c in size["choices"] if c["name"].endswith(" ml")]
+        assert [c["name"] for c in pours] == [
+            "50 ml", "100 ml", "150 ml", "200 ml", "250 ml", "300 ml",
+        ]
+        assert [c["price_pence"] for c in pours] == [shot * n for n in range(1, 7)]
+
+
+def test_one_line_in_the_menu_is_one_item_with_a_choice(client):
+    """У PDF лікери стоять одним рядком з однією ціною — отже, це один пункт
+    із вибором, а не чотири майже однакові картки."""
+    m = client.get("/api/menu").json()
+    keys = {i["key"] for i in m["items"]}
+    assert "liqueur" in keys
+    for gone in ("disaronno", "baileys", "jagermeister", "malibu"):
+        assert gone not in keys
+
+    liqueur = next(i for i in m["items"] if i["key"] == "liqueur")
+    kind = next(g for g in liqueur["options"] if g["key"] == "kind")
+    assert [c["name"] for c in kind["choices"]] == [
+        "Disaronno Amaretto", "Baileys", "Jägermeister", "Malibu",
+    ]
+
+
+def test_allergens_are_gone_from_the_menu(client):
+    """Заклад алергенів не надавав, а виведені з назв продуктів гірші за
+    жодних: гість вірить міткам. Тому їх немає ніде — ні полями, ні
+    джерелом, ні окремим попередженням."""
+    m = client.get("/api/menu").json()
+
+    assert "sources" not in m
+    for i in m["items"]:
+        assert not ({"a", "m", "r", "src"} & set(i)), i["key"]
+
+    # Склад лишився: на ньому тримається пошук трьома мовами
+    assert next(i for i in m["items"] if i["key"] == "mojito")["ing"]
+    assert "allergen-by-option" not in m["warnings"]

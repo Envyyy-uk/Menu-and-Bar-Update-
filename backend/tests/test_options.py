@@ -22,9 +22,12 @@ def line(key, qty=1, **options):
 
 
 def test_bottle_costs_what_the_bottle_costs(client, db, venue):
-    """50 мл — £13, пляшка — £230. Це та сама позиція меню."""
-    shot = place(client, db, items=[line("absolut", size="single")]).json()
+    """50 мл — £13, 150 мл — £39, пляшка — £230. Це та сама позиція меню."""
+    shot = place(client, db, items=[line("absolut", size="ml50")]).json()
     assert shot["total_pence"] == 1300
+
+    triple = place(client, db, items=[line("absolut", size="ml150")]).json()
+    assert triple["total_pence"] == 3900
 
     bottle = place(client, db, items=[line("absolut", size="bottle")]).json()
     assert bottle["total_pence"] == 23000
