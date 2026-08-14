@@ -241,7 +241,7 @@ def test_staff_cannot_refund(client, db, venue, stripe_secret):
 def test_manager_hits_the_ceiling(client, db, venue, stripe_secret):
     # Замовлення навмисно дороге за стелю manager (£50) — інакше спрацювала б
     # перевірка «сума більша за залишок», а не сама стеля.
-    order = paid_order(client, db, stripe_secret, items=[{"key": "braised-short-rib", "qty": 4}])
+    order = paid_order(client, db, stripe_secret, items=[{"key": "dom-perignon", "qty": 1}])
     assert order["total_pence"] > settings.manager_refund_limit_pence
     as_owner(client)
     client.post(

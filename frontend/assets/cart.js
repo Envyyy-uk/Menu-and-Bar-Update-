@@ -59,23 +59,142 @@ function resetToken() {
 
 const cartCount = () => Object.values(CART).reduce((a, b) => a + b, 0);
 
+/* Рядок кошика більше не дорівнює позиції меню: два мохіто різних смаків —
+   це два рядки. Тому ключ рядка складений із ключа позиції й обраних
+   варіантів. Групи сортуємо, щоб той самий вибір завжди давав той самий
+   ключ, у якому б порядку його не зробили. */
+function lineKey(key, options) {
+  const parts = Object.keys(options || {}).sort().map(g => `${g}=${options[g]}`);
+  return parts.length ? key + '|' + parts.join(';') : key;
+}
+
+function parseLine(line) {
+  const [key, tail] = String(line).split('|');
+  const options = {};
+  if (tail) tail.split(';').forEach(pair => {
+    const [g, c] = pair.split('=');
+    if (g) options[g] = c;
+  });
+  return { key, options };
+}
+
+/** Ціна з урахуванням варіантів. Сервер рахує це саме ще раз — тут лише
+    щоб гість бачив підсумок до оплати. */
+function linePrice(item, options) {
+  let price = item.price_pence;
+  let add = 0;
+  (item.options || []).forEach(group => {
+    const picked = (options || {})[group.key];
+    const choice = (group.choices || []).find(x => x.key === picked);
+    if (!choice) return;
+    if (choice.price_pence !== undefined && choice.price_pence !== null) price = choice.price_pence;
+    add += choice.add_pence || 0;
+  });
+  return price + add;
+}
+
+/** Назви обраних варіантів — те саме, що потім побачить бармен на марці. */
+function optionNames(item, options) {
+  return (item.options || []).map(group => {
+    const choice = (group.choices || []).find(x => x.key === (options || {})[group.key]);
+    return choice ? choice.name : null;
+  }).filter(Boolean);
+}
+
 function cartTotal(data) {
-  return Object.entries(CART).reduce((sum, [key, qty]) => {
+  return Object.entries(CART).reduce((sum, [line, qty]) => {
+    const { key, options } = parseLine(line);
     const item = data.items.find(i => i.key === key);
-    return sum + (item ? item.price_pence * qty : 0);
+    return sum + (item ? linePrice(item, options) * qty : 0);
   }, 0);
+}
+
+/** Скільки цієї позиції в кошику разом, усіма варіантами. Саме це число
+    показує картка в меню. */
+function qtyOf(itemKey) {
+  return Object.entries(CART).reduce(
+    (n, [line, qty]) => n + (parseLine(line).key === itemKey ? qty : 0), 0);
+}
+
+/* ------------------------------------------------------- вибір варіанта -- */
+/** Аркуш вибору: «яке саме мохіто», «50 мл чи пляшка».
+
+    Відкривається лише для позицій із варіантами. Пропустити вибір не можна —
+    «Мохіто» без смаку це не замовлення, а загадка для бармена, тож кнопка
+    лишається неактивною, поки не обрано все. */
+function openOptions(item, data) {
+  document.querySelectorAll('.sheet').forEach(n => n.remove());
+  const sheet = el('div', 'sheet');
+  const box = el('div', 'sheet-box opt-box');
+  sheet.appendChild(box);
+
+  box.appendChild(el('h2', null, esc(item.name)));
+  const picked = {};
+
+  const price = el('p', 'opt-price');
+  const add = el('button', 'primary wide', esc(t('cart.add', LANG)));
+  add.type = 'button';
+
+  const sync = () => {
+    const all = (item.options || []).every(g => picked[g.key]);
+    add.disabled = !all;
+    price.textContent = money(linePrice(item, picked), data.venue.currency, LANG);
+  };
+
+  (item.options || []).forEach(group => {
+    box.appendChild(el('p', 'opt-label', esc(t(group.label, LANG))));
+    const row = el('div', 'opt-row');
+    group.choices.forEach(choice => {
+      const b = el('button', 'opt-btn', esc(choice.name));
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        picked[group.key] = choice.key;
+        row.querySelectorAll('.opt-btn').forEach(x => x.classList.toggle('on', x === b));
+        sync();
+      });
+      row.appendChild(b);
+    });
+    box.appendChild(row);
+  });
+
+  box.append(price, add);
+  add.addEventListener('click', () => {
+    const line = lineKey(item.key, picked);
+    CART[line] = (CART[line] || 0) + 1;
+    saveCart();
+    sheet.remove();
+    refreshCart(data);
+  });
+
+  const close = el('button', 'wide', esc(t('cart.close', LANG)));
+  close.type = 'button';
+  close.addEventListener('click', () => sheet.remove());
+  box.appendChild(close);
+
+  sync();
+  sheet.addEventListener('click', ev => { if (ev.target === sheet) sheet.remove(); });
+  document.body.appendChild(sheet);
 }
 
 /* ---------------------------------------------------- кнопки на картках -- */
 function orderControls(item, data) {
   const slot = el('div', 'order-line');
-  const qty = CART[item.key] || 0;
+  const qty = qtyOf(item.key);
+  const hasOptions = (item.options || []).length > 0;
 
-  if (!qty) {
-    const add = el('button', 'add-btn', esc(t('cart.add', LANG)));
-    add.type = 'button';
-    add.addEventListener('click', () => { CART[item.key] = 1; saveCart(); refreshCart(data); });
-    slot.appendChild(add);
+  // Позиція з варіантами завжди веде через аркуш вибору: «+» на картці не
+  // знає, яке саме мохіто додавати другим.
+  if (!qty || hasOptions) {
+    const addBtn = el('button', 'add-btn', esc(hasOptions ? t('cart.choose', LANG) : t('cart.add', LANG)));
+    addBtn.type = 'button';
+    addBtn.addEventListener('click', () => {
+      if (hasOptions) return openOptions(item, data);
+      CART[item.key] = 1;
+      saveCart();
+      refreshCart(data);
+    });
+    if (qty) slot.appendChild(el('span', 'qty', String(qty)));
+    slot.appendChild(addBtn);
     return slot;
   }
 
@@ -100,9 +219,9 @@ function orderControls(item, data) {
 function onMenuRendered(data) {
   loadCart();
   // Позиція могла зникнути з меню, поки кошик лежав відкритим.
-  Object.keys(CART).forEach(key => {
-    const item = data.items.find(i => i.key === key);
-    if (!item || !item.orderable || !(item.available || {}).open) delete CART[key];
+  Object.keys(CART).forEach(line => {
+    const item = data.items.find(i => i.key === parseLine(line).key);
+    if (!item || !item.orderable || !(item.available || {}).open) delete CART[line];
   });
 
   document.querySelectorAll('.order-slot').forEach(slot => {
@@ -162,7 +281,8 @@ function refreshCart(data) {
     шукати ту саму картку в меню, щоб прибрати одну позицію, — це змусити
     прокрутити півменю з відкритим кошиком. */
 function cartLine(key, qty, data, redraw) {
-  const item = data.items.find(i => i.key === key);
+  const { key: itemKey, options } = parseLine(key);
+  const item = data.items.find(i => i.key === itemKey);
   const li = el('li');
   if (!item) {
     // Позиція зникла з меню, поки кошик лежав відкритим — прибираємо мовчки.
@@ -172,14 +292,18 @@ function cartLine(key, qty, data, redraw) {
   }
 
   const info = el('div', 'cart-info');
-  info.appendChild(el('span', 'cart-name', esc(item.name)));
+  // Обраний варіант поруч із назвою: без нього два рядки «Mojito» виглядають
+  // як помилка кошика, а не як два різні напої.
+  const chosen = optionNames(item, options);
+  info.appendChild(el('span', 'cart-name',
+    esc(item.name) + (chosen.length ? ` <span class="cart-opt">· ${esc(chosen.join(' · '))}</span>` : '')));
   info.appendChild(el('span', 'cart-price',
-    esc(money(item.price_pence * qty, data.venue.currency, LANG))));
+    esc(money(linePrice(item, options) * qty, data.venue.currency, LANG))));
 
   const controls = el('div', 'order-line');
   const minus = el('button', 'qty-btn', '−');
   minus.type = 'button';
-  minus.setAttribute('aria-label', `− ${item.name}`);
+  minus.setAttribute('aria-label', `− ${item.name} ${chosen.join(' ')}`);
   minus.addEventListener('click', () => {
     CART[key] = qty - 1;
     if (CART[key] <= 0) delete CART[key];
@@ -189,13 +313,13 @@ function cartLine(key, qty, data, redraw) {
 
   const plus = el('button', 'qty-btn', '+');
   plus.type = 'button';
-  plus.setAttribute('aria-label', `+ ${item.name}`);
+  plus.setAttribute('aria-label', `+ ${item.name} ${chosen.join(' ')}`);
   plus.addEventListener('click', () => { CART[key] = qty + 1; saveCart(); redraw(); });
 
   const drop = el('button', 'drop-btn', '×');
   drop.type = 'button';
   drop.title = t('cart.remove', LANG);
-  drop.setAttribute('aria-label', `${t('cart.remove', LANG)}: ${item.name}`);
+  drop.setAttribute('aria-label', `${t('cart.remove', LANG)}: ${item.name} ${chosen.join(' ')}`);
   drop.addEventListener('click', () => { delete CART[key]; saveCart(); redraw(); });
 
   controls.append(minus, el('span', 'qty', String(qty)), plus, drop);
@@ -268,7 +392,10 @@ async function submitOrder(data, note, button, box) {
   const payload = {
     table_token: API.tableToken(),
     client_token: clientToken(),
-    items: Object.entries(CART).map(([key, qty]) => ({ key, qty })),
+    items: Object.entries(CART).map(([line, qty]) => {
+      const { key, options } = parseLine(line);
+      return { key, qty, options };
+    }),
     note: note || null
   };
 

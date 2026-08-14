@@ -1,453 +1,57 @@
 {
-  "_note": "Демонстраційні дані для нового проєкту. Заклад і всі страви вигадані. Жодного зв'язку з реальним меню чи чужими листами алергенів. Ключі складу посилаються на lexicon, а не містять текст.",
+  "_note": "Меню PODVAL із PDF. Назви позицій і варіантів не перекладаються — гість замовляє їх так, як надруковано. Алергени й склад відновлені з назв продуктів, а не з листа закладу: джерело всюди 'reconstructed'. Перед відкриттям їх має підтвердити заклад.",
   "venue": {
-    "key": "the-copper-fig",
-    "name": "The Copper Fig",
+    "key": "podval",
+    "name": "PODVAL",
     "timezone": "Europe/London",
     "currency": "GBP"
   },
   "sources": {
-    "official-2026-07": {
-      "type": "official",
-      "label": {
-        "uk": "Офіційний лист закладу",
-        "en": "Venue allergen sheet",
-        "es": "Ficha oficial del local",
-        "it": "Scheda ufficiale del locale",
-        "de": "Offizielles Allergenblatt",
-        "ru": "Официальный лист заведения"
-      },
-      "checked": "2026-07-14"
-    },
     "reconstructed": {
       "type": "reconstructed",
       "label": {
-        "uk": "Реконструкція з опису",
-        "en": "Reconstructed from description",
-        "es": "Reconstruido de la descripción",
-        "it": "Ricostruito dalla descrizione",
-        "de": "Aus der Beschreibung rekonstruiert",
-        "ru": "Реконструкция из описания"
+        "uk": "Відновлено з назви продукту",
+        "en": "Reconstructed from the product name",
+        "es": "Reconstruido a partir del nombre del producto",
+        "it": "Ricostruito dal nome del prodotto",
+        "de": "Aus dem Produktnamen rekonstruiert",
+        "ru": "Восстановлено из названия продукта"
       }
     }
   },
   "warnings": {
-    "shared-fryer": {
-      "uk": "Спільний фритюр з позиціями, що містять глютен",
-      "en": "Shared fryer with gluten-containing items",
-      "es": "Freidora compartida con productos con gluten",
-      "it": "Friggitrice condivisa con prodotti con glutine",
-      "de": "Gemeinsame Fritteuse mit glutenhaltigen Produkten",
-      "ru": "Общий фритюр с позициями, содержащими глютен"
+    "age-check": {
+      "uk": "Алкоголь. Подається лише повнолітнім — бармен перевірить документ.",
+      "en": "Alcohol. Served to over-18s only — the bar will check ID.",
+      "es": "Alcohol. Solo para mayores de 18 años: el bar pedirá identificación.",
+      "it": "Alcol. Servito solo ai maggiorenni — il bar chiederà un documento.",
+      "de": "Alkohol. Nur an Volljährige — die Bar prüft den Ausweis.",
+      "ru": "Алкоголь. Подаётся только совершеннолетним — бармен проверит документ."
     },
-    "shared-grill": {
-      "uk": "Спільний гриль з рибою та м'ясом",
-      "en": "Shared grill with fish and meat",
-      "es": "Parrilla compartida con pescado y carne",
-      "it": "Griglia condivisa con pesce e carne",
-      "de": "Gemeinsamer Grill mit Fisch und Fleisch",
-      "ru": "Общий гриль с рыбой и мясом"
-    },
-    "raw-egg": {
-      "uk": "Містить сире яйце",
-      "en": "Contains raw egg",
-      "es": "Contiene huevo crudo",
-      "it": "Contiene uovo crudo",
-      "de": "Enthält rohes Ei",
-      "ru": "Содержит сырое яйцо"
+    "allergen-by-option": {
+      "uk": "Алерген залежить від обраного молока: мигдалеве — горіхи, соєве — соя.",
+      "en": "The allergen depends on the milk you choose: almond means nuts, soya means soya.",
+      "es": "El alérgeno depende de la leche elegida: almendra significa frutos secos; soja, soja.",
+      "it": "L'allergene dipende dal latte scelto: mandorla significa frutta a guscio, soia significa soia.",
+      "de": "Das Allergen hängt von der gewählten Milch ab: Mandel bedeutet Nüsse, Soja bedeutet Soja.",
+      "ru": "Аллерген зависит от выбранного молока: миндальное — орехи, соевое — соя."
     }
   },
   "lexicon": {
-    "beetroot": {
-      "uk": "буряк",
-      "en": "beetroot",
-      "es": "remolacha",
-      "it": "barbabietola",
-      "de": "Rote Bete",
-      "ru": "свёкла"
+    "vodka": {
+      "uk": "горілка",
+      "en": "vodka",
+      "es": "vodka",
+      "it": "vodka",
+      "de": "Wodka",
+      "ru": "водка"
     },
-    "capers": {
-      "uk": "каперси",
-      "en": "capers",
-      "es": "alcaparras",
-      "it": "capperi",
-      "de": "Kapern",
-      "ru": "каперсы"
-    },
-    "shallot": {
-      "uk": "шалот",
-      "en": "shallot",
-      "es": "chalota",
-      "it": "scalogno",
-      "de": "Schalotte",
-      "ru": "шалот"
-    },
-    "dijon-mustard": {
-      "uk": "діжонська гірчиця",
-      "en": "Dijon mustard",
-      "es": "mostaza de Dijon",
-      "it": "senape di Digione",
-      "de": "Dijon-Senf",
-      "ru": "дижонская горчица"
-    },
-    "olive-oil": {
-      "uk": "оливкова олія",
-      "en": "olive oil",
-      "es": "aceite de oliva",
-      "it": "olio d'oliva",
-      "de": "Olivenöl",
-      "ru": "оливковое масло"
-    },
-    "lemon-juice": {
-      "uk": "лимонний сік",
-      "en": "lemon juice",
-      "es": "zumo de limón",
-      "it": "succo di limone",
-      "de": "Zitronensaft",
-      "ru": "лимонный сок"
-    },
-    "sourdough-bread": {
-      "uk": "хліб на заквасці",
-      "en": "sourdough bread",
-      "es": "pan de masa madre",
-      "it": "pane a lievitazione naturale",
-      "de": "Sauerteigbrot",
-      "ru": "хлеб на закваске"
-    },
-    "wheat-flour": {
-      "uk": "пшеничне борошно",
-      "en": "wheat flour",
-      "es": "harina de trigo",
-      "it": "farina di frumento",
-      "de": "Weizenmehl",
-      "ru": "пшеничная мука"
-    },
-    "plain-flour": {
-      "uk": "борошно вищого ґатунку",
-      "en": "plain flour",
-      "es": "harina común",
-      "it": "farina 00",
-      "de": "Weizenmehl Type 405",
-      "ru": "мука высшего сорта"
-    },
-    "breadcrumbs": {
-      "uk": "панірувальні сухарі",
-      "en": "breadcrumbs",
-      "es": "pan rallado",
-      "it": "pangrattato",
-      "de": "Semmelbrösel",
-      "ru": "панировочные сухари"
-    },
-    "water": {
-      "uk": "вода",
-      "en": "water",
-      "es": "agua",
-      "it": "acqua",
-      "de": "Wasser",
-      "ru": "вода"
-    },
-    "yeast": {
-      "uk": "дріжджі",
-      "en": "yeast",
-      "es": "levadura",
-      "it": "lievito",
-      "de": "Hefe",
-      "ru": "дрожжи"
-    },
-    "salt": {
-      "uk": "сіль",
-      "en": "salt",
-      "es": "sal",
-      "it": "sale",
-      "de": "Salz",
-      "ru": "соль"
-    },
-    "sugar": {
-      "uk": "цукор",
-      "en": "sugar",
-      "es": "azúcar",
-      "it": "zucchero",
-      "de": "Zucker",
-      "ru": "сахар"
-    },
-    "black-pepper": {
-      "uk": "чорний перець",
-      "en": "black pepper",
-      "es": "pimienta negra",
-      "it": "pepe nero",
-      "de": "schwarzer Pfeffer",
-      "ru": "чёрный перец"
-    },
-    "octopus": {
-      "uk": "восьминіг",
-      "en": "octopus",
-      "es": "pulpo",
-      "it": "polpo",
-      "de": "Oktopus",
-      "ru": "осьминог"
-    },
-    "parsley": {
-      "uk": "петрушка",
-      "en": "parsley",
-      "es": "perejil",
-      "it": "prezzemolo",
-      "de": "Petersilie",
-      "ru": "петрушка"
-    },
-    "anchovy": {
-      "uk": "анчоус",
-      "en": "anchovy",
-      "es": "anchoa",
-      "it": "acciuga",
-      "de": "Sardelle",
-      "ru": "анчоус"
-    },
-    "garlic": {
-      "uk": "часник",
-      "en": "garlic",
-      "es": "ajo",
-      "it": "aglio",
-      "de": "Knoblauch",
-      "ru": "чеснок"
-    },
-    "potato": {
-      "uk": "картопля",
-      "en": "potato",
-      "es": "patata",
-      "it": "patata",
-      "de": "Kartoffel",
-      "ru": "картофель"
-    },
-    "arborio-rice": {
-      "uk": "рис арборіо",
-      "en": "arborio rice",
-      "es": "arroz arborio",
-      "it": "riso arborio",
-      "de": "Arborio-Reis",
-      "ru": "рис арборио"
-    },
-    "wild-mushroom": {
-      "uk": "лісові гриби",
-      "en": "wild mushrooms",
-      "es": "setas silvestres",
-      "it": "funghi di bosco",
-      "de": "Waldpilze",
-      "ru": "лесные грибы"
-    },
-    "vegetable-stock": {
-      "uk": "овочевий бульйон",
-      "en": "vegetable stock",
-      "es": "caldo de verduras",
-      "it": "brodo vegetale",
-      "de": "Gemüsebrühe",
-      "ru": "овощной бульон"
-    },
-    "beef-stock": {
-      "uk": "яловичий бульйон",
-      "en": "beef stock",
-      "es": "caldo de ternera",
-      "it": "brodo di manzo",
-      "de": "Rinderbrühe",
-      "ru": "говяжий бульон"
-    },
-    "celery": {
-      "uk": "селера",
-      "en": "celery",
-      "es": "apio",
-      "it": "sedano",
-      "de": "Sellerie",
-      "ru": "сельдерей"
-    },
-    "carrot": {
-      "uk": "морква",
-      "en": "carrot",
-      "es": "zanahoria",
-      "it": "carota",
-      "de": "Karotte",
-      "ru": "морковь"
-    },
-    "onion": {
-      "uk": "цибуля",
-      "en": "onion",
-      "es": "cebolla",
-      "it": "cipolla",
-      "de": "Zwiebel",
-      "ru": "лук"
-    },
-    "fennel": {
-      "uk": "фенхель",
-      "en": "fennel",
-      "es": "hinojo",
-      "it": "finocchio",
-      "de": "Fenchel",
-      "ru": "фенхель"
-    },
-    "rocket": {
-      "uk": "рукола",
-      "en": "rocket",
-      "es": "rúcula",
-      "it": "rucola",
-      "de": "Rucola",
-      "ru": "руккола"
-    },
-    "parmesan": {
-      "uk": "пармезан",
-      "en": "parmesan",
-      "es": "parmesano",
-      "it": "parmigiano",
-      "de": "Parmesan",
-      "ru": "пармезан"
-    },
-    "goat-cheese": {
-      "uk": "козячий сир",
-      "en": "goat cheese",
-      "es": "queso de cabra",
-      "it": "formaggio di capra",
-      "de": "Ziegenkäse",
-      "ru": "козий сыр"
-    },
-    "butter": {
-      "uk": "вершкове масло",
-      "en": "butter",
-      "es": "mantequilla",
-      "it": "burro",
-      "de": "Butter",
-      "ru": "сливочное масло"
-    },
-    "double-cream": {
-      "uk": "жирні вершки",
-      "en": "double cream",
-      "es": "nata espesa",
-      "it": "panna densa",
-      "de": "Schlagsahne",
-      "ru": "жирные сливки"
-    },
-    "whole-egg": {
-      "uk": "куряче яйце",
-      "en": "egg",
-      "es": "huevo",
-      "it": "uovo",
-      "de": "Ei",
-      "ru": "куриное яйцо"
-    },
-    "egg-white": {
-      "uk": "яєчний білок",
-      "en": "egg white",
-      "es": "clara de huevo",
-      "it": "albume",
-      "de": "Eiweiß",
-      "ru": "яичный белок"
-    },
-    "sea-bream": {
-      "uk": "дорада",
-      "en": "sea bream",
-      "es": "dorada",
-      "it": "orata",
-      "de": "Dorade",
-      "ru": "дорада"
-    },
-    "beef-short-rib": {
-      "uk": "яловичі реберця",
-      "en": "beef short rib",
-      "es": "costilla de ternera",
-      "it": "costine di manzo",
-      "de": "Rinderrippe",
-      "ru": "говяжьи рёбра"
-    },
-    "red-wine": {
-      "uk": "червоне вино",
-      "en": "red wine",
-      "es": "vino tinto",
-      "it": "vino rosso",
-      "de": "Rotwein",
-      "ru": "красное вино"
-    },
-    "white-wine": {
-      "uk": "біле вино",
-      "en": "white wine",
-      "es": "vino blanco",
-      "it": "vino bianco",
-      "de": "Weißwein",
-      "ru": "белое вино"
-    },
-    "red-wine-vinegar": {
-      "uk": "винний оцет",
-      "en": "red wine vinegar",
-      "es": "vinagre de vino",
-      "it": "aceto di vino",
-      "de": "Rotweinessig",
-      "ru": "винный уксус"
-    },
-    "honey": {
-      "uk": "мед",
-      "en": "honey",
-      "es": "miel",
-      "it": "miele",
-      "de": "Honig",
-      "ru": "мёд"
-    },
-    "fig": {
-      "uk": "інжир",
-      "en": "fig",
-      "es": "higo",
-      "it": "fico",
-      "de": "Feige",
-      "ru": "инжир"
-    },
-    "fig-syrup": {
-      "uk": "інжирний сироп",
-      "en": "fig syrup",
-      "es": "sirope de higo",
-      "it": "sciroppo di fico",
-      "de": "Feigensirup",
-      "ru": "инжирный сироп"
-    },
-    "walnut": {
-      "uk": "волоський горіх",
-      "en": "walnut",
-      "es": "nuez",
-      "it": "noce",
-      "de": "Walnuss",
-      "ru": "грецкий орех"
-    },
-    "dark-chocolate": {
-      "uk": "чорний шоколад",
-      "en": "dark chocolate",
-      "es": "chocolate negro",
-      "it": "cioccolato fondente",
-      "de": "Zartbitterschokolade",
-      "ru": "тёмный шоколад"
-    },
-    "cocoa": {
-      "uk": "какао",
-      "en": "cocoa",
-      "es": "cacao",
-      "it": "cacao",
-      "de": "Kakao",
-      "ru": "какао"
-    },
-    "soya-lecithin": {
-      "uk": "соєвий лецитин",
-      "en": "soya lecithin",
-      "es": "lecitina de soja",
-      "it": "lecitina di soia",
-      "de": "Sojalecithin",
-      "ru": "соевый лецитин"
-    },
-    "bourbon": {
-      "uk": "бурбон",
-      "en": "bourbon",
-      "es": "bourbon",
-      "it": "bourbon",
-      "de": "Bourbon",
-      "ru": "бурбон"
-    },
-    "whisky": {
+    "whiskey": {
       "uk": "віскі",
-      "en": "whisky",
+      "en": "whiskey",
       "es": "whisky",
       "it": "whisky",
-      "de": "Whisky",
+      "de": "Whiskey",
       "ru": "виски"
     },
     "gin": {
@@ -458,101 +62,261 @@
       "de": "Gin",
       "ru": "джин"
     },
-    "prosecco": {
-      "uk": "просекко",
-      "en": "prosecco",
-      "es": "prosecco",
-      "it": "prosecco",
-      "de": "Prosecco",
-      "ru": "просекко"
+    "rum": {
+      "uk": "ром",
+      "en": "rum",
+      "es": "ron",
+      "it": "rum",
+      "de": "Rum",
+      "ru": "ром"
     },
-    "angostura-bitters": {
-      "uk": "біттер ангостура",
-      "en": "Angostura bitters",
-      "es": "bíter Angostura",
-      "it": "bitter Angostura",
-      "de": "Angostura-Bitter",
-      "ru": "биттер ангостура"
+    "tequila": {
+      "uk": "текіла",
+      "en": "tequila",
+      "es": "tequila",
+      "it": "tequila",
+      "de": "Tequila",
+      "ru": "текила"
     },
-    "elderflower-cordial": {
-      "uk": "сироп бузини",
-      "en": "elderflower cordial",
-      "es": "sirope de saúco",
-      "it": "sciroppo di sambuco",
-      "de": "Holunderblütensirup",
-      "ru": "сироп бузины"
+    "brandy": {
+      "uk": "коньяк",
+      "en": "cognac",
+      "es": "coñac",
+      "it": "cognac",
+      "de": "Cognac",
+      "ru": "коньяк"
     },
-    "orange-zest": {
-      "uk": "цедра апельсина",
-      "en": "orange zest",
-      "es": "ralladura de naranja",
-      "it": "scorza d'arancia",
-      "de": "Orangenschale",
-      "ru": "цедра апельсина"
+    "grain-spirit": {
+      "uk": "зерновий спирт",
+      "en": "grain spirit",
+      "es": "alcohol de grano",
+      "it": "alcol di cereali",
+      "de": "Getreidealkohol",
+      "ru": "зерновой спирт"
     },
-    "lime-juice": {
-      "uk": "сік лайма",
-      "en": "lime juice",
-      "es": "zumo de lima",
-      "it": "succo di lime",
-      "de": "Limettensaft",
-      "ru": "сок лайма"
+    "water": {
+      "uk": "вода",
+      "en": "water",
+      "es": "agua",
+      "it": "acqua",
+      "de": "Wasser",
+      "ru": "вода"
     },
-    "basil": {
-      "uk": "базилік",
-      "en": "basil",
-      "es": "albahaca",
-      "it": "basilico",
-      "de": "Basilikum",
-      "ru": "базилик"
+    "sugar": {
+      "uk": "цукор",
+      "en": "sugar",
+      "es": "azúcar",
+      "it": "zucchero",
+      "de": "Zucker",
+      "ru": "сахар"
     },
-    "rosemary": {
-      "uk": "розмарин",
-      "en": "rosemary",
-      "es": "romero",
-      "it": "rosmarino",
-      "de": "Rosmarin",
-      "ru": "розмарин"
+    "lime": {
+      "uk": "лайм",
+      "en": "lime",
+      "es": "lima",
+      "it": "lime",
+      "de": "Limette",
+      "ru": "лайм"
     },
     "mint": {
-      "uk": "м'ята",
+      "uk": "мʼята",
       "en": "mint",
       "es": "menta",
       "it": "menta",
       "de": "Minze",
       "ru": "мята"
     },
-    "soda-water": {
-      "uk": "содова",
-      "en": "soda water",
-      "es": "agua con gas",
-      "it": "acqua frizzante",
-      "de": "Sodawasser",
-      "ru": "содовая"
+    "orange": {
+      "uk": "апельсин",
+      "en": "orange",
+      "es": "naranja",
+      "it": "arancia",
+      "de": "Orange",
+      "ru": "апельсин"
     },
-    "apple-juice": {
-      "uk": "яблучний сік",
-      "en": "apple juice",
-      "es": "zumo de manzana",
-      "it": "succo di mela",
-      "de": "Apfelsaft",
-      "ru": "яблочный сок"
+    "lemon": {
+      "uk": "лимон",
+      "en": "lemon",
+      "es": "limón",
+      "it": "limone",
+      "de": "Zitrone",
+      "ru": "лимон"
     },
-    "cinnamon": {
-      "uk": "кориця",
-      "en": "cinnamon",
-      "es": "canela",
-      "it": "cannella",
-      "de": "Zimt",
-      "ru": "корица"
+    "cranberry": {
+      "uk": "журавлина",
+      "en": "cranberry",
+      "es": "arándano rojo",
+      "it": "mirtillo rosso",
+      "de": "Cranberry",
+      "ru": "клюква"
     },
-    "ginger": {
-      "uk": "імбир",
-      "en": "ginger",
-      "es": "jengibre",
-      "it": "zenzero",
-      "de": "Ingwer",
-      "ru": "имбирь"
+    "passion-fruit": {
+      "uk": "маракуя",
+      "en": "passion fruit",
+      "es": "maracuyá",
+      "it": "frutto della passione",
+      "de": "Maracuja",
+      "ru": "маракуйя"
+    },
+    "strawberry": {
+      "uk": "полуниця",
+      "en": "strawberry",
+      "es": "fresa",
+      "it": "fragola",
+      "de": "Erdbeere",
+      "ru": "клубника"
+    },
+    "raspberry": {
+      "uk": "малина",
+      "en": "raspberry",
+      "es": "frambuesa",
+      "it": "lampone",
+      "de": "Himbeere",
+      "ru": "малина"
+    },
+    "mango": {
+      "uk": "манго",
+      "en": "mango",
+      "es": "mango",
+      "it": "mango",
+      "de": "Mango",
+      "ru": "манго"
+    },
+    "cherry": {
+      "uk": "вишня",
+      "en": "cherry",
+      "es": "cereza",
+      "it": "ciliegia",
+      "de": "Kirsche",
+      "ru": "вишня"
+    },
+    "black-currant": {
+      "uk": "чорна смородина",
+      "en": "black currant",
+      "es": "grosella negra",
+      "it": "ribes nero",
+      "de": "Schwarze Johannisbeere",
+      "ru": "чёрная смородина"
+    },
+    "vanilla": {
+      "uk": "ваніль",
+      "en": "vanilla",
+      "es": "vainilla",
+      "it": "vaniglia",
+      "de": "Vanille",
+      "ru": "ваниль"
+    },
+    "apple": {
+      "uk": "яблуко",
+      "en": "apple",
+      "es": "manzana",
+      "it": "mela",
+      "de": "Apfel",
+      "ru": "яблоко"
+    },
+    "grapes": {
+      "uk": "виноград",
+      "en": "grapes",
+      "es": "uva",
+      "it": "uva",
+      "de": "Weintrauben",
+      "ru": "виноград"
+    },
+    "sulphite-preservative": {
+      "uk": "консервант (сульфіти)",
+      "en": "sulphite preservative",
+      "es": "conservante (sulfitos)",
+      "it": "conservante (solfiti)",
+      "de": "Sulfit-Konservierung",
+      "ru": "консервант (сульфиты)"
+    },
+    "barley-malt": {
+      "uk": "ячмінний солод",
+      "en": "barley malt",
+      "es": "malta de cebada",
+      "it": "malto d'orzo",
+      "de": "Gerstenmalz",
+      "ru": "ячменный солод"
+    },
+    "maize": {
+      "uk": "кукурудза",
+      "en": "maize",
+      "es": "maíz",
+      "it": "mais",
+      "de": "Mais",
+      "ru": "кукуруза"
+    },
+    "hops": {
+      "uk": "хміль",
+      "en": "hops",
+      "es": "lúpulo",
+      "it": "luppolo",
+      "de": "Hopfen",
+      "ru": "хмель"
+    },
+    "campari-bitter": {
+      "uk": "гіркий лікер Campari",
+      "en": "Campari bitter",
+      "es": "amargo Campari",
+      "it": "bitter Campari",
+      "de": "Campari-Bitter",
+      "ru": "горький ликёр Campari"
+    },
+    "vermouth-rosso": {
+      "uk": "червоний вермут",
+      "en": "vermouth rosso",
+      "es": "vermut rosso",
+      "it": "vermouth rosso",
+      "de": "Wermut Rosso",
+      "ru": "вермут россо"
+    },
+    "aperol": {
+      "uk": "апероль",
+      "en": "Aperol",
+      "es": "Aperol",
+      "it": "Aperol",
+      "de": "Aperol",
+      "ru": "апероль"
+    },
+    "triple-sec": {
+      "uk": "апельсиновий лікер",
+      "en": "orange liqueur",
+      "es": "licor de naranja",
+      "it": "liquore all'arancia",
+      "de": "Orangenlikör",
+      "ru": "апельсиновый ликёр"
+    },
+    "cream": {
+      "uk": "вершки",
+      "en": "cream",
+      "es": "nata",
+      "it": "panna",
+      "de": "Sahne",
+      "ru": "сливки"
+    },
+    "apricot-kernel": {
+      "uk": "абрикосова кісточка",
+      "en": "apricot kernel",
+      "es": "hueso de albaricoque",
+      "it": "nocciolo di albicocca",
+      "de": "Aprikosenkern",
+      "ru": "абрикосовая косточка"
+    },
+    "herbs-spices": {
+      "uk": "трави й спеції",
+      "en": "herbs and spices",
+      "es": "hierbas y especias",
+      "it": "erbe e spezie",
+      "de": "Kräuter und Gewürze",
+      "ru": "травы и специи"
+    },
+    "coconut": {
+      "uk": "кокос",
+      "en": "coconut",
+      "es": "coco",
+      "it": "cocco",
+      "de": "Kokos",
+      "ru": "кокос"
     },
     "coffee": {
       "uk": "кава",
@@ -562,565 +326,1904 @@
       "de": "Kaffee",
       "ru": "кофе"
     },
-    "oat-milk": {
-      "uk": "вівсяне молоко",
-      "en": "oat milk",
-      "es": "bebida de avena",
-      "it": "bevanda d'avena",
-      "de": "Hafermilch",
-      "ru": "овсяное молоко"
+    "cocoa": {
+      "uk": "какао",
+      "en": "cocoa",
+      "es": "cacao",
+      "it": "cacao",
+      "de": "Kakao",
+      "ru": "какао"
     },
-    "salsa-verde": {
-      "uk": "зелений соус",
-      "en": "salsa verde",
-      "es": "salsa verde",
-      "it": "salsa verde",
-      "de": "Salsa verde",
-      "ru": "зелёный соус"
+    "milk": {
+      "uk": "молоко",
+      "en": "milk",
+      "es": "leche",
+      "it": "latte",
+      "de": "Milch",
+      "ru": "молоко"
     },
-    "dressing": {
-      "uk": "заправка",
-      "en": "dressing",
-      "es": "aliño",
-      "it": "condimento",
-      "de": "Dressing",
-      "ru": "заправка"
+    "almond-milk": {
+      "uk": "мигдалеве молоко",
+      "en": "almond milk",
+      "es": "leche de almendra",
+      "it": "latte di mandorla",
+      "de": "Mandelmilch",
+      "ru": "миндальное молоко"
     },
-    "oats": {
-      "uk": "овес",
-      "en": "oats",
-      "es": "avena",
-      "it": "avena",
-      "de": "Hafer",
-      "ru": "овёс"
+    "almonds": {
+      "uk": "мигдаль",
+      "en": "almonds",
+      "es": "almendras",
+      "it": "mandorle",
+      "de": "Mandeln",
+      "ru": "миндаль"
+    },
+    "soya-milk": {
+      "uk": "соєве молоко",
+      "en": "soya milk",
+      "es": "leche de soja",
+      "it": "latte di soia",
+      "de": "Sojamilch",
+      "ru": "соевое молоко"
+    },
+    "soya-beans": {
+      "uk": "соєві боби",
+      "en": "soya beans",
+      "es": "soja",
+      "it": "semi di soia",
+      "de": "Sojabohnen",
+      "ru": "соя"
+    },
+    "green-tea": {
+      "uk": "зелений чай",
+      "en": "green tea",
+      "es": "té verde",
+      "it": "tè verde",
+      "de": "grüner Tee",
+      "ru": "зелёный чай"
+    },
+    "black-tea": {
+      "uk": "чорний чай",
+      "en": "black tea",
+      "es": "té negro",
+      "it": "tè nero",
+      "de": "schwarzer Tee",
+      "ru": "чёрный чай"
+    },
+    "camomile": {
+      "uk": "ромашка",
+      "en": "camomile",
+      "es": "manzanilla",
+      "it": "camomilla",
+      "de": "Kamille",
+      "ru": "ромашка"
+    },
+    "berries": {
+      "uk": "ягоди",
+      "en": "berries",
+      "es": "bayas",
+      "it": "frutti di bosco",
+      "de": "Beeren",
+      "ru": "ягоды"
+    },
+    "dried-fruits": {
+      "uk": "сухофрукти",
+      "en": "dried fruits",
+      "es": "frutas secas",
+      "it": "frutta secca",
+      "de": "Trockenfrüchte",
+      "ru": "сухофрукты"
+    },
+    "honey": {
+      "uk": "мед",
+      "en": "honey",
+      "es": "miel",
+      "it": "miele",
+      "de": "Honig",
+      "ru": "мёд"
+    },
+    "caffeine": {
+      "uk": "кофеїн",
+      "en": "caffeine",
+      "es": "cafeína",
+      "it": "caffeina",
+      "de": "Koffein",
+      "ru": "кофеин"
+    },
+    "taurine": {
+      "uk": "таурин",
+      "en": "taurine",
+      "es": "taurina",
+      "it": "taurina",
+      "de": "Taurin",
+      "ru": "таурин"
     }
   },
   "items": [
     {
-      "key": "smoked-beetroot-tartare",
-      "name": "Smoked Beetroot Tartare",
-      "station": "kitchen",
-      "price_pence": 1150,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Копчений буряк із каперсами та хлібом на заквасці",
-        "en": "Smoked beetroot with capers and sourdough",
-        "es": "Remolacha ahumada con alcaparras y pan de masa madre",
-        "it": "Barbabietola affumicata con capperi e pane a lievitazione naturale",
-        "de": "Geräucherte Rote Bete mit Kapern und Sauerteigbrot",
-        "ru": "Копчёная свёкла с каперсами и хлебом на закваске"
-      },
-      "ing": [
-        "beetroot",
-        "capers",
-        "shallot",
-        "dijon-mustard",
-        "olive-oil",
-        "lemon-juice",
-        [
-          "sourdough-bread",
-          [
-            "wheat-flour",
-            "water",
-            "yeast",
-            "salt"
-          ]
-        ]
-      ],
-      "a": [
-        "mustard",
-        "cereals-gluten",
-        "sulphites"
-      ],
-      "m": [
-        "celery"
-      ],
-      "r": [
-        "mustard"
-      ],
-      "src": "official-2026-07",
-      "w": []
-    },
-    {
-      "key": "charred-octopus",
-      "name": "Charred Octopus",
-      "station": "kitchen",
-      "price_pence": 1300,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Восьминіг на грилі з зеленим соусом і картоплею",
-        "en": "Grilled octopus with salsa verde and potato",
-        "es": "Pulpo a la parrilla con salsa verde y patata",
-        "it": "Polpo alla griglia con salsa verde e patate",
-        "de": "Gegrillter Oktopus mit Salsa verde und Kartoffeln",
-        "ru": "Осьминог на гриле с зелёным соусом и картофелем"
-      },
-      "ing": [
-        "octopus",
-        [
-          "salsa-verde",
-          [
-            "parsley",
-            "capers",
-            "anchovy",
-            "olive-oil",
-            "garlic"
-          ]
-        ],
-        "potato",
-        "lemon-juice"
-      ],
-      "a": [
-        "molluscs",
-        "fish"
-      ],
-      "m": [
-        "celery",
-        "sulphites"
-      ],
-      "r": [],
-      "src": "official-2026-07",
-      "w": [
-        "shared-grill"
-      ]
-    },
-    {
-      "key": "wild-mushroom-arancini",
-      "name": "Wild Mushroom Arancini",
-      "station": "kitchen",
-      "price_pence": 950,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Смажені рисові кульки з лісовими грибами",
-        "en": "Fried rice balls with wild mushrooms",
-        "es": "Bolas de arroz fritas con setas silvestres",
-        "it": "Arancini fritti ai funghi di bosco",
-        "de": "Frittierte Reisbällchen mit Waldpilzen",
-        "ru": "Жареные рисовые шарики с лесными грибами"
-      },
-      "ing": [
-        "arborio-rice",
-        "wild-mushroom",
-        [
-          "vegetable-stock",
-          [
-            "celery",
-            "carrot",
-            "onion"
-          ]
-        ],
-        "parmesan",
-        "butter",
-        "whole-egg",
-        [
-          "breadcrumbs",
-          [
-            "wheat-flour",
-            "salt"
-          ]
-        ]
-      ],
-      "a": [
-        "cereals-gluten",
-        "milk",
-        "eggs",
-        "celery"
-      ],
-      "m": [
-        "tree-nuts"
-      ],
-      "r": [
-        "milk"
-      ],
-      "src": "official-2026-07",
-      "w": [
-        "shared-fryer"
-      ]
-    },
-    {
-      "key": "pan-seared-sea-bream",
-      "name": "Pan-Seared Sea Bream",
-      "station": "kitchen",
-      "price_pence": 2100,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Дорада на сковороді з фенхелем і білим вином",
-        "en": "Sea bream with fennel and white wine",
-        "es": "Dorada con hinojo y vino blanco",
-        "it": "Orata con finocchio e vino bianco",
-        "de": "Dorade mit Fenchel und Weißwein",
-        "ru": "Дорада с фенхелем и белым вином"
-      },
-      "ing": [
-        "sea-bream",
-        "fennel",
-        "white-wine",
-        "butter",
-        "lemon-juice",
-        "olive-oil"
-      ],
-      "a": [
-        "fish",
-        "milk",
-        "sulphites"
-      ],
-      "m": [],
-      "r": [
-        "milk"
-      ],
-      "src": "official-2026-07",
-      "w": [
-        "shared-grill"
-      ]
-    },
-    {
-      "key": "braised-short-rib",
-      "name": "Braised Short Rib",
-      "station": "kitchen",
-      "price_pence": 2450,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Яловичі реберця, тушковані в червоному вині",
-        "en": "Beef short rib braised in red wine",
-        "es": "Costilla de ternera estofada en vino tinto",
-        "it": "Costine di manzo brasate al vino rosso",
-        "de": "In Rotwein geschmorte Rinderrippe",
-        "ru": "Говяжьи рёбра, тушённые в красном вине"
-      },
-      "ing": [
-        "beef-short-rib",
-        "red-wine",
-        [
-          "beef-stock",
-          [
-            "celery",
-            "carrot",
-            "onion"
-          ]
-        ],
-        "plain-flour",
-        "double-cream",
-        "potato"
-      ],
-      "a": [
-        "celery",
-        "sulphites",
-        "cereals-gluten",
-        "milk"
-      ],
-      "m": [
-        "mustard"
-      ],
-      "r": [
-        "milk"
-      ],
-      "src": "official-2026-07",
-      "w": []
-    },
-    {
-      "key": "fig-walnut-salad",
-      "name": "Fig & Walnut Salad",
-      "station": "kitchen",
-      "price_pence": 1050,
-      "orderable": true,
-      "state": "soon",
-      "opens_at": "2026-09-01T12:00:00",
-      "desc": {
-        "uk": "Інжир, волоські горіхи, козячий сир і рукола",
-        "en": "Fig, walnut, goat cheese and rocket",
-        "es": "Higo, nuez, queso de cabra y rúcula",
-        "it": "Fico, noci, formaggio di capra e rucola",
-        "de": "Feige, Walnuss, Ziegenkäse und Rucola",
-        "ru": "Инжир, грецкий орех, козий сыр и руккола"
-      },
-      "ing": [
-        "fig",
-        "walnut",
-        "goat-cheese",
-        "rocket",
-        [
-          "dressing",
-          [
-            "dijon-mustard",
-            "olive-oil",
-            "red-wine-vinegar",
-            "honey"
-          ]
-        ]
-      ],
-      "a": [
-        "tree-nuts",
-        "milk",
-        "mustard",
-        "sulphites"
-      ],
-      "m": [],
-      "r": [
-        "milk",
-        "tree-nuts"
-      ],
-      "src": "official-2026-07",
-      "w": []
-    },
-    {
-      "key": "dark-chocolate-tart",
-      "name": "Dark Chocolate Tart",
-      "station": "kitchen",
-      "price_pence": 850,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Тарт із чорного шоколаду з вершками",
-        "en": "Dark chocolate tart with cream",
-        "es": "Tarta de chocolate negro con nata",
-        "it": "Crostata al cioccolato fondente con panna",
-        "de": "Zartbitterschokoladentarte mit Sahne",
-        "ru": "Тарт из тёмного шоколада со сливками"
-      },
-      "ing": [
-        [
-          "dark-chocolate",
-          [
-            "cocoa",
-            "sugar",
-            "soya-lecithin"
-          ]
-        ],
-        "butter",
-        "whole-egg",
-        "plain-flour",
-        "double-cream"
-      ],
-      "a": [
-        "milk",
-        "eggs",
-        "cereals-gluten",
-        "soya"
-      ],
-      "m": [
-        "tree-nuts",
-        "peanuts"
-      ],
-      "r": [],
-      "src": "reconstructed",
-      "w": []
-    },
-    {
-      "key": "copper-fig-old-fashioned",
-      "name": "Copper Fig Old Fashioned",
+      "key": "absolut",
+      "name": "Absolut",
       "station": "bar",
       "price_pence": 1300,
-      "orderable": false,
-      "orderable_reason": "alcohol-age-check",
+      "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Бурбон, інжирний сироп, біттер, цедра апельсина",
-        "en": "Bourbon, fig syrup, bitters, orange zest",
-        "es": "Bourbon, sirope de higo, bíter, ralladura de naranja",
-        "it": "Bourbon, sciroppo di fico, bitter, scorza d'arancia",
-        "de": "Bourbon, Feigensirup, Bitter, Orangenschale",
-        "ru": "Бурбон, инжирный сироп, биттер, цедра апельсина"
+        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
-        "bourbon",
-        "fig-syrup",
-        "angostura-bitters",
-        "orange-zest"
+        "grain-spirit",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "stoli",
+      "name": "Stoli",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "grain-spirit",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "grey-goose",
+      "name": "Grey Goose",
+      "station": "bar",
+      "price_pence": 26000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "grain-spirit",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "beluga",
+      "name": "Beluga",
+      "station": "bar",
+      "price_pence": 26000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Vodka · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Vodka · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Wodka · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "grain-spirit",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "jack-daniels",
+      "name": "Jack Daniel's",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "barley-malt",
+        "maize",
+        "water"
+      ],
+      "a": [
+        "cereals-gluten"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "black-label",
+      "name": "Johnnie Walker Black Label",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "barley-malt",
+        "water"
+      ],
+      "a": [
+        "cereals-gluten"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "jameson",
+      "name": "Jameson",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Whisky · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Whisky · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Whiskey · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "barley-malt",
+        "water"
+      ],
+      "a": [
+        "cereals-gluten"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bombay",
+      "name": "Bombay",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Джин · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Gin · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Ginebra · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Gin · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Gin · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Джин · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "grain-spirit",
+        "herbs-spices",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "havana-club",
+      "name": "Havana Club",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Ром · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Rum · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Ron · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Rum · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Rum · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Ром · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "sugar",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bacardi",
+      "name": "Bacardi",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Ром · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Rum · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Ron · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Rum · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Rum · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Ром · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "sugar",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            },
+            {
+              "key": "premium",
+              "name": "Bottle (Premium)",
+              "price_pence": 26000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "olmeca",
+      "name": "Olmeca",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Текіла · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Tequila · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Tequila · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Tequila · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Tequila · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Текила · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 20000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "patron-silver",
+      "name": "Patron Silver",
+      "station": "bar",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Текіла · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Tequila · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Tequila · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Tequila · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Tequila · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Текила · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 27000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hennessy",
+      "name": "Hennessy",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Коньяк · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Cognac · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Coñac · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Cognac · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Cognac · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Коньяк · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "grapes",
+        "water"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "disaronno",
+      "name": "Disaronno Amaretto",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Мигдалевий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Amaretto liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Licor de amaretto · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Liquore amaretto · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Amaretto-Likör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Миндальный ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "sugar",
+        "apricot-kernel",
+        "water"
       ],
       "a": [],
       "m": [
-        "cereals-gluten"
+        "tree-nuts"
       ],
       "r": [],
       "src": "reconstructed",
-      "w": []
-    },
-    {
-      "key": "smoked-rosemary-sour",
-      "name": "Smoked Rosemary Sour",
-      "station": "bar",
-      "price_pence": 1250,
-      "orderable": false,
-      "orderable_reason": "alcohol-age-check",
-      "state": "available",
-      "desc": {
-        "uk": "Віскі, лимон, яєчний білок, розмарин",
-        "en": "Whisky, lemon, egg white, rosemary",
-        "es": "Whisky, limón, clara de huevo, romero",
-        "it": "Whisky, limone, albume, rosmarino",
-        "de": "Whisky, Zitrone, Eiweiß, Rosmarin",
-        "ru": "Виски, лимон, яичный белок, розмарин"
-      },
-      "ing": [
-        "whisky",
-        "lemon-juice",
-        "egg-white",
-        "rosemary",
-        "sugar"
-      ],
-      "a": [
-        "eggs"
-      ],
-      "m": [
-        "cereals-gluten"
-      ],
-      "r": [],
-      "src": "official-2026-07",
       "w": [
-        "raw-egg"
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
       ]
     },
     {
-      "key": "elderflower-spritz",
-      "name": "Elderflower Spritz",
+      "key": "baileys",
+      "name": "Baileys",
       "station": "bar",
-      "price_pence": 1100,
-      "orderable": false,
-      "orderable_reason": "alcohol-age-check",
+      "price_pence": 1300,
+      "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Просекко, сироп бузини, содова, м'ята",
-        "en": "Prosecco, elderflower, soda, mint",
-        "es": "Prosecco, saúco, soda, menta",
-        "it": "Prosecco, sambuco, soda, menta",
-        "de": "Prosecco, Holunderblüte, Soda, Minze",
-        "ru": "Просекко, бузина, содовая, мята"
+        "uk": "Вершковий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Cream liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Licor de crema · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Liquore alla crema · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Sahnelikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Сливочный ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
       },
       "ing": [
-        "prosecco",
-        "elderflower-cordial",
-        "soda-water",
-        "mint"
+        "cream",
+        "whiskey",
+        "sugar",
+        "cocoa"
+      ],
+      "a": [
+        "milk"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "jagermeister",
+      "name": "Jägermeister",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Трав'яний лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Herbal liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Licor de hierbas · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Liquore alle erbe · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Kräuterlikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Травяной ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "herbs-spices",
+        "sugar",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "malibu",
+      "name": "Malibu",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Кокосовий лікер · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
+        "en": "Coconut liqueur · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
+        "es": "Licor de coco · Refresco para licores £3. El precio de la botella incluye dos a elegir.",
+        "it": "Liquore al cocco · Mixer per i distillati £3. Il prezzo della bottiglia include due mixer a scelta.",
+        "de": "Kokoslikör · Mixer für Spirituosen £3. Der Flaschenpreis enthält zwei Mixer nach Wahl.",
+        "ru": "Кокосовый ликёр · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
+      },
+      "ing": [
+        "rum",
+        "coconut",
+        "sugar"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 23000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "nalivka",
+      "name": "Nalivka",
+      "station": "bar",
+      "price_pence": 900,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Настоянка на ягодах і фруктах",
+        "en": "Fruit and berry infusion",
+        "es": "Infusión de frutas y bayas",
+        "it": "Infuso di frutta e bacche",
+        "de": "Frucht- und Beerenaufguss",
+        "ru": "Настойка на ягодах и фруктах"
+      },
+      "ing": [
+        "grain-spirit",
+        "sugar",
+        "berries"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "single",
+              "name": "50 ml",
+              "price_pence": 900
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 8000
+            }
+          ]
+        },
+        {
+          "key": "flavour",
+          "label": "opt.flavour",
+          "choices": [
+            {
+              "key": "citrus",
+              "name": "Citrus"
+            },
+            {
+              "key": "cherry",
+              "name": "Cherry"
+            },
+            {
+              "key": "strawberry",
+              "name": "Strawberry"
+            },
+            {
+              "key": "raspberry",
+              "name": "Raspberry"
+            },
+            {
+              "key": "black-currant",
+              "name": "Black Currant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "aperol-spritz",
+      "name": "Aperol Spritz",
+      "station": "bar",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Апероль, просекко, свіжий апельсин",
+        "en": "Aperol, prosecco, fresh orange",
+        "es": "Aperol, prosecco, naranja fresca",
+        "it": "Aperol, prosecco, arancia fresca",
+        "de": "Aperol, Prosecco, frische Orange",
+        "ru": "Апероль, просекко, свежий апельсин"
+      },
+      "ing": [
+        "aperol",
+        "grapes",
+        "orange"
       ],
       "a": [
         "sulphites"
       ],
       "m": [],
       "r": [],
-      "src": "official-2026-07",
-      "w": []
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
     },
     {
-      "key": "basil-garden-gimlet",
-      "name": "Basil Garden Gimlet",
+      "key": "porn-star-martini",
+      "name": "Porn Star Martini",
       "station": "bar",
-      "price_pence": 1200,
-      "orderable": false,
-      "orderable_reason": "alcohol-age-check",
-      "state": "86",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
       "desc": {
-        "uk": "Джин, базилік, лайм, цукровий сироп",
-        "en": "Gin, basil, lime, sugar syrup",
-        "es": "Ginebra, albahaca, lima, sirope",
-        "it": "Gin, basilico, lime, sciroppo di zucchero",
-        "de": "Gin, Basilikum, Limette, Zuckersirup",
-        "ru": "Джин, базилик, лайм, сахарный сироп"
+        "uk": "Маракуя, ванільна горілка, просекко",
+        "en": "Passion fruit, vanilla vodka, prosecco",
+        "es": "Maracuyá, vodka de vainilla, prosecco",
+        "it": "Frutto della passione, vodka alla vaniglia, prosecco",
+        "de": "Maracuja, Vanillewodka, Prosecco",
+        "ru": "Маракуйя, ванильная водка, просекко"
+      },
+      "ing": [
+        "passion-fruit",
+        "vodka",
+        "vanilla",
+        "grapes"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
+    },
+    {
+      "key": "negroni",
+      "name": "Negroni",
+      "station": "bar",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Джин, червоний вермут, Campari, апельсин",
+        "en": "Gin, vermouth rosso, Campari, orange",
+        "es": "Ginebra, vermut rosso, Campari, naranja",
+        "it": "Gin, vermouth rosso, Campari, arancia",
+        "de": "Gin, Wermut Rosso, Campari, Orange",
+        "ru": "Джин, вермут россо, Campari, апельсин"
       },
       "ing": [
         "gin",
-        "basil",
-        "lime-juice",
-        "sugar"
+        "vermouth-rosso",
+        "campari-bitter",
+        "orange"
       ],
-      "a": [],
+      "a": [
+        "sulphites"
+      ],
       "m": [],
       "r": [],
-      "src": "official-2026-07",
-      "w": []
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
     },
     {
-      "key": "house-lemonade",
-      "name": "House Lemonade",
+      "key": "mojito",
+      "name": "Mojito",
       "station": "bar",
-      "price_pence": 450,
+      "price_pence": 1600,
       "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Домашній лимонад із м'ятою",
-        "en": "House lemonade with mint",
-        "es": "Limonada de la casa con menta",
-        "it": "Limonata della casa con menta",
-        "de": "Hausgemachte Limonade mit Minze",
-        "ru": "Домашний лимонад с мятой"
+        "uk": "Ром, цукор, лайм, мʼята",
+        "en": "Rum, sugar, lime, mint",
+        "es": "Ron, azúcar, lima, menta",
+        "it": "Rum, zucchero, lime, menta",
+        "de": "Rum, Zucker, Limette, Minze",
+        "ru": "Ром, сахар, лайм, мята"
       },
       "ing": [
-        "lemon-juice",
+        "rum",
         "sugar",
-        "water",
+        "lime",
         "mint"
       ],
       "a": [],
       "m": [],
       "r": [],
-      "src": "official-2026-07",
-      "w": []
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "flavour",
+          "label": "opt.flavour",
+          "choices": [
+            {
+              "key": "classic",
+              "name": "Classic"
+            },
+            {
+              "key": "strawberry",
+              "name": "Strawberry"
+            },
+            {
+              "key": "raspberry",
+              "name": "Raspberry"
+            },
+            {
+              "key": "passion",
+              "name": "Passion"
+            },
+            {
+              "key": "mango",
+              "name": "Mango"
+            }
+          ]
+        }
+      ]
     },
     {
-      "key": "spiced-apple-cooler",
-      "name": "Spiced Apple Cooler",
+      "key": "cosmopolitan",
+      "name": "Cosmopolitan",
+      "station": "bar",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Горілка, Cointreau, журавлина, лайм",
+        "en": "Vodka, Cointreau, cranberry juice, lime",
+        "es": "Vodka, Cointreau, arándano rojo, lima",
+        "it": "Vodka, Cointreau, mirtillo rosso, lime",
+        "de": "Wodka, Cointreau, Cranberry, Limette",
+        "ru": "Водка, Cointreau, клюква, лайм"
+      },
+      "ing": [
+        "vodka",
+        "triple-sec",
+        "cranberry",
+        "lime"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
+    },
+    {
+      "key": "margarita",
+      "name": "Margarita",
+      "station": "bar",
+      "price_pence": 1600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Текіла, трипл сек, лайм",
+        "en": "Tequila, triple sec, lime",
+        "es": "Tequila, triple sec, lima",
+        "it": "Tequila, triple sec, lime",
+        "de": "Tequila, Triple Sec, Limette",
+        "ru": "Текила, трипл сек, лайм"
+      },
+      "ing": [
+        "tequila",
+        "triple-sec",
+        "lime"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "serve",
+          "label": "opt.serve",
+          "choices": [
+            {
+              "key": "martini",
+              "name": "Martini"
+            },
+            {
+              "key": "crushed",
+              "name": "Crushed Ice"
+            }
+          ]
+        },
+        {
+          "key": "flavour",
+          "label": "opt.flavour",
+          "choices": [
+            {
+              "key": "classic",
+              "name": "Classic"
+            },
+            {
+              "key": "strawberry",
+              "name": "Strawberry"
+            },
+            {
+              "key": "raspberry",
+              "name": "Raspberry"
+            },
+            {
+              "key": "passion",
+              "name": "Passion"
+            },
+            {
+              "key": "mango",
+              "name": "Mango"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "corona",
+      "name": "Corona",
+      "station": "bar",
+      "price_pence": 800,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Світле лагер-пиво",
+        "en": "Lager beer",
+        "es": "Cerveza lager",
+        "it": "Birra lager",
+        "de": "Lagerbier",
+        "ru": "Светлое лагер-пиво"
+      },
+      "ing": [
+        "water",
+        "barley-malt",
+        "maize",
+        "hops"
+      ],
+      "a": [
+        "cereals-gluten"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
+    },
+    {
+      "key": "soft-drink",
+      "name": "Soft Drinks / Juices",
       "station": "bar",
       "price_pence": 500,
       "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Яблучний сік, кориця, імбир, содова",
-        "en": "Apple juice, cinnamon, ginger, soda",
-        "es": "Zumo de manzana, canela, jengibre, soda",
-        "it": "Succo di mela, cannella, zenzero, soda",
-        "de": "Apfelsaft, Zimt, Ingwer, Soda",
-        "ru": "Яблочный сок, корица, имбирь, содовая"
+        "uk": "Газовані напої та соки",
+        "en": "Fizzy drinks and juices",
+        "es": "Refrescos y zumos",
+        "it": "Bibite e succhi",
+        "de": "Erfrischungsgetränke und Säfte",
+        "ru": "Газированные напитки и соки"
       },
       "ing": [
-        "apple-juice",
-        "cinnamon",
-        "ginger",
-        "soda-water"
+        "water",
+        "sugar"
       ],
       "a": [],
-      "m": [
-        "sulphites"
-      ],
+      "m": [],
       "r": [],
-      "src": "official-2026-07",
-      "w": []
+      "src": "reconstructed",
+      "w": [],
+      "options": [
+        {
+          "key": "kind",
+          "label": "opt.kind",
+          "choices": [
+            {
+              "key": "cola",
+              "name": "Cola"
+            },
+            {
+              "key": "sprite",
+              "name": "Sprite"
+            },
+            {
+              "key": "fanta",
+              "name": "Fanta"
+            },
+            {
+              "key": "orange",
+              "name": "Orange Juice"
+            },
+            {
+              "key": "apple",
+              "name": "Apple Juice"
+            },
+            {
+              "key": "cranberry",
+              "name": "Cranberry Juice"
+            },
+            {
+              "key": "red-bull",
+              "name": "Red Bull"
+            }
+          ]
+        }
+      ]
     },
     {
-      "key": "oat-cold-brew",
-      "name": "Oat Cold Brew",
+      "key": "white-wine",
+      "name": "White Wine",
       "station": "bar",
-      "price_pence": 475,
+      "price_pence": 1300,
       "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Холодна кава з вівсяним молоком",
-        "en": "Cold brew coffee with oat milk",
-        "es": "Café cold brew con bebida de avena",
-        "it": "Caffè cold brew con bevanda d'avena",
-        "de": "Cold Brew mit Hafermilch",
-        "ru": "Холодный кофе с овсяным молоком"
+        "uk": "Біле вино",
+        "en": "White wine",
+        "es": "Vino blanco",
+        "it": "Vino bianco",
+        "de": "Weißwein",
+        "ru": "Белое вино"
       },
       "ing": [
-        "coffee",
-        [
-          "oat-milk",
-          [
-            "oats",
-            "water"
-          ]
-        ]
+        "grapes",
+        "sulphite-preservative"
       ],
       "a": [
-        "cereals-gluten"
+        "sulphites"
       ],
       "m": [],
       "r": [],
-      "src": "official-2026-07",
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "glass",
+              "name": "Glass 175 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 8000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "red-wine",
+      "name": "Red Wine",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Червоне вино",
+        "en": "Red wine",
+        "es": "Vino tinto",
+        "it": "Vino rosso",
+        "de": "Rotwein",
+        "ru": "Красное вино"
+      },
+      "ing": [
+        "grapes",
+        "sulphite-preservative"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "glass",
+              "name": "Glass 175 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 8000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "prosecco",
+      "name": "Prosecco",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Італійське ігристе",
+        "en": "Italian sparkling",
+        "es": "Espumoso italiano",
+        "it": "Spumante italiano",
+        "de": "Italienischer Schaumwein",
+        "ru": "Итальянское игристое"
+      },
+      "ing": [
+        "grapes",
+        "sulphite-preservative"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "glass",
+              "name": "Glass 175 ml",
+              "price_pence": 1300
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 8000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "champagne-moet",
+      "name": "Moët & Chandon",
+      "station": "bar",
+      "price_pence": 2500,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Шампанське",
+        "en": "Champagne",
+        "es": "Champán",
+        "it": "Champagne",
+        "de": "Champagner",
+        "ru": "Шампанское"
+      },
+      "ing": [
+        "grapes",
+        "sulphite-preservative"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ],
+      "options": [
+        {
+          "key": "size",
+          "label": "opt.size",
+          "choices": [
+            {
+              "key": "glass",
+              "name": "Glass 175 ml",
+              "price_pence": 2500
+            },
+            {
+              "key": "bottle",
+              "name": "Bottle",
+              "price_pence": 20000
+            }
+          ]
+        },
+        {
+          "key": "style",
+          "label": "opt.style",
+          "choices": [
+            {
+              "key": "classic",
+              "name": "Classic"
+            },
+            {
+              "key": "rose",
+              "name": "Rosé"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "dom-perignon",
+      "name": "Dom Pérignon",
+      "station": "bar",
+      "price_pence": 50000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Шампанське, лише пляшка",
+        "en": "Champagne, bottle only",
+        "es": "Champán, solo botella",
+        "it": "Champagne, solo bottiglia",
+        "de": "Champagner, nur Flasche",
+        "ru": "Шампанское, только бутылка"
+      },
+      "ing": [
+        "grapes",
+        "sulphite-preservative"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
+    },
+    {
+      "key": "ruinart",
+      "name": "Ruinart Blanc de Blancs",
+      "station": "bar",
+      "price_pence": 35000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Шампанське, лише пляшка",
+        "en": "Champagne, bottle only",
+        "es": "Champán, solo botella",
+        "it": "Champagne, solo bottiglia",
+        "de": "Champagner, nur Flasche",
+        "ru": "Шампанское, только бутылка"
+      },
+      "ing": [
+        "grapes",
+        "sulphite-preservative"
+      ],
+      "a": [
+        "sulphites"
+      ],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "age-check"
+      ]
+    },
+    {
+      "key": "tea-pot",
+      "name": "Tea Pot",
+      "station": "bar",
+      "price_pence": 1000,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Чайник чаю",
+        "en": "Pot of tea",
+        "es": "Tetera",
+        "it": "Teiera",
+        "de": "Kännchen Tee",
+        "ru": "Чайник чая"
+      },
+      "ing": [
+        "water",
+        "black-tea"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": [],
+      "options": [
+        {
+          "key": "kind",
+          "label": "opt.kind",
+          "choices": [
+            {
+              "key": "green",
+              "name": "Green"
+            },
+            {
+              "key": "black",
+              "name": "Black"
+            },
+            {
+              "key": "camomile",
+              "name": "Camomile"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "tea-pot-special",
+      "name": "Tea Pot Special",
+      "station": "bar",
+      "price_pence": 1300,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Чайник із ягодами, фруктами та медом",
+        "en": "Pot of tea with berries, fruits and honey",
+        "es": "Tetera con bayas, frutas y miel",
+        "it": "Teiera con frutti di bosco, frutta e miele",
+        "de": "Kännchen mit Beeren, Früchten und Honig",
+        "ru": "Чайник с ягодами, фруктами и мёдом"
+      },
+      "ing": [
+        "water",
+        "black-tea",
+        "berries",
+        "dried-fruits",
+        "honey"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
       "w": []
+    },
+    {
+      "key": "hot-chocolate",
+      "name": "Hot Chocolate",
+      "station": "bar",
+      "price_pence": 600,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Гарячий шоколад",
+        "en": "Hot chocolate",
+        "es": "Chocolate caliente",
+        "it": "Cioccolata calda",
+        "de": "Heiße Schokolade",
+        "ru": "Горячий шоколад"
+      },
+      "ing": [
+        "cocoa",
+        "sugar",
+        "milk"
+      ],
+      "a": [
+        "milk"
+      ],
+      "m": [
+        "tree-nuts",
+        "soya"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "allergen-by-option"
+      ],
+      "options": [
+        {
+          "key": "milk",
+          "label": "opt.milk",
+          "choices": [
+            {
+              "key": "milk",
+              "name": "Milk"
+            },
+            {
+              "key": "almond",
+              "name": "Almond"
+            },
+            {
+              "key": "soya",
+              "name": "Soya"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "espresso",
+      "name": "Black Coffee · Espresso",
+      "station": "bar",
+      "price_pence": 400,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Чорна кава",
+        "en": "Black coffee",
+        "es": "Café solo",
+        "it": "Caffè nero",
+        "de": "Schwarzer Kaffee",
+        "ru": "Чёрный кофе"
+      },
+      "ing": [
+        "coffee",
+        "water"
+      ],
+      "a": [],
+      "m": [],
+      "r": [],
+      "src": "reconstructed",
+      "w": []
+    },
+    {
+      "key": "cappuccino",
+      "name": "Cappuccino",
+      "station": "bar",
+      "price_pence": 500,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Cappuccino на молоці, мигдалевому або соєвому",
+        "en": "Cappuccino with dairy, almond or soya milk",
+        "es": "Cappuccino con leche, almendra o soja",
+        "it": "Cappuccino con latte, mandorla o soia",
+        "de": "Cappuccino mit Milch, Mandel- oder Sojamilch",
+        "ru": "Cappuccino на молоке, миндальном или соевом"
+      },
+      "ing": [
+        "coffee",
+        "water",
+        "milk"
+      ],
+      "a": [
+        "milk"
+      ],
+      "m": [
+        "tree-nuts",
+        "soya"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "allergen-by-option"
+      ],
+      "options": [
+        {
+          "key": "milk",
+          "label": "opt.milk",
+          "choices": [
+            {
+              "key": "milk",
+              "name": "Milk"
+            },
+            {
+              "key": "almond",
+              "name": "Almond"
+            },
+            {
+              "key": "soya",
+              "name": "Soya"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "latte",
+      "name": "Latte",
+      "station": "bar",
+      "price_pence": 500,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Latte на молоці, мигдалевому або соєвому",
+        "en": "Latte with dairy, almond or soya milk",
+        "es": "Latte con leche, almendra o soja",
+        "it": "Latte con latte, mandorla o soia",
+        "de": "Latte mit Milch, Mandel- oder Sojamilch",
+        "ru": "Latte на молоке, миндальном или соевом"
+      },
+      "ing": [
+        "coffee",
+        "water",
+        "milk"
+      ],
+      "a": [
+        "milk"
+      ],
+      "m": [
+        "tree-nuts",
+        "soya"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "allergen-by-option"
+      ],
+      "options": [
+        {
+          "key": "milk",
+          "label": "opt.milk",
+          "choices": [
+            {
+              "key": "milk",
+              "name": "Milk"
+            },
+            {
+              "key": "almond",
+              "name": "Almond"
+            },
+            {
+              "key": "soya",
+              "name": "Soya"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mocha",
+      "name": "Mocha",
+      "station": "bar",
+      "price_pence": 500,
+      "orderable": true,
+      "state": "available",
+      "desc": {
+        "uk": "Mocha на молоці, мигдалевому або соєвому",
+        "en": "Mocha with dairy, almond or soya milk",
+        "es": "Mocha con leche, almendra o soja",
+        "it": "Mocha con latte, mandorla o soia",
+        "de": "Mocha mit Milch, Mandel- oder Sojamilch",
+        "ru": "Mocha на молоке, миндальном или соевом"
+      },
+      "ing": [
+        "coffee",
+        "water",
+        "milk",
+        "cocoa"
+      ],
+      "a": [
+        "milk"
+      ],
+      "m": [
+        "tree-nuts",
+        "soya"
+      ],
+      "r": [],
+      "src": "reconstructed",
+      "w": [
+        "allergen-by-option"
+      ],
+      "options": [
+        {
+          "key": "milk",
+          "label": "opt.milk",
+          "choices": [
+            {
+              "key": "milk",
+              "name": "Milk"
+            },
+            {
+              "key": "almond",
+              "name": "Almond"
+            },
+            {
+              "key": "soya",
+              "name": "Soya"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

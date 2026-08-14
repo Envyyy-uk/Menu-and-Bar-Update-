@@ -60,11 +60,24 @@ def _load() -> dict[str, Any]:
 
 
 def _venue(db: Session, data: dict[str, Any]) -> Venue:
+    """Заклад у файлі — це **той самий** заклад, навіть якщо змінився ключ.
+
+    Система однозакладна, і `get_venue` бере найстаріший запис. Тому створити
+    другий заклад під новим ключем означало б тихо лишити застосунок на
+    старому меню: сідер відпрацював без помилок, а гість бачить старе. Тому
+    перейменовуємо наявний, а не заводимо сусідній — разом зі столами,
+    людьми й історією замовлень, які на нього посилаються.
+    """
     spec = data["venue"]
     venue = db.scalars(select(Venue).where(Venue.key == spec["key"])).first()
     if venue is None:
-        venue = Venue(key=spec["key"])
-        db.add(venue)
+        existing = db.scalars(select(Venue).order_by(Venue.created_at)).all()
+        if len(existing) == 1:
+            venue = existing[0]
+            venue.key = spec["key"]
+        else:
+            venue = Venue(key=spec["key"])
+            db.add(venue)
     venue.name = spec["name"]
     venue.timezone = spec["timezone"]
     venue.currency = spec["currency"]
@@ -107,6 +120,7 @@ def seed(db: Session) -> Venue:
         is_new = item.created_at is None
         item.name = spec["name"]
         item.station = spec.get("station", "kitchen")
+        item.options = spec.get("options", [])
         item.price_pence = spec.get("price_pence", 0)
         item.description = spec.get("desc", {})
         item.ingredients = spec.get("ing", [])
@@ -123,6 +137,14 @@ def seed(db: Session) -> Venue:
         if is_new:
             item.state = SEED_STATE_MAP.get(spec.get("state", "available"), "auto")
             item.opens_at = _stamp(spec.get("opens_at"))
+
+    # Позиція, якої більше немає у файлі, ховається з меню — але не
+    # видаляється: на неї посилаються старі замовлення, і чек не має попливти
+    # від того, що напій зняли з меню. Повернути її можна тим самим файлом.
+    seeded = {spec["key"] for spec in data.get("items", [])}
+    for row in db.scalars(select(MenuItem).where(MenuItem.venue_id == venue.id)).all():
+        if row.key not in seeded and row.active:
+            row.active = False
 
     for label in DEMO_TABLES:
         exists = db.scalars(

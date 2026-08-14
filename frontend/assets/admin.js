@@ -586,7 +586,8 @@ function renderOrders(mount) {
 
     const list = el('ul', 'ing');
     order.items.forEach(i => list.appendChild(el('li', null,
-      `${esc(i.name)} × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
+      `${esc(i.name)}${(i.options || []).length ? ' · ' + esc(i.options.join(' · ')) : ''}` +
+      ` × ${i.qty} · ${esc(t(i.station === 'bar' ? 'a.bar' : 'a.kitchen', LANG))}`)));
     row.appendChild(list);
     if (order.note) row.appendChild(el('p', 'ro', esc(order.note)));
 

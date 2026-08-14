@@ -67,7 +67,7 @@ with sync_playwright() as p:
     guest = browser.new_context(viewport={"width": 420, "height": 900}).new_page()
     guest.goto(f"{BASE}/t/{token}?lang=uk", wait_until="networkidle")
     guest.wait_for_selector(".add-btn")
-    guest.locator("#d-house-lemonade .add-btn").click()
+    guest.locator("#d-espresso .add-btn").click()
     guest.wait_for_timeout(200)
     guest.locator("#cartbar button").click()
     guest.wait_for_selector(".sheet")

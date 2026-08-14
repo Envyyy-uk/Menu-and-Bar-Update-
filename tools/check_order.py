@@ -73,7 +73,7 @@ with sync_playwright() as p:
     # усе меню в робочий стан
     admin.locator(".tab", has_text="Позиції").click()
     admin.wait_for_selector(".arow")
-    for name in ("House Lemonade", "Spiced Apple Cooler"):
+    for name in ("Black Coffee · Espresso", "Tea Pot Special"):
         admin.locator(".arow", has_text=name).first.locator("button", has_text="За розкладом").click()
         admin.wait_for_timeout(500)
 
@@ -98,51 +98,57 @@ with sync_playwright() as p:
     guest.goto(f"{BASE}/t/{token}?lang=uk", wait_until="networkidle")
     guest.wait_for_selector(".dish")
     guest.wait_for_selector(".add-btn")
-    check("на алкоголі кнопки немає",
-          guest.locator("#d-elderflower-spritz .add-btn").count() == 0)
+    # У PODVAL алкоголь замовляється — контроль лишається бармену при подачі
+    check("алкоголь замовляється, але попереджає про вік",
+          guest.locator("#d-mojito .add-btn").count() == 1
+          and "Алкоголь" in guest.locator("#d-mojito").inner_text(),
+          guest.locator("#d-mojito").inner_text()[:70])
+    check("позиція з варіантами веде через вибір, а не одразу в кошик",
+          guest.locator("#d-mojito .add-btn").inner_text() == "Обрати",
+          guest.locator("#d-mojito .add-btn").inner_text())
 
-    guest.locator("#d-house-lemonade .add-btn").click()
-    guest.locator("#d-house-lemonade .qty-btn").nth(1).click()
+    guest.locator("#d-espresso .add-btn").click()
+    guest.locator("#d-espresso .qty-btn").nth(1).click()
     guest.wait_for_timeout(200)
-    check("кількість рахується", guest.locator("#d-house-lemonade .qty").inner_text() == "2")
-    check("панель кошика показує суму", "£9.00" in guest.inner_text("#cartbar"),
+    check("кількість рахується", guest.locator("#d-espresso .qty").inner_text() == "2")
+    check("панель кошика показує суму", "£8.00" in guest.inner_text("#cartbar"),
           guest.inner_text("#cartbar"))
 
     # --- кошик редагується зсередини --------------------------------------
-    guest.locator("#d-oat-cold-brew .add-btn").click()
+    guest.locator("#d-corona .add-btn").click()
     guest.wait_for_timeout(200)
     guest.locator("#cartbar button").click()
     guest.wait_for_selector(".sheet")
     check("у кошику видно обидві позиції", guest.locator(".cart-list li").count() == 2,
           guest.locator(".cart-list li").count())
 
-    lemonade_line = guest.locator(".cart-list li", has_text="House Lemonade")
-    lemonade_line.locator(".qty-btn").first.click()   # −
+    coffee_line = guest.locator(".cart-list li", has_text="Black Coffee")
+    coffee_line.locator(".qty-btn").first.click()   # −
     guest.wait_for_timeout(200)
     check("кількість зменшується прямо в кошику",
-          guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty").inner_text() == "1")
-    check("сума перерахувалася", "£9.25" in guest.inner_text(".cart-total"),
+          guest.locator(".cart-list li", has_text="Black Coffee").locator(".qty").inner_text() == "1")
+    check("сума перерахувалася", "£12.00" in guest.inner_text(".cart-total"),
           guest.inner_text(".cart-total"))
 
-    guest.locator(".cart-list li", has_text="Oat Cold Brew").locator(".drop-btn").click()
+    guest.locator(".cart-list li", has_text="Corona").locator(".drop-btn").click()
     guest.wait_for_timeout(200)
     check("страву можна прибрати з кошика",
           guest.locator(".cart-list li").count() == 1, guest.locator(".cart-list li").count())
     check("картка в меню синхронізувалася",
-          guest.locator("#d-oat-cold-brew .add-btn").count() == 1)
+          guest.locator("#d-corona .add-btn").count() == 1)
 
-    guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty-btn").nth(1).click()
+    guest.locator(".cart-list li", has_text="Black Coffee").locator(".qty-btn").nth(1).click()
     guest.wait_for_timeout(200)
     check("кількість повертається назад",
-          guest.locator(".cart-list li", has_text="House Lemonade").locator(".qty").inner_text() == "2")
+          guest.locator(".cart-list li", has_text="Black Coffee").locator(".qty").inner_text() == "2")
 
     guest.locator(".sheet button.wide:not(.primary)").click()
     guest.wait_for_timeout(200)
 
     # --- позиція випала, поки кошик відкритий ------------------------------
-    guest.locator("#d-spiced-apple-cooler .add-btn").click()
+    guest.locator("#d-tea-pot-special .add-btn").click()
     guest.wait_for_timeout(200)
-    admin.locator(".arow", has_text="Spiced Apple Cooler").first.locator(
+    admin.locator(".arow", has_text="Tea Pot Special").first.locator(
         "button", has_text="Немає").click()
     admin.wait_for_timeout(1000)
 
@@ -151,7 +157,7 @@ with sync_playwright() as p:
     guest.locator(".sheet .primary.wide").click()
     guest.wait_for_selector(".dropped", timeout=15000)
     check("гість бачить, що саме випало",
-          "Spiced Apple Cooler" in guest.inner_text(".dropped"), guest.inner_text(".dropped")[:80])
+          "Tea Pot Special" in guest.inner_text(".dropped"), guest.inner_text(".dropped")[:80])
 
     # --- замовляємо решту, двічі поспіль -----------------------------------
     guest.locator(".dropped button").click()
@@ -188,8 +194,44 @@ with sync_playwright() as p:
         BASE,
     )
     check("напій пішов на бар, а не на кухню",
-          queue["bar"] == 1 and queue["kitchen"] == 0 and queue["barItems"] == ["House Lemonade"],
+          queue["bar"] == 1 and queue["kitchen"] == 0 and queue["barItems"] == ["Black Coffee · Espresso"],
           json.dumps(queue, ensure_ascii=False))
+
+    # --- варіант доїжджає до бару ------------------------------------------
+    # Головне, заради чого варіанти й з'явились: бармен має бачити, яке саме
+    # мохіто робити. «Mojito» без смаку — це загадка посеред зміни.
+    guest.locator("#cartbar button", has_text="Нове замовлення").click()
+    guest.wait_for_timeout(400)
+    guest.locator("#d-mojito .add-btn").click()
+    guest.wait_for_selector(".opt-box")
+    check("аркуш вибору відкрився", guest.locator(".opt-box .opt-btn").count() == 5,
+          guest.locator(".opt-box .opt-btn").count())
+    check("поки не обрано — додати не можна",
+          guest.locator(".opt-box .primary.wide").is_disabled())
+    guest.locator(".opt-box .opt-btn", has_text="Mango").click()
+    guest.wait_for_timeout(200)
+    check("після вибору кнопка ожила",
+          not guest.locator(".opt-box .primary.wide").is_disabled())
+    guest.locator(".opt-box .primary.wide").click()
+    guest.wait_for_timeout(300)
+
+    guest.locator("#cartbar button").click()
+    guest.wait_for_selector(".sheet .cart-list")
+    check("варіант видно в кошику", "Mango" in guest.inner_text(".cart-list"),
+          guest.inner_text(".cart-list")[:70])
+    guest.locator(".sheet .primary.wide").click()
+    guest.wait_for_timeout(3000)
+
+    made = admin.evaluate(
+        """async base => {
+             const b = await (await fetch(base + '/api/orders?station=bar')).json();
+             const last = b[b.length - 1];
+             return last.items.map(i => i.name + ' / ' + (i.options || []).join(','));
+           }""",
+        BASE,
+    )
+    check("бар бачить, яке саме мохіто робити", "Mojito / Mango" in made,
+          json.dumps(made, ensure_ascii=False))
 
     # --- перезавантаження сторінки не створює дубль ------------------------
     guest.reload(wait_until="networkidle")
@@ -225,7 +267,7 @@ with sync_playwright() as p:
     # --- прибирання ---------------------------------------------------------
     admin.locator(".tab", has_text="Позиції").click()
     admin.wait_for_selector(".arow")
-    admin.locator(".arow", has_text="Spiced Apple Cooler").first.locator(
+    admin.locator(".arow", has_text="Tea Pot Special").first.locator(
         "button", has_text="За розкладом").click()
     admin.wait_for_timeout(600)
 

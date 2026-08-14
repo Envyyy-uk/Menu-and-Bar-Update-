@@ -390,6 +390,24 @@ body:has(.cartbar:not([hidden])) { padding-bottom: 72px; }
 }
 button.wide { width: 100%; margin-top: 8px; }
 
+/* Вибір варіанта: «яке саме мохіто», «50 мл чи пляшка».
+
+   Кнопки, а не список: гість тримає телефон однією рукою, і потрапити
+   пальцем у рядок «select» на ходу складніше, ніж у кнопку. */
+.opt-label { margin: 12px 0 6px; font-size: 14px; color: var(--muted); }
+.opt-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.opt-btn {
+  padding: 9px 14px; font-size: 16px; border-radius: 999px;
+  border: 1px solid var(--rule); background: var(--paper-2); color: var(--ink);
+}
+.opt-btn.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.opt-price { margin: 14px 0 4px; text-align: right; font-size: 19px; font-weight: 600; }
+.cart-opt { color: var(--muted); }
+.kopt {
+  display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+  border: 1px solid #4a4239; color: #e6d9c2; font-size: 15px;
+}
+
 /* Оплата: гаманці зверху, картка знизу.
 
    Гаманець — це один тап, картка — двадцять секунд набирання, тож саме

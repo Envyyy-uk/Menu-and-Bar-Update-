@@ -65,7 +65,7 @@ with sync_playwright() as p:
         lambda m: errors.append(m.text) if m.type == "error" and "401" not in m.text else None,
     )
 
-    kitchen.goto(f"{BASE}/kitchen/?lang=uk", wait_until="networkidle")
+    kitchen.goto(f"{BASE}/kitchen/?station=bar&lang=uk", wait_until="networkidle")
     check("без сесії планшет просить PIN", kitchen.locator(".login input").count() == 1)
 
     # реєструємо цей планшет як пристрій і заходимо PIN-ом
@@ -100,7 +100,7 @@ with sync_playwright() as p:
     guest = browser.new_context(viewport={"width": 420, "height": 900}).new_page()
     guest.goto(f"{BASE}/t/{token}?lang=uk", wait_until="networkidle")
     guest.wait_for_selector(".add-btn")
-    guest.locator("#d-charred-octopus .add-btn").click()
+    guest.locator("#d-espresso .add-btn").click()
     guest.wait_for_timeout(200)
     guest.locator("#cartbar button").click()
     guest.wait_for_selector(".sheet")
@@ -116,17 +116,19 @@ with sync_playwright() as p:
     card = kitchen.locator(".kcard").first
     check("нове замовлення виділено", "fresh" in (card.get_attribute("class") or ""),
           card.get_attribute("class"))
-    check("на кухні видно позицію кухні", "Charred Octopus" in card.inner_text(),
+    check("на барі видно барну позицію", "Black Coffee" in card.inner_text(),
           card.inner_text()[:80])
 
-    # --- бар не бачить кухонного -------------------------------------------
-    bar = tablet.new_page()
-    bar.goto(f"{BASE}/kitchen/?station=bar&lang=uk", wait_until="networkidle")
-    bar.wait_for_selector(".kbar")
-    bar.wait_for_timeout(1500)
-    check("бар не бачить кухонної позиції",
-          "Charred Octopus" not in bar.inner_text("#board"), bar.inner_text("#board")[:60])
-    bar.close()
+    # --- кухня не бачить барного -------------------------------------------
+    # У меню PODVAL кухонних позицій немає взагалі — їжа ще «Coming Soon».
+    # Тому кухонний екран має лишатись порожнім, а не показувати чужі напої.
+    other = tablet.new_page()
+    other.goto(f"{BASE}/kitchen/?station=kitchen&lang=uk", wait_until="networkidle")
+    other.wait_for_selector(".kbar")
+    other.wait_for_timeout(1500)
+    check("кухня не бачить барної позиції",
+          "Black Coffee" not in other.inner_text("#board"), other.inner_text("#board")[:60])
+    other.close()
 
     # --- КРИТЕРІЙ: вимикаємо мережу ----------------------------------------
     kitchen.context.set_offline(True)

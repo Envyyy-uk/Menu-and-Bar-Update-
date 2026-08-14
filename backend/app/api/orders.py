@@ -51,6 +51,8 @@ LIVE_STATUSES = (STATUS_PAID, STATUS_ACCEPTED, STATUS_READY)
 class LineIn(BaseModel):
     key: str
     qty: int = Field(default=1, ge=1, le=99)
+    # Обрані варіанти: {"size": "bottle"}. Ціну за ними рахує сервер.
+    options: dict[str, str] = Field(default_factory=dict)
 
 
 class OrderIn(BaseModel):
@@ -86,7 +88,7 @@ def place_order(
             venue,
             table_token=body.table_token,
             client_token=body.client_token,
-            lines=[Line(key=i.key, qty=i.qty) for i in body.items],
+            lines=[Line(key=i.key, qty=i.qty, options=i.options) for i in body.items],
             note=body.note,
         )
     except OrderError as exc:

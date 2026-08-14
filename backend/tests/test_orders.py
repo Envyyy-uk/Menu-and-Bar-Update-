@@ -18,7 +18,38 @@ def new_client_token():
     return "ct-" + uuid.uuid4().hex
 
 
-DEFAULT_ITEMS = [{"key": "house-lemonade", "qty": 2}]
+# Позиції меню PODVAL, у яких немає варіантів: їх можна замовити одним
+# ключем. Усе, що з варіантами, тестується окремо в test_options.py.
+PLAIN = "espresso"            # Black Coffee · Espresso, £4, бар
+PLAIN_2 = "tea-pot-special"   # £13, бар
+
+DEFAULT_ITEMS = [{"key": PLAIN, "qty": 2}]
+
+
+def to_kitchen(client, db, key=PLAIN_2):
+    """Переводить позицію на кухню й повертає її ключ.
+
+    У меню PODVAL кухонних позицій немає — їжа ще «Coming Soon», усе йде на
+    бар. Але розділення станцій — робоча поведінка, і перевіряти її треба.
+    Тому тест сам створює собі другу станцію, замість того щоб залежати від
+    того, що колись опинилось у сідері.
+    """
+    from tests.test_permissions import as_owner as _owner
+
+    _owner(client)
+    item = db.scalars(select(MenuItem).where(MenuItem.key == key)).one()
+    client.patch(f"/api/admin/items/{item.id}", json={"station": "kitchen"})
+    client.post("/api/auth/logout")
+    return key
+
+
+def back_to_bar(client, db, key=PLAIN_2):
+    from tests.test_permissions import as_owner as _owner
+
+    _owner(client)
+    item = db.scalars(select(MenuItem).where(MenuItem.key == key)).one()
+    client.patch(f"/api/admin/items/{item.id}", json={"station": "bar"})
+    client.post("/api/auth/logout")
 
 
 def place(client, db, items=None, client_token=None, note=None):
@@ -74,12 +105,12 @@ def test_different_tokens_make_different_orders(client, db, venue):
 
 def test_prices_and_names_are_snapshotted(client, db, venue):
     """Меню зміниться — історія не попливе."""
-    order = place(client, db, items=[{"key": "house-lemonade", "qty": 2}]).json()
-    assert order["items"][0]["name"] == "House Lemonade"
+    order = place(client, db, items=[{"key": PLAIN, "qty": 2}]).json()
+    assert order["items"][0]["name"] == "Black Coffee · Espresso"
     assert order["total_pence"] == order["items"][0]["unit_price_pence"] * 2
 
     as_owner(client)
-    item = db.scalars(select(MenuItem).where(MenuItem.key == "house-lemonade")).one()
+    item = db.scalars(select(MenuItem).where(MenuItem.key == PLAIN)).one()
     old_price = item.price_pence
     client.patch(f"/api/admin/items/{item.id}", json={"price_pence": old_price + 500})
 
@@ -95,7 +126,7 @@ def test_unknown_table_is_refused(client, db, venue):
         json={
             "table_token": "not-a-real-token",
             "client_token": new_client_token(),
-            "items": [{"key": "house-lemonade", "qty": 1}],
+            "items": [{"key": PLAIN, "qty": 1}],
         },
     )
     assert r.status_code == 404
@@ -108,22 +139,26 @@ def test_empty_order_is_refused(client, db, venue):
 # ------------------------------------------------------- межа v1: алкоголь -
 
 
-def test_alcohol_cannot_be_ordered(client, db, venue):
-    """Позиції видно в меню, але вони не замовляються: вік перевіряють при
-    подачі. Межа зашита в дані, а не в код."""
-    r = place(client, db, items=[{"key": "elderflower-spritz", "qty": 1}])
-    assert r.status_code == 409
-    problems = r.json()["detail"]["unavailable"]
-    assert problems[0]["reason"] == "alcohol-age-check"
+def test_alcohol_is_orderable_but_carries_an_age_warning(client, db, venue):
+    """PODVAL — бар: якби алкоголь не замовлявся, застосунок був би меню для
+    читання. Контроль лишається там, де він і був — бармен перевіряє документ
+    при подачі, а гість бачить це попередження ще в меню."""
+    r = place(client, db, items=[{"key": "mojito", "qty": 1, "options": {"flavour": "classic"}}])
+    assert r.status_code == 201
+
+    menu = client.get("/api/menu").json()
+    mojito = next(i for i in menu["items"] if i["key"] == "mojito")
+    assert "age-check" in mojito["w"]
+    assert menu["warnings"]["age-check"]["uk"].startswith("Алкоголь")
 
 
 def test_86_item_cannot_be_ordered(client, db, venue):
     as_owner(client)
-    item = db.scalars(select(MenuItem).where(MenuItem.key == "spiced-apple-cooler")).one()
+    item = db.scalars(select(MenuItem).where(MenuItem.key == PLAIN_2)).one()
     client.patch(f"/api/admin/items/{item.id}", json={"state": "off"})
     client.post("/api/auth/logout")
 
-    r = place(client, db, items=[{"key": "spiced-apple-cooler", "qty": 1}])
+    r = place(client, db, items=[{"key": PLAIN_2, "qty": 1}])
     assert r.status_code == 409
     assert r.json()["detail"]["unavailable"][0]["reason"] == "sold_out"
 
@@ -136,16 +171,16 @@ def test_availability_is_checked_again_at_payment(client, db, venue):
     """Позицію можуть вимкнути, поки гість тримає її в кошику. Оплата тоді
     не проводиться, і гість бачить, що саме випало."""
     ct = new_client_token()
-    order = place(client, db, items=[{"key": "oat-cold-brew", "qty": 1}], client_token=ct).json()
+    order = place(client, db, items=[{"key": PLAIN_2, "qty": 1}], client_token=ct).json()
 
     as_owner(client)
-    item = db.scalars(select(MenuItem).where(MenuItem.key == "oat-cold-brew")).one()
+    item = db.scalars(select(MenuItem).where(MenuItem.key == PLAIN_2)).one()
     client.patch(f"/api/admin/items/{item.id}", json={"state": "off"})
     client.post("/api/auth/logout")
 
     r = client.post(f"/api/orders/{order['id']}/checkout", params={"client_token": ct})
     assert r.status_code == 409
-    assert r.json()["detail"]["unavailable"][0]["name"] == "Oat Cold Brew"
+    assert r.json()["detail"]["unavailable"][0]["name"] == "Tea Pot Special"
 
     db.expire_all()
     assert db.get(Order, uuid.UUID(order["id"])).status == "draft"
@@ -228,14 +263,15 @@ def test_order_reaches_the_queue_only_after_paid(client, db, venue):
 
 
 def test_queue_splits_kitchen_and_bar(client, db, venue):
-    """Кухня не має бачити коктейлі, бар — стейки.
+    """Кухня не має бачити те, що робить бар, і навпаки.
 
     Черга станції складається з марок, тож звіряємось за `order_id`.
     """
+    food = to_kitchen(client, db)
     order, _ = paid_order(
         client,
         db,
-        items=[{"key": "charred-octopus", "qty": 1}, {"key": "house-lemonade", "qty": 1}],
+        items=[{"key": food, "qty": 1}, {"key": PLAIN, "qty": 1}],
     )
     as_staff(client)
 
@@ -244,10 +280,13 @@ def test_queue_splits_kitchen_and_bar(client, db, venue):
     bar = next(o for o in client.get("/api/orders", params={"station": "bar"}).json()
                if o["order_id"] == order["id"])
 
-    assert [i["name"] for i in kitchen["items"]] == ["Charred Octopus"]
-    assert [i["name"] for i in bar["items"]] == ["House Lemonade"]
+    assert [i["name"] for i in kitchen["items"]] == ["Tea Pot Special"]
+    assert [i["name"] for i in bar["items"]] == ["Black Coffee · Espresso"]
     # сума лишається сумою всього замовлення — це один чек, а не два
     assert kitchen["total_pence"] == bar["total_pence"] == order["total_pence"]
+
+    client.post("/api/auth/logout")
+    back_to_bar(client, db)
 
 
 def test_queue_needs_a_session(client, db, venue):

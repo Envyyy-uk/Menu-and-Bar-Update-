@@ -112,7 +112,10 @@ function card(order) {
   const list = el('ul', 'kitems');
   order.items.forEach(i => {
     const li = el('li');
-    li.innerHTML = `<b>${i.qty}×</b> ${esc(i.name)}`;
+    // Варіант — не прикраса: без нього бармен не знає, яке саме мохіто
+    const opts = (i.options || []).join(' · ');
+    li.innerHTML = `<b>${i.qty}×</b> ${esc(i.name)}` +
+      (opts ? ` <span class="kopt">${esc(opts)}</span>` : '');
     list.appendChild(li);
   });
   box.appendChild(list);

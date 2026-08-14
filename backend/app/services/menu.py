@@ -43,6 +43,9 @@ def item_payload(
         "name": item.name,
         "station": item.station,
         "price_pence": item.price_pence,
+        # Варіанти: «50 мл чи пляшка», «яке мохіто». Ціну за ними
+        # рахує сервер — фронт лише запитує вибір.
+        "options": item.options or [],
         "desc": item.description,
         "ing": item.ingredients,
         "a": item.allergens_a,

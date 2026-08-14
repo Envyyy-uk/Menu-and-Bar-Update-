@@ -50,6 +50,48 @@ class OrderError(Exception):
 class Line:
     key: str
     qty: int
+    # Обрані варіанти: {"size": "bottle", "flavour": "mango"}
+    options: dict[str, str] | None = None
+
+
+def resolve_options(item: MenuItem, chosen: dict[str, str] | None) -> tuple[int, list[str]]:
+    """Ціна з урахуванням варіантів і їхні назви для марки.
+
+    Рахує сервер, а не браузер: інакше «пляшку за ціною чарки» можна було б
+    замовити, підмінивши один рядок у запиті.
+
+    `price_pence` варіанта **замінює** ціну позиції (50 мл проти пляшки),
+    `add_pence` — додається (мікс до міцного). Обов'язкову групу пропустити
+    не можна: «Мохіто» без смаку — це не замовлення, а загадка для бармена.
+    """
+    groups = item.options or []
+    chosen = chosen or {}
+
+    unknown = set(chosen) - {g["key"] for g in groups}
+    if unknown:
+        raise OrderError(f"невідомий варіант: {', '.join(sorted(unknown))}", status=422)
+
+    price = item.price_pence
+    add = 0
+    names: list[str] = []
+    for group in groups:
+        picked = chosen.get(group["key"])
+        if picked is None:
+            raise OrderError(
+                f"не обрано: {group['key']}",
+                status=422,
+                payload={"missing_option": group["key"], "item": item.key},
+            )
+        choice = next((c for c in group["choices"] if c["key"] == picked), None)
+        if choice is None:
+            raise OrderError(
+                f"невідомий вибір: {group['key']}={picked}", status=422
+            )
+        if choice.get("price_pence") is not None:
+            price = int(choice["price_pence"])
+        add += int(choice.get("add_pence") or 0)
+        names.append(choice["name"])
+    return price + add, names
 
 
 def _table(db: Session, venue: Venue, token: str) -> Table:
@@ -166,13 +208,15 @@ def create_order(
     for line in lines:
         item = items[line.key]
         qty = max(1, min(line.qty, 99))
-        total += item.price_pence * qty
+        unit, option_names = resolve_options(item, line.options)
+        total += unit * qty
         # Знімок на момент замовлення: меню зміниться — історія не попливе.
         order.items.append(
             OrderItem(
                 menu_item_id=item.id,
                 qty=qty,
-                unit_price_pence=item.price_pence,
+                options_snapshot=option_names,
+                unit_price_pence=unit,
                 name_snapshot=item.name,
                 station_snapshot=item.station,
             )
@@ -307,6 +351,8 @@ def ticket_payload(order: Order, ticket: OrderTicket, table_label: str | None) -
                 "qty": i.qty,
                 "unit_price_pence": i.unit_price_pence,
                 "station": i.station_snapshot,
+                # Без цього на марці «Мохіто» — і бармен не знає, яке саме
+                "options": list(i.options_snapshot or []),
             }
             for i in order.items
             if i.station_snapshot == ticket.station
@@ -332,6 +378,7 @@ def order_payload(order: Order, table_label: str | None = None) -> dict[str, Any
                 "qty": i.qty,
                 "unit_price_pence": i.unit_price_pence,
                 "station": i.station_snapshot,
+                "options": list(i.options_snapshot or []),
             }
             for i in order.items
         ],

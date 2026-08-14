@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PgUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -105,6 +106,12 @@ class OrderItem(UUIDPk, Base):
     unit_price_pence: Mapped[int] = mapped_column(Integer, default=0)
     name_snapshot: Mapped[str] = mapped_column(String(200), default="")
     station_snapshot: Mapped[str] = mapped_column(String(10), default="kitchen")
+    # Обрані варіанти як текст на момент замовлення: ["Bottle", "Strawberry"].
+    # Саме це читає бармен на марці — і саме це не має попливти, якщо завтра
+    # смак перейменують.
+    options_snapshot: Mapped[list[str]] = mapped_column(
+        JSONB, default=list, server_default="[]"
+    )
 
     order: Mapped[Order] = relationship(back_populates="items")
 

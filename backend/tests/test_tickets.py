@@ -10,17 +10,42 @@
 
 import uuid
 
+import pytest
 from sqlalchemy import select
 
 from app.models import Order, OrderTicket
 from tests.test_orders import new_client_token, place
 from tests.test_permissions import as_owner, as_staff
 
-KITCHEN_A = "charred-octopus"
-KITCHEN_B = "braised-short-rib"
-DRINK = "house-lemonade"
+# У меню PODVAL кухонних позицій немає — їжа ще «Coming Soon», усе йде на
+# бар. Розділення станцій від цього не зникло, тож тест сам переводить дві
+# позиції на кухню замість того, щоб залежати від вмісту сідера.
+KITCHEN_A = "tea-pot-special"
+KITCHEN_B = "espresso"
+DRINK = "corona"
 
 FULL = [{"key": KITCHEN_A, "qty": 1}, {"key": KITCHEN_B, "qty": 1}, {"key": DRINK, "qty": 2}]
+
+
+@pytest.fixture(autouse=True)
+def two_stations(client, db, venue):
+    """Дві позиції на кухню, решта — бар. Після тесту повертаємо як було."""
+    from sqlalchemy import select as _select
+
+    from app.models import MenuItem
+
+    as_owner(client)
+    ids = {}
+    for key in (KITCHEN_A, KITCHEN_B):
+        item = db.scalars(_select(MenuItem).where(MenuItem.key == key)).one()
+        ids[key] = item.id
+        client.patch(f"/api/admin/items/{item.id}", json={"station": "kitchen"})
+    client.post("/api/auth/logout")
+    yield
+    as_owner(client)
+    for key, item_id in ids.items():
+        client.patch(f"/api/admin/items/{item_id}", json={"station": "bar"})
+    client.post("/api/auth/logout")
 
 
 def paid(client, db, items=None):
@@ -56,7 +81,7 @@ def test_kitchen_sees_all_its_dishes_on_one_ticket(client, db, venue):
     order, _ = paid(client, db)
     as_staff(client)
     ticket = find(tickets_of(client, "kitchen"), order["number"])
-    assert sorted(i["name"] for i in ticket["items"]) == ["Braised Short Rib", "Charred Octopus"]
+    assert sorted(i["name"] for i in ticket["items"]) == ["Black Coffee · Espresso", "Tea Pot Special"]
     # напій на кухонну марку не потрапив
     assert all(i["station"] == "kitchen" for i in ticket["items"])
 

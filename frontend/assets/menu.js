@@ -96,6 +96,28 @@ function closedText(av, schedules) {
     `${esc(t('sched.servedAt', LANG))} ${esc(describeSchedule(schedules[av.schedule], LANG))}`;
 }
 
+/** Ціна на картці.
+
+    Позиція з варіантами має не одну ціну: біле вино — £13 за келих і £80 за
+    пляшку. Показати саме £13 означало б пообіцяти те, чого немає, тож
+    показуємо найменшу з «від». Позиції без вибору лишаються з простою ціною. */
+function priceLabel(item, currency) {
+  const prices = [];
+  (item.options || []).forEach(group => {
+    (group.choices || []).forEach(choice => {
+      if (choice.price_pence !== undefined && choice.price_pence !== null) {
+        prices.push(choice.price_pence);
+      }
+    });
+  });
+  if (!prices.length) return money(item.price_pence, currency, LANG);
+  const low = Math.min(...prices);
+  const high = Math.max(...prices);
+  return low === high
+    ? money(low, currency, LANG)
+    : `${t('price.from', LANG)} ${money(low, currency, LANG)}`;
+}
+
 /* --------------------------------------------------------- картка ------- */
 function dishCard(item, data) {
   const card = el('article', 'dish');
@@ -114,7 +136,7 @@ function dishCard(item, data) {
 
   const head = el('div', 'dish-head');
   head.appendChild(el('h3', null, esc(item.name)));
-  head.appendChild(el('span', 'price', esc(money(item.price_pence, data.venue.currency, LANG))));
+  head.appendChild(el('span', 'price', esc(priceLabel(item, data.venue.currency))));
   card.appendChild(head);
 
   const desc = pick(item.desc, LANG);

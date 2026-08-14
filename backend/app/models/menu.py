@@ -107,6 +107,22 @@ class MenuItem(UUIDPk, Timestamped, Base):
     orderable: Mapped[bool] = mapped_column(Boolean, default=True)
     orderable_reason: Mapped[str | None] = mapped_column(String(40), default=None)
 
+    # Варіанти: «50 мл чи пляшка», «яке молоко», «яке мохіто».
+    #
+    # Без них бар не знає, що саме робити: «Мохіто» на марці — це не
+    # замовлення, а загадка. Розбивати ж кожен смак в окрему позицію означає
+    # меню на дев'яносто карток, де п'ять із них — те саме мохіто.
+    #
+    # [{"key": "flavour", "label": "opt.flavour", "choices": [
+    #     {"key": "classic", "name": "Classic"},
+    #     {"key": "bottle",  "name": "Bottle", "price_pence": 23000},
+    #     {"key": "cola",    "name": "Cola",   "add_pence": 300}]}]
+    #
+    # `price_pence` замінює ціну позиції, `add_pence` додається. Назви
+    # варіантів не перекладаються — як і назва страви, гість замовляє їх так,
+    # як надруковано в меню. Перекладається лише підпис групи (`label`).
+    options: Mapped[list[Any]] = mapped_column(JSONB, default=list, server_default="[]")
+
     # Склад: ключі словника, вкладені компоненти — ["salsa-verde", ["parsley", …]]
     ingredients: Mapped[list[Any]] = mapped_column(JSONB, default=list)
     # Три рівні алергенів + джерело з датою.

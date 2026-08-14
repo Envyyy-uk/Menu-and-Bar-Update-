@@ -118,14 +118,14 @@ def test_86_from_the_panel_shows_up_in_the_guest_menu(client, db, venue):
     """Критерій спринту з боку API: зміна стану — це запис у Postgres,
     і наступний же запит гостя її бачить."""
     as_owner(client)
-    item = next(i for i in client.get("/api/admin/items").json() if i["key"] == "house-lemonade")
+    item = next(i for i in client.get("/api/admin/items").json() if i["key"] == "espresso")
 
     client.patch(f"/api/admin/items/{item['id']}", json={"state": "off"})
     menu = client.get("/api/menu").json()
-    lemonade = next(i for i in menu["items"] if i["key"] == "house-lemonade")
-    assert lemonade["available"]["open"] is False
-    assert lemonade["available"]["reason"] == "sold_out"
+    coffee = next(i for i in menu["items"] if i["key"] == "espresso")
+    assert coffee["available"]["open"] is False
+    assert coffee["available"]["reason"] == "sold_out"
 
     client.patch(f"/api/admin/items/{item['id']}", json={"state": "auto"})
     menu = client.get("/api/menu").json()
-    assert next(i for i in menu["items"] if i["key"] == "house-lemonade")["available"]["open"]
+    assert next(i for i in menu["items"] if i["key"] == "espresso")["available"]["open"]

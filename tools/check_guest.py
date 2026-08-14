@@ -34,14 +34,14 @@ with sync_playwright() as p:
     page.goto(BASE + "/?lang=uk", wait_until="networkidle")
     page.wait_for_selector(".dish")
 
-    check("венью в шапці", page.inner_text("#venue-name") == "The Copper Fig")
-    check("14 карток", page.locator(".dish").count() == 14, page.locator(".dish").count())
+    check("венью в шапці", page.inner_text("#venue-name") == "PODVAL")
+    check("39 карток", page.locator(".dish").count() == 39, page.locator(".dish").count())
     # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
     check("немає заголовків розділів", page.locator(".section").count() == 0)
     check("немає вкладок розділів", page.locator("#toolbar .tabs").count() == 0)
-    check("усі 14 страв в одній сітці",
+    check("усі 39 позицій в одній сітці",
           page.locator("#menu > .grid").count() == 1
-          and page.locator("#menu > .grid > .dish").count() == 14,
+          and page.locator("#menu > .grid > .dish").count() == 39,
           page.locator("#menu > .grid > .dish").count())
 
     # --- крос-мовний пошук по складнику -----------------------------------
@@ -54,16 +54,14 @@ with sync_playwright() as p:
             if page.locator(".dish").nth(i).is_visible()
         ]
 
-    for word, lang in [("овес", "uk"), ("oats", "en"), ("Hafer", "de"), ("avena", "es/it"), ("овёс", "ru")]:
+    for word, lang in [("хміль", "uk"), ("hops", "en"), ("Hopfen", "de"),
+                       ("lúpulo", "es"), ("luppolo", "it"), ("хмель", "ru")]:
         found = search(word)
-        check(f"пошук «{word}» ({lang}) → oat-cold-brew", found == ["d-oat-cold-brew"], found)
+        check(f"пошук «{word}» ({lang}) → corona", found == ["d-corona"], found)
 
-    found = search("восьминіг")
-    check("пошук «восьминіг» → charred-octopus", found == ["d-charred-octopus"], found)
-    found = search("Weizenmehl")
-    check("пошук «Weizenmehl» (вкладений склад) → 4 позиції з борошном",
-          set(found) == {"d-smoked-beetroot-tartare", "d-wild-mushroom-arancini",
-                         "d-braised-short-rib", "d-dark-chocolate-tart"}, found)
+    found = search("Gerstenmalz")
+    check("пошук «Gerstenmalz» → усе на ячмінному солоді",
+          set(found) == {"d-jack-daniels", "d-black-label", "d-jameson", "d-corona"}, found)
 
     search("")
 
@@ -80,37 +78,51 @@ with sync_playwright() as p:
     # «може містити» приглушується нарівні з «містить»
     page.locator(".chip", has_text="Горіхи").first.click()
     page.wait_for_timeout(150)
-    check("горіхи: 1 «містить» + 2 «може містити» = 3",
-          page.locator(".dish.flagged").count() == 3, page.locator(".dish.flagged").count())
+    check("горіхи: «може містити» приглушується нарівні з «містить»",
+          page.locator(".dish.flagged").count() == 5, page.locator(".dish.flagged").count())
     page.click(".clear-btn")
     page.wait_for_timeout(150)
     check("скидання знімає приглушення", page.locator(".dish.flagged").count() == 0)
 
-    # --- стани позицій -----------------------------------------------------
-    gimlet = page.locator("#d-basil-garden-gimlet")
-    check("86 підписано «Наразі немає»", "Наразі немає" in gimlet.inner_text(), gimlet.inner_text()[:60])
-    salad = page.locator("#d-fig-walnut-salad")
-    check("«Скоро» з датою відкриття", "Скоро" in salad.inner_text() and "вересня" in salad.inner_text(),
-          salad.inner_text()[:80])
-    check("алкоголь: пояснення замість кнопки",
-          "Алкоголь замовляється" in page.locator("#d-copper-fig-old-fashioned").inner_text())
+    # --- алкоголь і ціна ---------------------------------------------------
+    # У PODVAL алкоголь замовляється: якби ні, застосунок був би меню для
+    # читання. Контроль лишається людині — і гість бачить це в меню.
+    mojito = page.locator("#d-mojito")
+    check("алкоголь попереджає про вік", "Алкоголь" in mojito.inner_text(),
+          mojito.inner_text()[:80])
+    # Кнопок замовлення тут немає взагалі: цю сторінку відкрито без QR столу.
+    # Що алкоголь замовляється — перевіряє check_order.py, зі столом.
+    check("без QR столу кнопок немає ні в кого", page.locator(".add-btn").count() == 0,
+          page.locator(".add-btn").count())
 
-    check("ціна у фунтах, а не «11,50 GBP»",
-          "£11.50" in page.locator("#d-smoked-beetroot-tartare").inner_text(),
-          page.locator("#d-smoked-beetroot-tartare .price").inner_text())
+    check("ціна у фунтах, а не «13 GBP»",
+          "£13.00" in page.locator("#d-absolut").inner_text(),
+          page.locator("#d-absolut .price").inner_text())
+    # У позиції з варіантами ціна не одна: £13 келих, £80 пляшка
+    check("вино показує «від», а не одну ціну",
+          "від £13.00" in page.locator("#d-white-wine .price").inner_text(),
+          page.locator("#d-white-wine .price").inner_text())
+    check("позиція без варіантів — проста ціна",
+          page.locator("#d-espresso .price").inner_text() == "£4.00",
+          page.locator("#d-espresso .price").inner_text())
 
-    # --- три рівні алергенів ----------------------------------------------
-    tartare = page.locator("#d-smoked-beetroot-tartare")
-    check("мітка R на гірчиці", tartare.locator(".tag .rem").count() == 1)
-    check("«може містити» пунктиром", tartare.locator(".tag.maybe").count() == 1)
-    check("джерело з датою перевірки", "2026-07-14" in tartare.inner_text())
+    # --- рівні алергенів і чесність джерела --------------------------------
+    disaronno = page.locator("#d-disaronno")
+    check("«може містити» пунктиром", disaronno.locator(".tag.maybe").count() == 1,
+          disaronno.inner_text()[:80])
+    check("джерело названо чесно: відновлено, а не лист закладу",
+          "Відновлено з назви продукту" in disaronno.inner_text(),
+          disaronno.inner_text()[-90:])
+    check("вершковий лікер помічено молоком",
+          page.locator("#d-baileys .tag").first.inner_text().strip() != "",
+          page.locator("#d-baileys").inner_text()[:80])
 
     # --- зміна мови --------------------------------------------------------
     page.click('.langbtn[data-lang="de"]')
     page.wait_for_timeout(200)
-    check("німецька: заголовок складу", "ZUTATEN" in page.locator("#d-oat-cold-brew").inner_text().upper(),
-          page.locator("#d-oat-cold-brew").inner_text()[:80])
-    check("німецька: склад перекладено", "Hafer" in page.locator("#d-oat-cold-brew").inner_text())
+    check("німецька: заголовок складу", "ZUTATEN" in page.locator("#d-espresso").inner_text().upper(),
+          page.locator("#d-espresso").inner_text()[:80])
+    check("німецька: склад перекладено", "Kaffee" in page.locator("#d-espresso").inner_text())
     page.click('.langbtn[data-lang="uk"]')
     page.wait_for_timeout(200)
 
@@ -118,13 +130,13 @@ with sync_playwright() as p:
     # --- фільтр переживає авто-оновлення ----------------------------------
     if not page.locator(".filters").first.evaluate("n => n.classList.contains('open')"):
         page.click(".filter-toggle")
-    page.fill(".search", "fig")
+    page.fill(".search", "moj")
     page.wait_for_timeout(150)
     page.evaluate("MenuStore.refresh()")
     page.wait_for_timeout(400)
     check("фільтр лишається відкритим після авто-оновлення",
           page.locator(".filters").first.evaluate("n => n.classList.contains('open')"))
-    check("пошук не збився після авто-оновлення", page.input_value(".search") == "fig")
+    check("пошук не збився після авто-оновлення", page.input_value(".search") == "moj")
     page.click(".clear-btn")
 
     # --- тема --------------------------------------------------------------

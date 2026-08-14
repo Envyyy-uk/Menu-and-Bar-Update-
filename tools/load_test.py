@@ -69,7 +69,7 @@ def order_body(token: str, client_token: str, items=None):
     return {
         "table_token": token,
         "client_token": client_token,
-        "items": items or [{"key": "house-lemonade", "qty": 1}],
+        "items": items or [{"key": "espresso", "qty": 1}],
     }
 
 
@@ -163,11 +163,11 @@ def scenario_pay_twice(token: str, cookie: str) -> None:
 def scenario_sold_out_race(token: str, cookie: str) -> None:
     """Позицію вимкнули рівно тоді, коли її замовляють."""
     _, items, _ = call("GET", "/api/admin/items", cookie=cookie)
-    item = next(i for i in items if i["key"] == "spiced-apple-cooler")
+    item = next(i for i in items if i["key"] == "tea-pot-special")
     call("PATCH", f"/api/admin/items/{item['id']}", {"state": "off"}, cookie=cookie)
 
     status, body, _ = place(token, f"ct-{uuid.uuid4().hex}",
-                            [{"key": "spiced-apple-cooler", "qty": 1}])
+                            [{"key": "tea-pot-special", "qty": 1}])
     check("вимкнену позицію не замовити", status == 409, str(status))
     check("гість бачить, що саме випало",
           bool(body) and body["detail"]["unavailable"][0]["reason"] == "sold_out",

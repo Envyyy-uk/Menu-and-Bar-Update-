@@ -18,7 +18,7 @@ from playwright.sync_api import sync_playwright
 BASE = os.environ.get("BASE_URL", "http://127.0.0.1:8000")
 EMAIL = os.environ.get("ADMIN_EMAIL", "owner@example.com")
 PASSWORD = os.environ.get("ADMIN_PASSWORD", "change-me-please-12")
-ITEM = "House Lemonade"
+ITEM = "Black Coffee · Espresso"
 
 fails = []
 
@@ -84,7 +84,7 @@ with sync_playwright() as p:
     guest.goto(f"{BASE}/?lang=uk", wait_until="networkidle")
     guest.wait_for_selector(".dish")
     check("до змін: позиція в меню доступна",
-          "Наразі немає" not in guest.locator("#d-house-lemonade").inner_text())
+          "Наразі немає" not in guest.locator("#d-espresso").inner_text())
 
     row = admin.locator(".arow", has_text=ITEM).first
     check("рядок позиції показує наявність зараз", "Доступно зараз" in row.inner_text(),
@@ -100,14 +100,18 @@ with sync_playwright() as p:
     got = False
     for _ in range(30):
         guest.wait_for_timeout(1000)
-        if "Наразі немає" in guest.locator("#d-house-lemonade").inner_text():
+        if "Наразі немає" in guest.locator("#d-espresso").inner_text():
             got = True
             break
     check("гість бачить 86 БЕЗ перезавантаження сторінки", got,
-          guest.locator("#d-house-lemonade").inner_text()[:60])
+          guest.locator("#d-espresso").inner_text()[:60])
 
     # --- ціна ------------------------------------------------------------
+    # Запам'ятовуємо справжню ціну, щоб наприкінці повернути саме її: інші
+    # набори рахують суми кошика й не мають залежати від того, чи проганяли
+    # перед цим цей тест.
     price = row.locator('input[type="number"]')
+    original_price = price.input_value()
     price.fill("5.25")
     price.dispatch_event("change")
     admin.wait_for_timeout(900)
@@ -156,7 +160,7 @@ with sync_playwright() as p:
     row.locator("button", has_text="За розкладом").click()
     admin.wait_for_timeout(800)
     price = row.locator('input[type="number"]')
-    price.fill("4.50")
+    price.fill(original_price)
     price.dispatch_event("change")
     admin.wait_for_timeout(800)
 

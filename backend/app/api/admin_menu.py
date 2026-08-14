@@ -66,6 +66,7 @@ def list_items(
             "key": i.key,
             "name": i.name,
             "station": i.station,
+            "options": i.options or [],
             "price_pence": i.price_pence,
             "state": i.state,
             "opens_at": i.opens_at,

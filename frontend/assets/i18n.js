@@ -134,6 +134,16 @@ const I18N = {
   'pay.failed':  { uk: 'Платіж не пройшов. Гроші не списано.', en: 'The payment did not go through. You were not charged.', es: 'El pago no se realizó. No se le ha cobrado.', it: 'Il pagamento non è andato a buon fine. Non è stato addebitato nulla.', de: 'Die Zahlung ist fehlgeschlagen. Es wurde nichts abgebucht.', ru: 'Платёж не прошёл. Деньги не списаны.' },
   'pay.noscript':{ uk: 'Не вдалося завантажити платіжну форму. Перевірте зв’язок і спробуйте ще раз.', en: 'The payment form could not load. Check your connection and try again.', es: 'No se pudo cargar el formulario de pago. Compruebe la conexión e inténtelo de nuevo.', it: 'Impossibile caricare il modulo di pagamento. Controllate la connessione e riprovate.', de: 'Das Zahlungsformular konnte nicht geladen werden. Prüfen Sie die Verbindung und versuchen Sie es erneut.', ru: 'Не удалось загрузить платёжную форму. Проверьте связь и попробуйте ещё раз.' },
   'pay.later':   { uk: 'Оплатити пізніше', en: 'Pay later', es: 'Pagar más tarde', it: 'Paga più tardi', de: 'Später bezahlen', ru: 'Оплатить позже' },
+  'price.from':  { uk: 'від', en: 'from', es: 'desde', it: 'da', de: 'ab', ru: 'от' },
+  'cart.choose':  { uk: 'Обрати', en: 'Choose', es: 'Elegir', it: 'Scegli', de: 'Wählen', ru: 'Выбрать' },
+  /* --- підписи груп варіантів. Самі варіанти не перекладаються: гість
+         замовляє їх так, як надруковано в меню. --- */
+  'opt.size':    { uk: 'Обʼєм', en: 'Size', es: 'Tamaño', it: 'Formato', de: 'Größe', ru: 'Объём' },
+  'opt.flavour': { uk: 'Смак', en: 'Flavour', es: 'Sabor', it: 'Gusto', de: 'Geschmack', ru: 'Вкус' },
+  'opt.milk':    { uk: 'Молоко', en: 'Milk', es: 'Leche', it: 'Latte', de: 'Milch', ru: 'Молоко' },
+  'opt.kind':    { uk: 'Вид', en: 'Kind', es: 'Tipo', it: 'Tipo', de: 'Sorte', ru: 'Вид' },
+  'opt.serve':   { uk: 'Подача', en: 'Serve', es: 'Servicio', it: 'Servizio', de: 'Servierart', ru: 'Подача' },
+  'opt.style':   { uk: 'Стиль', en: 'Style', es: 'Estilo', it: 'Stile', de: 'Stil', ru: 'Стиль' },
   'cart.sending':{ uk: 'Надсилаємо…', en: 'Sending…', es: 'Enviando…', it: 'Invio…', de: 'Wird gesendet…', ru: 'Отправляем…' },
   'cart.empty':  { uk: 'Кошик порожній', en: 'Your basket is empty', es: 'La cesta está vacía', it: 'Il carrello è vuoto', de: 'Der Warenkorb ist leer', ru: 'Корзина пуста' },
   'cart.remove': { uk: 'Прибрати', en: 'Remove', es: 'Quitar', it: 'Rimuovi', de: 'Entfernen', ru: 'Убрать' },
