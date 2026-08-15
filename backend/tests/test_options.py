@@ -23,13 +23,13 @@ def line(key, qty=1, **options):
 
 def test_bottle_costs_what_the_bottle_costs(client, db, venue):
     """50 мл — £13, 150 мл — £39, пляшка — £230. Це та сама позиція меню."""
-    shot = place(client, db, items=[line("absolut", size="ml50")]).json()
+    shot = place(client, db, items=[line("vodka-house", size="ml50", kind="absolut")]).json()
     assert shot["total_pence"] == 1300
 
-    triple = place(client, db, items=[line("absolut", size="ml150")]).json()
+    triple = place(client, db, items=[line("vodka-house", size="ml150", kind="absolut")]).json()
     assert triple["total_pence"] == 3900
 
-    bottle = place(client, db, items=[line("absolut", size="bottle")]).json()
+    bottle = place(client, db, items=[line("vodka-house", size="bottle", kind="stoli")]).json()
     assert bottle["total_pence"] == 23000
 
 
@@ -39,7 +39,8 @@ def test_price_is_taken_from_the_server_not_the_phone(client, db, venue):
     r = place(
         client,
         db,
-        items=[{"key": "absolut", "qty": 1, "options": {"size": "bottle"},
+        items=[{"key": "vodka-house", "qty": 1,
+                "options": {"size": "bottle", "kind": "absolut"},
                 "unit_price_pence": 1, "price_pence": 1}],
     )
     assert r.status_code == 201
@@ -47,7 +48,7 @@ def test_price_is_taken_from_the_server_not_the_phone(client, db, venue):
 
 
 def test_quantity_multiplies_the_chosen_variant(client, db, venue):
-    order = place(client, db, items=[line("absolut", 3, size="bottle")]).json()
+    order = place(client, db, items=[line("vodka-house", 3, size="bottle", kind="absolut")]).json()
     assert order["total_pence"] == 69000
 
 
@@ -110,7 +111,7 @@ def test_the_bar_sees_which_one_to_make(client, db, venue):
     ct = new_client_token()
     order = place(
         client, db,
-        items=[line("mojito", 2, flavour="strawberry"), line("cappuccino", milk="soya")],
+        items=[line("mojito", 2, flavour="strawberry"), line("coffee-milk", kind="cappuccino", milk="soya")],
         client_token=ct,
     ).json()
     client.post(f"/api/orders/{order['id']}/checkout", params={"client_token": ct})
@@ -123,7 +124,7 @@ def test_the_bar_sees_which_one_to_make(client, db, venue):
     )
     got = {i["name"]: i["options"] for i in ticket["items"]}
     assert got["Mojito"] == ["Strawberry"]
-    assert got["Cappuccino"] == ["Soya"]
+    assert got["Cappuccino, Latte, Mocha"] == ["Cappuccino", "Soya"]
 
 
 def test_the_choice_is_frozen_at_order_time(client, db, venue):

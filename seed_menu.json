@@ -227,8 +227,8 @@
   },
   "items": [
     {
-      "key": "absolut",
-      "name": "Absolut",
+      "key": "vodka-house",
+      "name": "Absolut, Stoli",
       "category": "spirits",
       "station": "bar",
       "price_pence": 1300,
@@ -287,15 +287,29 @@
               "price_pence": 23000
             }
           ]
+        },
+        {
+          "key": "kind",
+          "label": "opt.kind",
+          "choices": [
+            {
+              "key": "absolut",
+              "name": "Absolut"
+            },
+            {
+              "key": "stoli",
+              "name": "Stoli"
+            }
+          ]
         }
       ]
     },
     {
-      "key": "stoli",
-      "name": "Stoli",
+      "key": "vodka-premium",
+      "name": "Grey Goose, Beluga",
       "category": "spirits",
       "station": "bar",
-      "price_pence": 1300,
+      "price_pence": 26000,
       "orderable": true,
       "state": "available",
       "desc": {
@@ -316,47 +330,31 @@
           "label": "opt.size",
           "choices": [
             {
-              "key": "ml50",
-              "name": "50 ml",
-              "price_pence": 1300
-            },
-            {
-              "key": "ml100",
-              "name": "100 ml",
-              "price_pence": 2600
-            },
-            {
-              "key": "ml150",
-              "name": "150 ml",
-              "price_pence": 3900
-            },
-            {
-              "key": "ml200",
-              "name": "200 ml",
-              "price_pence": 5200
-            },
-            {
-              "key": "ml250",
-              "name": "250 ml",
-              "price_pence": 6500
-            },
-            {
-              "key": "ml300",
-              "name": "300 ml",
-              "price_pence": 7800
-            },
-            {
               "key": "bottle",
               "name": "Bottle",
-              "price_pence": 23000
+              "price_pence": 26000
+            }
+          ]
+        },
+        {
+          "key": "kind",
+          "label": "opt.kind",
+          "choices": [
+            {
+              "key": "grey-goose",
+              "name": "Grey Goose"
+            },
+            {
+              "key": "beluga",
+              "name": "Beluga"
             }
           ]
         }
       ]
     },
     {
-      "key": "jack-daniels",
-      "name": "Jack Daniel's",
+      "key": "whiskey",
+      "name": "Jack Daniels, Black Label, Jameson",
       "category": "spirits",
       "station": "bar",
       "price_pence": 1300,
@@ -421,142 +419,22 @@
               "price_pence": 26000
             }
           ]
-        }
-      ]
-    },
-    {
-      "key": "black-label",
-      "name": "Johnnie Walker Black Label",
-      "category": "spirits",
-      "station": "bar",
-      "price_pence": 1300,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
-        "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
-      },
-      "ing": [
-        "barley-malt",
-        "water"
-      ],
-      "w": [
-        "age-check"
-      ],
-      "options": [
+        },
         {
-          "key": "size",
-          "label": "opt.size",
+          "key": "kind",
+          "label": "opt.kind",
           "choices": [
             {
-              "key": "ml50",
-              "name": "50 ml",
-              "price_pence": 1300
+              "key": "jack-daniels",
+              "name": "Jack Daniels"
             },
             {
-              "key": "ml100",
-              "name": "100 ml",
-              "price_pence": 2600
+              "key": "black-label",
+              "name": "Black Label"
             },
             {
-              "key": "ml150",
-              "name": "150 ml",
-              "price_pence": 3900
-            },
-            {
-              "key": "ml200",
-              "name": "200 ml",
-              "price_pence": 5200
-            },
-            {
-              "key": "ml250",
-              "name": "250 ml",
-              "price_pence": 6500
-            },
-            {
-              "key": "ml300",
-              "name": "300 ml",
-              "price_pence": 7800
-            },
-            {
-              "key": "bottle",
-              "name": "Bottle",
-              "price_pence": 23000
-            },
-            {
-              "key": "premium",
-              "name": "Bottle (Premium)",
-              "price_pence": 26000
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "jameson",
-      "name": "Jameson",
-      "category": "spirits",
-      "station": "bar",
-      "price_pence": 1300,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Віскі · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
-        "en": "Whiskey · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "ru": "Виски · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
-      },
-      "ing": [
-        "barley-malt",
-        "water"
-      ],
-      "w": [
-        "age-check"
-      ],
-      "options": [
-        {
-          "key": "size",
-          "label": "opt.size",
-          "choices": [
-            {
-              "key": "ml50",
-              "name": "50 ml",
-              "price_pence": 1300
-            },
-            {
-              "key": "ml100",
-              "name": "100 ml",
-              "price_pence": 2600
-            },
-            {
-              "key": "ml150",
-              "name": "150 ml",
-              "price_pence": 3900
-            },
-            {
-              "key": "ml200",
-              "name": "200 ml",
-              "price_pence": 5200
-            },
-            {
-              "key": "ml250",
-              "name": "250 ml",
-              "price_pence": 6500
-            },
-            {
-              "key": "ml300",
-              "name": "300 ml",
-              "price_pence": 7800
-            },
-            {
-              "key": "bottle",
-              "name": "Bottle",
-              "price_pence": 23000
-            },
-            {
-              "key": "premium",
-              "name": "Bottle (Premium)",
-              "price_pence": 26000
+              "key": "jameson",
+              "name": "Jameson"
             }
           ]
         }
@@ -633,8 +511,8 @@
       ]
     },
     {
-      "key": "havana-club",
-      "name": "Havana Club",
+      "key": "rum-house",
+      "name": "Havana Club, Bacardi",
       "category": "spirits",
       "station": "bar",
       "price_pence": 1300,
@@ -698,73 +576,18 @@
               "price_pence": 26000
             }
           ]
-        }
-      ]
-    },
-    {
-      "key": "bacardi",
-      "name": "Bacardi",
-      "category": "spirits",
-      "station": "bar",
-      "price_pence": 1300,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Ром · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
-        "en": "Rum · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "ru": "Ром · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
-      },
-      "ing": [
-        "sugar",
-        "water"
-      ],
-      "w": [
-        "age-check"
-      ],
-      "options": [
+        },
         {
-          "key": "size",
-          "label": "opt.size",
+          "key": "kind",
+          "label": "opt.kind",
           "choices": [
             {
-              "key": "ml50",
-              "name": "50 ml",
-              "price_pence": 1300
+              "key": "havana-club",
+              "name": "Havana Club"
             },
             {
-              "key": "ml100",
-              "name": "100 ml",
-              "price_pence": 2600
-            },
-            {
-              "key": "ml150",
-              "name": "150 ml",
-              "price_pence": 3900
-            },
-            {
-              "key": "ml200",
-              "name": "200 ml",
-              "price_pence": 5200
-            },
-            {
-              "key": "ml250",
-              "name": "250 ml",
-              "price_pence": 6500
-            },
-            {
-              "key": "ml300",
-              "name": "300 ml",
-              "price_pence": 7800
-            },
-            {
-              "key": "bottle",
-              "name": "Bottle",
-              "price_pence": 23000
-            },
-            {
-              "key": "premium",
-              "name": "Bottle (Premium)",
-              "price_pence": 26000
+              "key": "bacardi",
+              "name": "Bacardi"
             }
           ]
         }
@@ -1041,74 +864,6 @@
             {
               "key": "malibu",
               "name": "Malibu"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "grey-goose",
-      "name": "Grey Goose",
-      "category": "spirits",
-      "station": "bar",
-      "price_pence": 26000,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
-        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
-      },
-      "ing": [
-        "grain-spirit",
-        "water"
-      ],
-      "w": [
-        "age-check"
-      ],
-      "options": [
-        {
-          "key": "size",
-          "label": "opt.size",
-          "choices": [
-            {
-              "key": "bottle",
-              "name": "Bottle",
-              "price_pence": 26000
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "beluga",
-      "name": "Beluga",
-      "category": "spirits",
-      "station": "bar",
-      "price_pence": 26000,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Горілка · Мікс до міцного — £3. Ціна пляшки включає два мікси на вибір.",
-        "en": "Vodka · Mixer for spirits £3. Bottle price includes two mixers of your choice.",
-        "ru": "Водка · Микс к крепкому — £3. Цена бутылки включает два микса на выбор."
-      },
-      "ing": [
-        "grain-spirit",
-        "water"
-      ],
-      "w": [
-        "age-check"
-      ],
-      "options": [
-        {
-          "key": "size",
-          "label": "opt.size",
-          "choices": [
-            {
-              "key": "bottle",
-              "name": "Bottle",
-              "price_pence": 26000
             }
           ]
         }
@@ -1798,7 +1553,7 @@
     },
     {
       "key": "espresso",
-      "name": "Black Coffee · Espresso",
+      "name": "Black Coffee. Espresso",
       "category": "hot",
       "station": "bar",
       "price_pence": 400,
@@ -1816,17 +1571,17 @@
       "w": []
     },
     {
-      "key": "cappuccino",
-      "name": "Cappuccino",
+      "key": "coffee-milk",
+      "name": "Cappuccino, Latte, Mocha",
       "category": "hot",
       "station": "bar",
       "price_pence": 500,
       "orderable": true,
       "state": "available",
       "desc": {
-        "uk": "Cappuccino на молоці, мигдалевому або соєвому",
-        "en": "Cappuccino with dairy, almond or soya milk",
-        "ru": "Cappuccino на молоке, миндальном или соевом"
+        "uk": "Кава на молоці, мигдалевому або соєвому",
+        "en": "Coffee with dairy, almond or soya milk",
+        "ru": "Кофе на молоке, миндальном или соевом"
       },
       "ing": [
         "coffee",
@@ -1836,86 +1591,23 @@
       "w": [],
       "options": [
         {
-          "key": "milk",
-          "label": "opt.milk",
+          "key": "kind",
+          "label": "opt.kind",
           "choices": [
             {
-              "key": "milk",
-              "name": "Milk"
+              "key": "cappuccino",
+              "name": "Cappuccino"
             },
             {
-              "key": "almond",
-              "name": "Almond"
+              "key": "latte",
+              "name": "Latte"
             },
             {
-              "key": "soya",
-              "name": "Soya"
+              "key": "mocha",
+              "name": "Mocha"
             }
           ]
-        }
-      ]
-    },
-    {
-      "key": "latte",
-      "name": "Latte",
-      "category": "hot",
-      "station": "bar",
-      "price_pence": 500,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Latte на молоці, мигдалевому або соєвому",
-        "en": "Latte with dairy, almond or soya milk",
-        "ru": "Latte на молоке, миндальном или соевом"
-      },
-      "ing": [
-        "coffee",
-        "water",
-        "milk"
-      ],
-      "w": [],
-      "options": [
-        {
-          "key": "milk",
-          "label": "opt.milk",
-          "choices": [
-            {
-              "key": "milk",
-              "name": "Milk"
-            },
-            {
-              "key": "almond",
-              "name": "Almond"
-            },
-            {
-              "key": "soya",
-              "name": "Soya"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "key": "mocha",
-      "name": "Mocha",
-      "category": "hot",
-      "station": "bar",
-      "price_pence": 500,
-      "orderable": true,
-      "state": "available",
-      "desc": {
-        "uk": "Mocha на молоці, мигдалевому або соєвому",
-        "en": "Mocha with dairy, almond or soya milk",
-        "ru": "Mocha на молоке, миндальном или соевом"
-      },
-      "ing": [
-        "coffee",
-        "water",
-        "milk",
-        "cocoa"
-      ],
-      "w": [],
-      "options": [
+        },
         {
           "key": "milk",
           "label": "opt.milk",

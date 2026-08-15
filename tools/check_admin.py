@@ -18,7 +18,7 @@ from playwright.sync_api import sync_playwright
 BASE = os.environ.get("BASE_URL", "http://127.0.0.1:8000")
 EMAIL = os.environ.get("ADMIN_EMAIL", "owner@example.com")
 PASSWORD = os.environ.get("ADMIN_PASSWORD", "change-me-please-12")
-ITEM = "Black Coffee · Espresso"
+ITEM = "Black Coffee. Espresso"
 
 fails = []
 

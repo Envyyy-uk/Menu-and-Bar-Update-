@@ -10,7 +10,7 @@ def test_menu_returns_seed_data(client):
     assert m["venue"]["name"] == "PODVAL"
     assert m["venue"]["currency"] == "GBP"
     assert "sections" not in m          # меню один список, груп немає
-    assert len(m["items"]) == 37
+    assert len(m["items"]) == 30
     assert m["lexicon"]["coffee"]["ru"] == "кофе"
     # Меню виходить трьома мовами — зайвих у файлі бути не має
     assert set(m["lexicon"]["coffee"]) == {"uk", "en", "ru"}
@@ -52,7 +52,7 @@ def test_alcohol_is_orderable_and_warns_about_age(client):
     бармен перевіряє документ при подачі."""
     m = client.get("/api/menu").json()
     booze = [i for i in m["items"] if "age-check" in i["w"]]
-    assert len(booze) >= 25
+    assert len(booze) == 23
     assert all(i["orderable"] is True for i in booze)
 
     # А безалкогольне цього попередження не носить
@@ -72,7 +72,7 @@ def test_options_reach_the_guest(client):
     ]
 
     # 50 мл проти пляшки — різні ціни на тій самій позиції
-    size = next(g for g in by_key["absolut"]["options"] if g["key"] == "size")
+    size = next(g for g in by_key["vodka-house"]["options"] if g["key"] == "size")
     assert [(c["name"], c["price_pence"]) for c in size["choices"]] == [
         ("50 ml", 1300), ("100 ml", 2600), ("150 ml", 3900),
         ("200 ml", 5200), ("250 ml", 6500), ("300 ml", 7800),
@@ -110,9 +110,9 @@ def test_menu_is_one_flat_list_ordered_by_position(client):
     """Меню — один список. Порядок задає зал позицією, а не групою."""
     m = client.get("/api/menu").json()
     keys = [i["key"] for i in m["items"]]
-    assert len(keys) == len(set(keys)) == 37
+    assert len(keys) == len(set(keys)) == 30
     # порядок меню: міцне, коктейлі, пиво, вино, гаряче
-    assert keys[0] == "absolut"
+    assert keys[0] == "vodka-house"
     assert keys[-1] == "hookah"
 
 
@@ -260,7 +260,7 @@ def test_menu_is_grouped_into_categories(client):
         by_cat.setdefault(i["category"], []).append(i["key"])
     assert by_cat["hookah"] == ["hookah"]
     assert "mojito" in by_cat["cocktails"]
-    assert "absolut" in by_cat["spirits"]
+    assert "vodka-house" in by_cat["spirits"]
 
 
 def test_pour_sizes_are_multiples_of_the_shot(client):
@@ -268,7 +268,7 @@ def test_pour_sizes_are_multiples_of_the_shot(client):
     m = client.get("/api/menu").json()
     by_key = {i["key"]: i for i in m["items"]}
 
-    for key, shot in (("absolut", 1300), ("patron-silver", 1600), ("nalivka", 900)):
+    for key, shot in (("vodka-house", 1300), ("patron-silver", 1600), ("nalivka", 900)):
         size = next(g for g in by_key[key]["options"] if g["key"] == "size")
         pours = [c for c in size["choices"] if c["name"].endswith(" ml")]
         assert [c["name"] for c in pours] == [

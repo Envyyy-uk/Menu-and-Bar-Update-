@@ -81,7 +81,7 @@ def test_kitchen_sees_all_its_dishes_on_one_ticket(client, db, venue):
     order, _ = paid(client, db)
     as_staff(client)
     ticket = find(tickets_of(client, "kitchen"), order["number"])
-    assert sorted(i["name"] for i in ticket["items"]) == ["Black Coffee · Espresso", "Tea Pot Special"]
+    assert sorted(i["name"] for i in ticket["items"]) == ["Black Coffee. Espresso", "Tea Pot Special"]
     # напій на кухонну марку не потрапив
     assert all(i["station"] == "kitchen" for i in ticket["items"])
 

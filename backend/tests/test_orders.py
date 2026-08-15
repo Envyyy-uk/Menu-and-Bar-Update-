@@ -106,7 +106,7 @@ def test_different_tokens_make_different_orders(client, db, venue):
 def test_prices_and_names_are_snapshotted(client, db, venue):
     """Меню зміниться — історія не попливе."""
     order = place(client, db, items=[{"key": PLAIN, "qty": 2}]).json()
-    assert order["items"][0]["name"] == "Black Coffee · Espresso"
+    assert order["items"][0]["name"] == "Black Coffee. Espresso"
     assert order["total_pence"] == order["items"][0]["unit_price_pence"] * 2
 
     as_owner(client)
@@ -281,7 +281,7 @@ def test_queue_splits_kitchen_and_bar(client, db, venue):
                if o["order_id"] == order["id"])
 
     assert [i["name"] for i in kitchen["items"]] == ["Tea Pot Special"]
-    assert [i["name"] for i in bar["items"]] == ["Black Coffee · Espresso"]
+    assert [i["name"] for i in bar["items"]] == ["Black Coffee. Espresso"]
     # сума лишається сумою всього замовлення — це один чек, а не два
     assert kitchen["total_pence"] == bar["total_pence"] == order["total_pence"]
 

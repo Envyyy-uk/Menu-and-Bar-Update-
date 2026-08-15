@@ -73,7 +73,7 @@ with sync_playwright() as p:
     # усе меню в робочий стан
     admin.locator(".tab", has_text="Позиції").click()
     admin.wait_for_selector(".arow")
-    for name in ("Black Coffee · Espresso", "Tea Pot Special"):
+    for name in ("Black Coffee. Espresso", "Tea Pot Special"):
         admin.locator(".arow", has_text=name).first.locator("button", has_text="За розкладом").click()
         admin.wait_for_timeout(500)
 
@@ -194,7 +194,7 @@ with sync_playwright() as p:
         BASE,
     )
     check("напій пішов на бар, а не на кухню",
-          queue["bar"] == 1 and queue["kitchen"] == 0 and queue["barItems"] == ["Black Coffee · Espresso"],
+          queue["bar"] == 1 and queue["kitchen"] == 0 and queue["barItems"] == ["Black Coffee. Espresso"],
           json.dumps(queue, ensure_ascii=False))
 
     # --- варіант доїжджає до бару ------------------------------------------

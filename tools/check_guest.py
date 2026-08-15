@@ -35,7 +35,7 @@ with sync_playwright() as p:
     page.wait_for_selector(".dish")
 
     check("венью в шапці", page.inner_text("#venue-name") == "PODVAL")
-    check("37 позицій", page.locator(".dish").count() == 37, page.locator(".dish").count())
+    check("30 позицій", page.locator(".dish").count() == 30, page.locator(".dish").count())
     # меню — один суцільний список: ні заголовків розділів, ні вкладок над ним
     # Рядок категорій угорі: це навігація, а не фільтр
     tabs = [page.locator("#toolbar .tab").nth(i).inner_text()
@@ -50,7 +50,7 @@ with sync_playwright() as p:
           cats == ["c-spirits", "c-cocktails", "c-beer-soft", "c-wine", "c-hot", "c-hookah"],
           cats)
     check("кожна позиція під заголовком",
-          page.locator("#menu > .cat > .grid > .dish").count() == 37,
+          page.locator("#menu > .cat > .grid > .dish").count() == 30,
           page.locator("#menu > .cat > .grid > .dish").count())
     check("кальяни окремою категорією",
           page.locator("#c-hookah h2").inner_text() == "Кальяни",
@@ -72,7 +72,7 @@ with sync_playwright() as p:
 
     found = search("ячмінний солод")
     check("пошук «ячмінний солод» → усе на ньому",
-          set(found) == {"d-jack-daniels", "d-black-label", "d-jameson", "d-corona"}, found)
+          set(found) == {"d-whiskey", "d-corona"}, found)
 
     search("")
 
@@ -99,8 +99,8 @@ with sync_playwright() as p:
           page.locator(".add-btn").count())
 
     check("ціна у фунтах, а не «13 GBP»",
-          "£13.00" in page.locator("#d-absolut").inner_text(),
-          page.locator("#d-absolut .price").inner_text())
+          "£13.00" in page.locator("#d-vodka-house").inner_text(),
+          page.locator("#d-vodka-house .price").inner_text())
     # У позиції з варіантами ціна не одна: £13 келих, £80 пляшка
     check("вино показує «від», а не одну ціну",
           "від £13.00" in page.locator("#d-white-wine .price").inner_text(),
